@@ -9,15 +9,35 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@next/font": "^14.2.15",
     "@react-spring/three": "^10.0.3",
+    "@react-three/a11y": "^3.0.0",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
+    "@react-three/gltfjsx": "^4.3.4",
+    "@react-three/postprocessing": "^3.0.4",
     "@react-three/rapier": "^2.2.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@use-gesture/react": "^10.3.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
+    "gltf-pipeline": "^4.3.0",
+    "gsap": "^3.13.0",
+    "leva": "^0.10.1",
+    "locomotive-scroll": "^4.1.4",
+    "lucide-react": "^0.552.0",
     "next": "16.0.1",
+    "nodemailer": "^7.0.10",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "three": "^0.181.0"
+    "react-hook-form": "^7.66.0",
+    "stats.js": "^0.17.0",
+    "three": "^0.181.0",
+    "tunnel-rat": "^0.1.2",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -26,7 +46,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.16",
     "typescript": "^5"
   }
 }
