@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import Hero from '@/components/Hero';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -20,10 +21,13 @@ const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
 export default function Home() {
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden">
-      {/* 3D Scene */}
+      {/* 3D Scene Background */}
       <Scene3D>
         <MainScene />
       </Scene3D>
+
+      {/* Hero Section Overlay */}
+      <Hero />
 
       {/* Floating UI Overlay */}
       <ProjectPanel />

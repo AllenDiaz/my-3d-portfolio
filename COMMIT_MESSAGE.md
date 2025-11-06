@@ -1,66 +1,82 @@
-feat: Add interactive 3D office environment with clickable portfolio objects
+feat: Add interactive Hero/Landing section with professional profile overlay
 
 ## Summary
-Implemented a fully interactive 3D workspace where users can explore the portfolio by navigating through a virtual office and clicking on objects to reveal projects and information.
+Implemented a stunning Hero/Landing section that overlays the 3D office environment, showcasing professional information, skills, and call-to-action elements with modern glassmorphism design.
 
-## Components Added
+## New Component Added
 
-### 3D Scene Infrastructure
-- Scene3D: Canvas wrapper with Three.js configuration and loading states
-- MainScene: Scene composition orchestrating all 3D elements
-- SceneSetup: Camera controls (OrbitControls) and multi-source lighting system
+### Hero.tsx
+- **Professional Headline**: Large, gradient-styled name with job title
+- **Tagline & Description**: Brief introduction highlighting expertise and passion
+- **Tech Stack Pills**: Interactive badges displaying key technologies (React, Next.js, TypeScript, Three.js, Node.js, TailwindCSS)
+- **CTA Buttons**: 
+  - View My Work (primary with gradient hover effect)
+  - Contact Me (secondary with glassmorphism)
+  - Download Resume (tertiary)
+- **Social Links**: GitHub, LinkedIn, Email with hover animations
+- **Professional Photo Section**: 
+  - Circular photo container with animated gradient border
+  - Placeholder with initials (ready for actual photo)
+  - Floating stats card (Years Experience, Projects, Satisfaction)
+- **Scroll Indicator**: Animated mouse icon encouraging exploration
 
-### Interactive 3D Models
-- OfficeRoom: Complete office environment (walls, floor, ceiling, desk, chair, bookshelf, side table, window)
-- Computer: Three clickable monitors with hover effects and glow animations
-- DeskItem: Five interactive desk objects (keyboard, mouse, notebook, coffee cup, phone)
+## Key Features
+✨ Smooth entrance animations with staggered children
+🎨 Glassmorphism design (backdrop blur, transparency, subtle borders)
+🖼️ Professional photo section with gradient effects
+📊 Stats display with experience metrics
+💫 Hover effects and micro-interactions
+📱 Responsive layout (desktop optimized)
+� Direct links to GitHub, LinkedIn, and email
+📄 Resume download functionality
+⬇️ Animated scroll indicator
 
-### UI Components
-- ProjectPanel: Animated modal with glassmorphism design displaying project details, technologies, and links
+## Design Elements
+- **Color Scheme**: Blue to purple gradient accents on dark background
+- **Typography**: Bold headings with gradient text effects
+- **Glassmorphism**: Semi-transparent backgrounds with backdrop blur
+- **Animations**: Framer Motion for smooth transitions and hover states
+- **Icons**: Lucide React for consistent iconography
 
-### State Management
-- useStore: Zustand store managing selected objects, active projects, and UI visibility
+## Information Sourced from CV
+- Name: Allen Diaz
+- Title: Full-Stack Developer & Creative Problem Solver
+- GitHub: https://github.com/AllenDiaz
+- LinkedIn: https://www.linkedin.com/in/allen-diaz-525071258/
+- Email: allendiaz.developer@gmail.com
+- Technologies: React, Next.js, TypeScript, Three.js, Node.js, TailwindCSS
 
-## Features
-✨ Click on monitors to view project details
-🖱️ Hover effects with animations and tooltips
-🎮 Orbit controls for camera navigation (drag, zoom, pan)
-💡 Dynamic lighting with shadows and reflections
-🎨 Modern glassmorphism UI with smooth animations
-📦 Modular, reusable component architecture
-🏗️ TypeScript for type safety
-
-## Technologies Used
-- @react-three/fiber & @react-three/drei
-- Three.js for 3D graphics
-- Zustand for state management
-- Framer Motion for UI animations
-- Lucide React for icons
-- Next.js with dynamic imports
+## Technical Implementation
+- Framer Motion variants for coordinated animations
+- TypeScript with proper type safety (const assertions for ease arrays)
+- Pointer-events optimization (only interactive elements accept clicks)
+- Z-index layering (Hero at z-10, above 3D scene)
+- Absolute positioning for overlay effect
+- Container max-width for optimal reading
 
 ## File Structure
 ```
 components/
-├── 3d/
-│   ├── Scene3D.tsx
-│   ├── MainScene.tsx
-│   ├── SceneSetup.tsx
-│   ├── OfficeRoom.tsx
-│   ├── Computer.tsx
-│   └── DeskItem.tsx
-├── ui/
-│   └── ProjectPanel.tsx
-store/
-└── useStore.ts
+├── Hero.tsx (NEW)
+app/
+└── page.tsx (UPDATED - Hero integration)
 ```
+
+## Integration
+- Hero section positioned as absolute overlay on 3D scene
+- Maintains non-intrusive design allowing 3D interaction
+- Instructions moved to bottom for better visibility
+- All interactive elements have proper pointer-events
 
 ## Testing
 ✅ Build successful with no errors
-✅ All components properly typed
-✅ Dynamic imports prevent SSR issues
-✅ Optimized performance settings
+✅ TypeScript compilation passes
+✅ Animations work smoothly
+✅ Responsive design verified
+✅ All links properly configured
 
 ---
 Commit Type: Feature Addition
 Breaking Changes: None
-Scope: Portfolio 3D Experience
+Scope: Hero/Landing Section
+Related to: 3D Portfolio Experience
