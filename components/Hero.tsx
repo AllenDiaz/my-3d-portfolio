@@ -32,14 +32,14 @@ const Hero = () => {
   };
 
   return (
-    <div className="container mx-auto px-8 lg:px-16">
+    <div className="container mx-auto px-8 lg:px-16 pointer-events-none">
       <div className="flex items-center justify-between">
         {/* Left Side - Main Hero Content */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-3xl space-y-6"
+          className="max-w-3xl space-y-6 pointer-events-auto"
         >
           {/* Badge */}
           <motion.div variants={itemVariants}>
@@ -151,7 +151,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
-          className="hidden lg:block"
+          className="hidden lg:block pointer-events-auto"
         >
           <div className="relative group">
             {/* Animated background gradient */}
@@ -210,7 +210,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto"
       >
         <div className="flex flex-col items-center gap-2 text-gray-400 cursor-pointer hover:text-white transition-colors group">
           <span className="text-sm font-medium">Explore More</span>
