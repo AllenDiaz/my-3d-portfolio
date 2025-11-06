@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Download, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -31,14 +32,14 @@ const Hero = () => {
   };
 
   return (
-    <div className="absolute inset-0 z-10 pointer-events-none">
-      <div className="container mx-auto h-full flex items-center justify-between px-8 lg:px-16">
+    <div className="container mx-auto px-8 lg:px-16">
+      <div className="flex items-center justify-between">
         {/* Left Side - Main Hero Content */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-3xl space-y-6 pointer-events-auto"
+          className="max-w-3xl space-y-6"
         >
           {/* Badge */}
           <motion.div variants={itemVariants}>
@@ -84,22 +85,26 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-4">
-            <button
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white font-semibold overflow-hidden transition-all hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                View My Work
-                <ArrowRight className={`w-5 h-5 transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
+            <Link href="/3d-office">
+              <button
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white font-semibold overflow-hidden transition-all hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  View My Work
+                  <ArrowRight className={`w-5 h-5 transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </button>
+            </Link>
 
-            <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all hover:scale-105 flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              Contact Me
-            </button>
+            <Link href="/about">
+              <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all hover:scale-105 flex items-center gap-2">
+                <Mail className="w-5 h-5" />
+                About Me
+              </button>
+            </Link>
 
             <a
               href="/Allen_Diaz_Resume.pdf"
@@ -146,7 +151,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
-          className="hidden lg:block pointer-events-auto"
+          className="hidden lg:block"
         >
           <div className="relative group">
             {/* Animated background gradient */}
@@ -205,10 +210,10 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2 text-gray-400 cursor-pointer hover:text-white transition-colors group">
-          <span className="text-sm font-medium">Explore Below</span>
+          <span className="text-sm font-medium">Explore More</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
