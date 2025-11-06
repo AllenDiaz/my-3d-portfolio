@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
+import LightToggle from '@/components/ui/LightToggle';
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), {
@@ -23,6 +24,9 @@ export default function ThreeDOfficePage() {
     <main className="relative">
       {/* Navigation */}
       <Navbar />
+
+      {/* Light Toggle Button */}
+      <LightToggle />
 
       {/* 3D Office Experience */}
       <div className="relative w-full h-screen bg-black overflow-hidden">

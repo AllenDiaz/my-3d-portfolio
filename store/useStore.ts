@@ -27,6 +27,10 @@ interface StoreState {
   isAnimatingCamera: boolean;
   setIsAnimatingCamera: (isAnimating: boolean) => void;
   
+  // Light mode state
+  lightsOn: boolean;
+  setLightsOn: (lightsOn: boolean) => void;
+  
   // Projects data
   projects: Project[];
   setProjects: (projects: Project[]) => void;
@@ -44,6 +48,9 @@ export const useStore = create<StoreState>((set) => ({
   
   isAnimatingCamera: false,
   setIsAnimatingCamera: (isAnimating) => set({ isAnimatingCamera: isAnimating }),
+  
+  lightsOn: true,
+  setLightsOn: (lightsOn) => set({ lightsOn }),
   
   projects: [
     {

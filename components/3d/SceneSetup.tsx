@@ -3,9 +3,11 @@
 import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
+import { useStore } from '@/store/useStore';
 
 export default function SceneSetup() {
   const { camera } = useThree();
+  const lightsOn = useStore((state) => state.lightsOn);
 
   useEffect(() => {
     // Set initial camera position
@@ -34,12 +36,12 @@ export default function SceneSetup() {
 
       {/* Lighting */}
       {/* Ambient Light */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={lightsOn ? 0.3 : 0.05} />
 
       {/* Main Directional Light */}
       <directionalLight
         position={[5, 8, 5]}
-        intensity={0.8}
+        intensity={lightsOn ? 0.8 : 0.1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -53,13 +55,13 @@ export default function SceneSetup() {
       {/* Fill Light */}
       <directionalLight
         position={[-5, 5, -5]}
-        intensity={0.3}
+        intensity={lightsOn ? 0.3 : 0.05}
       />
 
       {/* Desk Light */}
       <pointLight
         position={[0, 2, -2]}
-        intensity={0.6}
+        intensity={lightsOn ? 0.6 : 0.1}
         distance={5}
         color="#ffd89b"
         castShadow
@@ -68,14 +70,14 @@ export default function SceneSetup() {
       {/* Accent Lights */}
       <pointLight
         position={[-4, 2, -4]}
-        intensity={0.3}
+        intensity={lightsOn ? 0.3 : 0.05}
         distance={3}
         color="#4a90e2"
       />
 
       <pointLight
         position={[4, 2, -3]}
-        intensity={0.3}
+        intensity={lightsOn ? 0.3 : 0.05}
         distance={3}
         color="#9b59b6"
       />
@@ -85,7 +87,7 @@ export default function SceneSetup() {
         position={[0, 5.5, 0]}
         angle={Math.PI / 3}
         penumbra={0.5}
-        intensity={0.4}
+        intensity={lightsOn ? 0.4 : 0.05}
         castShadow
         color="#ffffff"
       />
