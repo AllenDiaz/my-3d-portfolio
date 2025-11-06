@@ -21,7 +21,7 @@ const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
 
 export default function ThreeDOfficePage() {
   return (
-    <main className="relative">
+    <main className="relative bg-black dark:bg-black transition-colors">
       {/* Navigation */}
       <Navbar />
 
@@ -29,7 +29,7 @@ export default function ThreeDOfficePage() {
       <LightToggle />
 
       {/* 3D Office Experience */}
-      <div className="relative w-full h-screen bg-black overflow-hidden">
+      <div className="relative w-full h-screen bg-black dark:bg-black overflow-hidden transition-colors">
         {/* 3D Scene Background */}
         <Scene3D>
           <MainScene />
@@ -50,7 +50,7 @@ export default function ThreeDOfficePage() {
 
         {/* Instructions Overlay */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <div className="bg-black/80 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-gray-700 text-sm">
+          <div className="bg-black/80 dark:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-gray-700 dark:border-gray-600 text-sm transition-colors">
             <span className="font-semibold">Click</span> objects to explore • <span className="font-semibold">Drag</span> to rotate • <span className="font-semibold">Scroll</span> to zoom
           </div>
         </div>

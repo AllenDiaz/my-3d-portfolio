@@ -43,7 +43,7 @@ const Hero = () => {
         >
           {/* Badge */}
           <motion.div variants={itemVariants}>
-            <span className="inline-block px-4 py-2 bg-blue-500/10 backdrop-blur-md border border-blue-500/20 rounded-full text-blue-400 text-sm font-medium">
+            <span className="inline-block px-4 py-2 bg-blue-500/10 dark:bg-blue-500/20 backdrop-blur-md border border-blue-500/20 dark:border-blue-500/30 rounded-full text-blue-400 dark:text-blue-300 text-sm font-medium transition-colors">
               Available for Opportunities
             </span>
           </motion.div>
@@ -76,7 +76,7 @@ const Hero = () => {
             {['React', 'Next.js', 'TypeScript', 'Three.js', 'Node.js', 'TailwindCSS'].map((tech) => (
               <span
                 key={tech}
-                className="px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg text-gray-300 text-sm hover:bg-white/10 transition-colors"
+                className="px-4 py-2 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-300 dark:text-gray-200 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors"
               >
                 {tech}
               </span>
@@ -100,7 +100,7 @@ const Hero = () => {
             </Link>
 
             <Link href="/about">
-              <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all hover:scale-105 flex items-center gap-2">
+              <button className="px-8 py-4 bg-white/10 dark:bg-white/20 backdrop-blur-md border border-white/20 dark:border-white/30 rounded-xl text-white font-semibold hover:bg-white/20 dark:hover:bg-white/30 transition-all hover:scale-105 flex items-center gap-2">
                 <Mail className="w-5 h-5" />
                 About Me
               </button>
@@ -109,7 +109,7 @@ const Hero = () => {
             <a
               href="/Allen_Diaz_Resume.pdf"
               download
-              className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl text-gray-300 font-semibold hover:bg-white/10 transition-all hover:scale-105 flex items-center gap-2"
+              className="px-8 py-4 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-xl text-gray-300 dark:text-gray-200 font-semibold hover:bg-white/10 dark:hover:bg-white/20 transition-all hover:scale-105 flex items-center gap-2"
             >
               <Download className="w-5 h-5" />
               Resume
@@ -122,7 +122,7 @@ const Hero = () => {
               href="https://github.com/AllenDiaz"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all hover:scale-110"
+              className="p-3 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-400 dark:text-gray-300 hover:text-white hover:bg-white/10 dark:hover:bg-white/20 hover:border-white/20 dark:hover:border-white/30 transition-all hover:scale-110"
               aria-label="GitHub"
             >
               <Github className="w-6 h-6" />
@@ -131,14 +131,14 @@ const Hero = () => {
               href="https://www.linkedin.com/in/allen-diaz-525071258/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all hover:scale-110"
+              className="p-3 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-400 dark:text-gray-300 hover:text-white hover:bg-white/10 dark:hover:bg-white/20 hover:border-white/20 dark:hover:border-white/30 transition-all hover:scale-110"
               aria-label="LinkedIn"
             >
               <Linkedin className="w-6 h-6" />
             </a>
             <a
               href="mailto:allendiaz.developer@gmail.com"
-              className="p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all hover:scale-110"
+              className="p-3 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-400 dark:text-gray-300 hover:text-white hover:bg-white/10 dark:hover:bg-white/20 hover:border-white/20 dark:hover:border-white/30 transition-all hover:scale-110"
               aria-label="Email"
             >
               <Mail className="w-6 h-6" />
@@ -158,7 +158,7 @@ const Hero = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity animate-pulse" />
             
             {/* Photo container */}
-            <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/10 backdrop-blur-sm bg-gradient-to-br from-gray-800 to-gray-900">
+            <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/10 dark:border-white/20 backdrop-blur-sm bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 transition-colors">
               {/* Placeholder - Replace with actual photo */}
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center space-y-4">
@@ -184,7 +184,7 @@ const Hero = () => {
               transition={{ delay: 1, duration: 0.6 }}
               className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-max"
             >
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-6 py-3 flex items-center gap-6">
+              <div className="bg-white/10 dark:bg-white/20 backdrop-blur-md border border-white/20 dark:border-white/30 rounded-xl px-6 py-3 flex items-center gap-6 transition-colors">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">5+</div>
                   <div className="text-xs text-gray-400">Years Exp</div>

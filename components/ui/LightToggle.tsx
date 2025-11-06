@@ -23,8 +23,8 @@ export default function LightToggle() {
         border transition-all duration-300
         hover:scale-105 active:scale-95
         ${lightsOn 
-          ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/30' 
-          : 'bg-gray-800/80 border-gray-600/50 text-gray-400 hover:bg-gray-700/80'
+          ? 'bg-yellow-500/20 dark:bg-yellow-500/30 border-yellow-500/50 dark:border-yellow-500/60 text-yellow-300 dark:text-yellow-200 hover:bg-yellow-500/30 dark:hover:bg-yellow-500/40' 
+          : 'bg-gray-800/80 dark:bg-gray-700/80 border-gray-600/50 dark:border-gray-500/50 text-gray-400 dark:text-gray-300 hover:bg-gray-700/80 dark:hover:bg-gray-600/80'
         }
       `}
       whileHover={{ scale: 1.05 }}

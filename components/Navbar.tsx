@@ -3,13 +3,17 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Code2, User, Briefcase, Mail, FolderOpen, Download } from 'lucide-react';
+import { Menu, X, Code2, User, Briefcase, Mail, FolderOpen, Download, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -31,8 +35,8 @@ export default function Navbar() {
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-black/80 backdrop-blur-md border-b border-white/10'
-          : 'bg-black/50 backdrop-blur-sm'
+          ? 'bg-black/80 dark:bg-black/90 backdrop-blur-md border-b border-white/10 dark:border-white/10'
+          : 'bg-black/50 dark:bg-black/60 backdrop-blur-sm'
       }`}
     >
       <div className="container mx-auto px-6 lg:px-8">
@@ -63,6 +67,20 @@ export default function Navbar() {
 
           {/* CTA Button - Desktop */}
           <div className="hidden lg:flex items-center gap-4">
+            {/* Theme Toggle */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-5 h-5 text-yellow-400" />
+                ) : (
+                  <Moon className="w-5 h-5 text-blue-400" />
+                )}
+              </button>
+            )}
             <a
               href="/Allen_Diaz_Resume.pdf"
               download
@@ -103,6 +121,25 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              {/* Mobile Theme Toggle */}
+              {mounted && (
+                <button
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-3"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun className="w-5 h-5 text-yellow-400" />
+                      <span>Light Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-5 h-5 text-blue-400" />
+                      <span>Dark Mode</span>
+                    </>
+                  )}
+                </button>
+              )}
               <a
                 href="/Allen_Diaz_Resume.pdf"
                 download

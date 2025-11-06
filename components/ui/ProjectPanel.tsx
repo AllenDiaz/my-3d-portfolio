@@ -21,7 +21,7 @@ export default function ProjectPanel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm z-40 transition-colors"
             onClick={handleClose}
           />
 
@@ -33,7 +33,7 @@ export default function ProjectPanel() {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl mx-4"
           >
-            <div className="bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-800 overflow-hidden">
+            <div className="bg-zinc-900 dark:bg-zinc-800 rounded-2xl shadow-2xl border border-zinc-800 dark:border-zinc-700 overflow-hidden transition-colors">
               {/* Header */}
               <div className="relative h-48 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-8">
                 <button
@@ -92,9 +92,9 @@ export default function ProjectPanel() {
                 </div>
 
                 {/* Additional Info */}
-                <div className="mt-8 pt-6 border-t border-zinc-800">
+                <div className="mt-8 pt-6 border-t border-zinc-800 dark:border-zinc-700 transition-colors">
                   <h3 className="text-white font-semibold mb-3">Key Features</h3>
-                  <ul className="space-y-2 text-gray-400">
+                  <ul className="space-y-2 text-gray-400 dark:text-gray-300">
                     <li className="flex items-start">
                       <span className="text-blue-500 mr-2">•</span>
                       <span>Modern and responsive design</span>

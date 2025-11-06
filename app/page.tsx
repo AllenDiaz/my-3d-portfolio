@@ -38,7 +38,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative bg-black min-h-screen">
+    <main className="relative bg-black dark:bg-black min-h-screen transition-colors">
       {/* Navigation */}
       <Navbar />
 
@@ -58,7 +58,7 @@ export default function Home() {
         </div>
 
         {/* Overlay gradient for better text readability - pointer-events-none allows 3D interaction */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 dark:from-black/70 dark:via-black/50 dark:to-black/90 z-10 pointer-events-none transition-colors" />
 
         {/* Hero Content - pointer-events-none on container, interactive elements have pointer-events-auto */}
         <div className="relative z-20 w-full pointer-events-none">
@@ -67,7 +67,7 @@ export default function Home() {
       </section>
 
       {/* Quick Links Section */}
-      <section className="relative py-20 px-8 bg-gradient-to-b from-black via-gray-900 to-black">
+      <section className="relative py-20 px-8 bg-gradient-to-b from-black via-gray-900 to-black dark:from-black dark:via-gray-900 dark:to-black transition-colors">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -94,7 +94,7 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <Link href={feature.href}>
-                  <div className="group relative h-full bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all hover:scale-105 hover:border-white/20 cursor-pointer">
+                  <div className="group relative h-full bg-white/5 dark:bg-white/5 backdrop-blur-md border border-white/10 dark:border-white/10 rounded-2xl p-8 hover:bg-white/10 dark:hover:bg-white/10 transition-all hover:scale-105 hover:border-white/20 cursor-pointer">
                     {/* Icon */}
                     <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                       <feature.icon className="w-8 h-8 text-white" />
@@ -125,9 +125,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-8 px-8 bg-black border-t border-white/10">
+      <footer className="relative py-8 px-8 bg-black dark:bg-black border-t border-white/10 dark:border-white/10 transition-colors">
         <div className="container mx-auto max-w-7xl text-center">
-          <p className="text-gray-400">
+          <p className="text-gray-400 dark:text-gray-400">
             © {new Date().getFullYear()} Allen Diaz. Built with Next.js, Three.js & Tailwind CSS.
           </p>
         </div>

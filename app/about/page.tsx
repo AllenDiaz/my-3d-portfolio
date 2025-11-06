@@ -5,7 +5,7 @@ import AboutMe from '@/components/AboutMe';
 
 export default function AboutPage() {
   return (
-    <main className="relative bg-black min-h-screen">
+    <main className="relative bg-black dark:bg-black min-h-screen transition-colors">
       {/* Navigation */}
       <Navbar />
 
