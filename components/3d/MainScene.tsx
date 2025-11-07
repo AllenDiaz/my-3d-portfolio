@@ -3,8 +3,13 @@
 import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
+import DeskLamp from './DeskLamp';
 import SceneSetup from './SceneSetup';
 import BinaryWall from './BinaryWall';
+import PostProcessing from './PostProcessing';
+import FloatingParticles from './FloatingParticles';
+import AmbientSound from './AmbientSound';
+import HolographicDisplay from './HolographicDisplay';
 import { useStore } from '@/store/useStore';
 
 export default function MainScene() {
@@ -12,20 +17,32 @@ export default function MainScene() {
   
   return (
     <>
+      {/* Ambient Sound System */}
+      <AmbientSound enabled={true} />
+      
       {/* Scene Setup (Lights, Camera, Controls) */}
-      <SceneSetup />
+      <SceneSetup enableCinematicIntro={true} />
 
-      {/* Binary Wall - Only visible when lights are on */}
-      {lightsOn && (
-        <>
-          <BinaryWall position={[0, 2, -4.8]} rotation={[0, 0, 0]} width={12} height={5} />
-          <BinaryWall position={[-6, 2, 0]} rotation={[0, Math.PI / 2, 0]} width={10} height={5} />
-          <BinaryWall position={[6, 2, 0]} rotation={[0, -Math.PI / 2, 0]} width={10} height={5} />
-        </>
-      )}
+      {/* Binary Wall - Intermittent surreal effect */}
+      {/* NO BACK WALL - Creates eerie absence behind desk/chair */}
+      
+      {/* Left Wall - Flickering binary */}
+      <BinaryWall position={[-9.95, 3, 0]} rotation={[0, Math.PI / 2, 0]} width={20} height={6} />
+      
+      {/* Right Wall - Flickering binary */}
+      <BinaryWall position={[9.95, 3, 0]} rotation={[0, -Math.PI / 2, 0]} width={20} height={6} />
+      
+      {/* Front Wall - Flickering binary */}
+      <BinaryWall position={[0, 3, 10]} rotation={[0, Math.PI, 0]} width={20} height={6} />
 
       {/* Office Environment */}
       <OfficeRoom />
+
+      {/* Atmospheric Particles */}
+      <FloatingParticles count={300} />
+
+      {/* Holographic Display */}
+      <HolographicDisplay position={[0, 2, -4.5]} />
 
       {/* Interactive Computers/Monitors */}
       <Computer position={[-0.5, 0.8, -1.9]} projectId="1" />
@@ -64,6 +81,12 @@ export default function MainScene() {
         itemType="phone" 
         label="Contact Me"
       />
+
+      {/* Interactive Desk Lamp */}
+      <DeskLamp position={[1.2, 0.82, -1.5]} />
+
+      {/* Post-Processing Effects */}
+      <PostProcessing />
     </>
   );
 }

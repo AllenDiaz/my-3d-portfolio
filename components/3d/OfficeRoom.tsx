@@ -1,14 +1,15 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { Mesh, BoxGeometry } from 'three';
+import { MeshReflectorMaterial } from '@react-three/drei';
 
 export default function OfficeRoom() {
   const floorRef = useRef<Mesh>(null);
   
   return (
     <group>
-      {/* Floor */}
+      {/* Floor with Reflections */}
       <mesh 
         ref={floorRef}
         rotation={[-Math.PI / 2, 0, 0]} 
@@ -16,10 +17,17 @@ export default function OfficeRoom() {
         receiveShadow
       >
         <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial 
-          color="#1a1a1a" 
-          roughness={0.8}
-          metalness={0.2}
+        <MeshReflectorMaterial
+          blur={[300, 100]}
+          resolution={512}
+          mixBlur={1}
+          mixStrength={0.3}
+          roughness={0.7}
+          depthScale={1.2}
+          minDepthThreshold={0.4}
+          maxDepthThreshold={1.4}
+          color="#1a1a1a"
+          metalness={0.5}
         />
       </mesh>
 

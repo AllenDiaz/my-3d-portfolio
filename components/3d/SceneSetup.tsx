@@ -1,23 +1,32 @@
 'use client';
 
-import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { useStore } from '@/store/useStore';
+import CinematicCamera from './CinematicCamera';
 
-export default function SceneSetup() {
+interface SceneSetupProps {
+  enableCinematicIntro?: boolean;
+}
+
+export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupProps) {
   const { camera } = useThree();
   const lightsOn = useStore((state) => state.lightsOn);
 
   useEffect(() => {
-    // Set initial camera position
-    camera.position.set(0, 1.5, 5);
-  }, [camera]);
+    // Set initial camera position if not using cinematic intro
+    if (!enableCinematicIntro) {
+      camera.position.set(0, 1.5, 5);
+    }
+  }, [camera, enableCinematicIntro]);
 
   return (
     <>
       {/* Camera */}
-      <PerspectiveCamera makeDefault position={[0, 1.5, 5]} fov={50} />
+      {enableCinematicIntro ? (
+        <CinematicCamera />
+      ) : null}
 
       {/* Camera Controls */}
       <OrbitControls

@@ -69,7 +69,7 @@ export default function BinaryWall({
         time: { value: 0 },
         map: { value: texture },
         glowColor: { value: new THREE.Color(0x00ff00) },
-        intensity: { value: 1.5 }
+        intensity: { value: 2.0 }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -85,24 +85,62 @@ export default function BinaryWall({
         uniform float intensity;
         varying vec2 vUv;
         
+        // Pseudo-random function for more chaotic behavior
+        float random(vec2 st) {
+          return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+        }
+        
         void main() {
           vec2 uv = vUv;
           
-          // Scrolling effect
-          uv.y += time * 0.05;
+          // Slow, eerie scrolling effect
+          uv.y += time * 0.03;
           
           // Get texture color
           vec4 texColor = texture2D(map, uv);
           
-          // Add glow
-          float glow = sin(time * 2.0 + vUv.y * 10.0) * 0.5 + 0.5;
-          vec3 finalColor = texColor.rgb * glowColor * intensity * (0.7 + glow * 0.3);
+          // SURREAL INTERMITTENT APPEARANCE SYSTEM
+          // Creates unpredictable, unsettling patterns where code appears and vanishes
           
-          // Fade edges
-          float edgeFade = smoothstep(0.0, 0.1, vUv.x) * smoothstep(1.0, 0.9, vUv.x);
-          edgeFade *= smoothstep(0.0, 0.1, vUv.y) * smoothstep(1.0, 0.9, vUv.y);
+          // Multiple independent flicker layers with different frequencies
+          float flicker1 = sin(time * 2.3 + vUv.x * 12.0) * 0.5 + 0.5;
+          float flicker2 = sin(time * 3.7 + vUv.y * 9.0 + vUv.x * 3.0) * 0.5 + 0.5;
+          float flicker3 = cos(time * 1.8 + vUv.x * 7.0 - vUv.y * 5.0) * 0.5 + 0.5;
+          float flicker4 = sin(time * 4.2) * 0.5 + 0.5;
           
-          gl_FragColor = vec4(finalColor, texColor.a * edgeFade);
+          // Add random noise for more erratic behavior
+          float noise = random(vUv + time * 0.1);
+          float noiseFactor = smoothstep(0.3, 0.7, noise);
+          
+          // Vertical sections that flicker independently (creates eerie patchy effect)
+          float sectionFlicker = sin(floor(vUv.x * 8.0) + time * 2.0) * 0.5 + 0.5;
+          
+          // Horizontal waves of disappearance
+          float waveDisappear = sin(vUv.y * 6.0 - time * 1.5) * 0.5 + 0.5;
+          
+          // Combined visibility - always visible but with varying intensity
+          float visibility = flicker1 * flicker2 * flicker3 * flicker4;
+          visibility *= mix(0.7, 1.0, noiseFactor);
+          visibility *= mix(0.6, 1.0, sectionFlicker);
+          visibility *= mix(0.7, 1.0, waveDisappear);
+          
+          // Keep it always visible (minimum 0.6, maximum 1.0)
+          visibility = mix(0.6, 1.0, visibility);
+          
+          // When visible, add pulsing intensity (brighter)
+          float pulse = sin(time * 2.0 + vUv.x * 8.0 + vUv.y * 6.0) * 0.2 + 0.9;
+          
+          // Ethereal glow effect when visible (increased brightness)
+          float glow = sin(time * 1.2 + vUv.y * 4.0) * 0.3 + 1.0;
+          
+          // Final color with enhanced brightness and glow
+          vec3 finalColor = texColor.rgb * glowColor * intensity * glow * pulse * 1.5;
+          
+          // Critical: Alpha becomes 0 when disappeared - LEAVES NO TRACE
+          // This creates the eerie sense of complete absence
+          float alpha = texColor.a * visibility;
+          
+          gl_FragColor = vec4(finalColor, alpha);
         }
       `,
       transparent: true,
