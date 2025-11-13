@@ -31,6 +31,14 @@ interface StoreState {
   lightsOn: boolean;
   setLightsOn: (lightsOn: boolean) => void;
   
+  // Chair notification state
+  showChairNotification: boolean;
+  setShowChairNotification: (show: boolean) => void;
+  
+  // Character visibility state
+  showCharacter: boolean;
+  setShowCharacter: (show: boolean) => void;
+  
   // Projects data
   projects: Project[];
   setProjects: (projects: Project[]) => void;
@@ -51,6 +59,12 @@ export const useStore = create<StoreState>((set) => ({
   
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),
+  
+  showChairNotification: false,
+  setShowChairNotification: (show) => set({ showChairNotification: show }),
+  
+  showCharacter: false,
+  setShowCharacter: (show) => set({ showCharacter: show }),
   
   projects: [
     {

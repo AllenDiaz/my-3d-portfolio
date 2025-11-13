@@ -1,11 +1,23 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import { Mesh, BoxGeometry } from 'three';
 import { MeshReflectorMaterial } from '@react-three/drei';
+import { useStore } from '@/store/useStore';
+import { ThreeEvent } from '@react-three/fiber';
 
 export default function OfficeRoom() {
   const floorRef = useRef<Mesh>(null);
+  const chairRef = useRef<Mesh>(null);
+  const [chairHovered, setChairHovered] = useState(false);
+  const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  const setShowCharacter = useStore((state) => state.setShowCharacter);
+  
+  const handleChairClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    setShowChairNotification(true);
+    setShowCharacter(true);
+  };
   
   return (
     <group>
@@ -121,13 +133,28 @@ export default function OfficeRoom() {
       </group>
 
       {/* Chair */}
-      <group position={[0, 0, 1]}>
+      <group 
+        position={[0, 0, 1]}
+        onClick={handleChairClick}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setChairHovered(true);
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          setChairHovered(false);
+          document.body.style.cursor = 'auto';
+        }}
+      >
         {/* Seat */}
         <mesh position={[0, 0.5, 0]} castShadow>
           <boxGeometry args={[0.6, 0.1, 0.6]} />
           <meshStandardMaterial 
-            color="#1a1a2e"
+            color={chairHovered ? "#2a2a4e" : "#1a1a2e"}
             roughness={0.7}
+            emissive={chairHovered ? "#3a3a6e" : "#000000"}
+            emissiveIntensity={chairHovered ? 0.3 : 0}
           />
         </mesh>
 
@@ -135,8 +162,10 @@ export default function OfficeRoom() {
         <mesh position={[0, 0.9, -0.25]} castShadow>
           <boxGeometry args={[0.6, 0.8, 0.1]} />
           <meshStandardMaterial 
-            color="#1a1a2e"
+            color={chairHovered ? "#2a2a4e" : "#1a1a2e"}
             roughness={0.7}
+            emissive={chairHovered ? "#3a3a6e" : "#000000"}
+            emissiveIntensity={chairHovered ? 0.3 : 0}
           />
         </mesh>
 

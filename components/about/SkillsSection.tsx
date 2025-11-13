@@ -34,7 +34,7 @@ const SkillsSection = () => {
       skills: [
         { name: 'Node.js', level: 90 },
         { name: 'Express.js', level: 85 },
-        { name: 'Python', level: 75 },
+        { name: 'Python', level: 90 },
         { name: 'REST API', level: 90 },
         { name: 'GraphQL', level: 80 },
         { name: 'Microservices', level: 75 },
@@ -46,7 +46,7 @@ const SkillsSection = () => {
       color: 'from-purple-500 to-pink-500',
       skills: [
         { name: 'MongoDB', level: 85 },
-        { name: 'PostgreSQL', level: 80 },
+        { name: 'PostgreSQL', level: 90 },
         { name: 'MySQL', level: 80 },
         { name: 'Redis', level: 75 },
         { name: 'Firebase', level: 85 },
@@ -165,10 +165,10 @@ const SkillsSection = () => {
         <h4 className="text-2xl font-bold text-white mb-6 text-center">Tech Stack</h4>
         <div className="flex flex-wrap justify-center gap-3">
           {[
-            'React', 'Next.js', 'TypeScript', 'Node.js', 'MongoDB', 
-            'PostgreSQL', 'Tailwind CSS', 'Three.js', 'GraphQL', 
-            'Docker', 'AWS', 'Git', 'Figma', 'Redux', 'Express.js',
-            'Python', 'Firebase', 'Vercel', 'REST API', 'Webpack'
+            'React', 'Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL','Node.js', 'MongoDB', 
+           'Tailwind CSS', 'Three.js', 'GraphQL', 
+            'Docker', 'GCP', 'AWS', 'Azuer', 'Git', 'Linux', 'Figma', 'Redux', 'Express.js',
+            'Python', 'Javascript', 'Laravel', 'Firebase', 'Vercel', 'REST API', 'Webpack'
           ].map((tech) => (
             <motion.span
               key={tech}

@@ -43,10 +43,10 @@ const AboutMe = () => {
   };
 
   const stats = [
-    { icon: Briefcase, label: 'Years Experience', value: '5+' },
-    { icon: Code2, label: 'Projects Completed', value: '50+' },
-    { icon: Award, label: 'Client Satisfaction', value: '100%' },
-    { icon: GitBranch, label: 'Open Source', value: '20+' },
+    { icon: Briefcase, label: 'Years Experience', value: '3+' },
+    { icon: Code2, label: 'Projects Completed', value: '30+' },
+    { icon: Award, label: 'Certifications', value: '35+' },
+    { icon: GitBranch, label: 'Open Source', value: '10+' },
   ];
 
   return (
@@ -90,21 +90,16 @@ const AboutMe = () => {
               <h3 className="text-3xl font-bold text-white mb-4">My Story</h3>
               <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p>
-                  Hello! I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a passionate 
-                  Full-Stack Developer with over 5 years of experience building innovative web applications 
-                  and digital solutions. I specialize in creating seamless user experiences using modern 
-                  technologies like React, Next.js, and Three.js.
+                  I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a Full-Stack Engineer 
+                  with 3+ years of experience turning ideas into powerful, scalable web applications. My journey 
+                  began in high school with a simple curiosity about how the web works—and evolved into a passion 
+                  for building efficient, user-friendly digital solutions.
                 </p>
                 <p>
-                  My journey in software development started with a curiosity about how things work on the 
-                  web. This curiosity evolved into a deep passion for building efficient, scalable, and 
-                  user-friendly applications. I thrive on solving complex problems and transforming ideas 
-                  into reality through code.
-                </p>
-                <p>
-                  When I'm not coding, I enjoy exploring new technologies, contributing to open-source 
-                  projects, and sharing knowledge with the developer community. I believe in continuous 
-                  learning and staying up-to-date with the latest industry trends.
+                  I thrive on solving complex problems, exploring new technologies, and contributing to open-source 
+                  projects. When I'm not coding, you'll find me running, shooting hoops on the basketball court, 
+                  or sharing knowledge with the developer community. For me, continuous learning isn't just a 
+                  habit—it's a mindset.
                 </p>
               </div>
 
@@ -154,7 +149,7 @@ const AboutMe = () => {
 
                 {/* Download Resume Button */}
                 <motion.a
-                  href="/Allen_Diaz_Resume.pdf"
+                  href="/AllenDiaz_CV.pdf"
                   download
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -168,18 +163,25 @@ const AboutMe = () => {
               {/* Certifications / Achievements */}
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8">
                 <h3 className="text-2xl font-bold text-white mb-6">Certifications</h3>
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
                   {[
-                    'AWS Certified Developer',
-                    'Google Cloud Professional',
-                    'Meta React Developer',
-                    'MongoDB Certified',
+                    'Udemy Web Developer Bootcamp 2025 – Colt Steele',
+                    'IBM Full-Stack JavaScript Developer Specialization',
+                    'GenAI for Data-Driven Solutions – US ASEAN Center',
+                    'AWS Academy Cloud Foundations – AWS',
+                    'Google Cloud Fundamentals: Core Infrastructure – Google',
+                    'Introduction to Microsoft Azure Cloud Services – Microsoft',
+                    'Introduction to Containers with Docker, Kubernetes & OpenShift – IBM',
+                    'Get Started with Cloud Native, DevOps, Agile, and NoSQL – IBM',
                   ].map((cert) => (
                     <div key={cert} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">{cert}</span>
+                      <span className="text-gray-300 text-sm">{cert}</span>
                     </div>
                   ))}
+                  <div className="flex items-center gap-3 pt-2 border-t border-white/10">
+                    <span className="text-gray-400 text-sm italic">...and more</span>
+                  </div>
                 </div>
               </div>
             </div>

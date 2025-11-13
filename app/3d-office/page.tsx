@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 import LightToggle from '@/components/ui/LightToggle';
+import SystemNotification from '@/components/ui/SystemNotification';
+import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), {
@@ -20,6 +22,9 @@ const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
 });
 
 export default function ThreeDOfficePage() {
+  const showChairNotification = useStore((state) => state.showChairNotification);
+  const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
       {/* Navigation */}
@@ -55,6 +60,13 @@ export default function ThreeDOfficePage() {
           </div>
         </div>
       </div>
+
+      {/* System Notification for Chair */}
+      <SystemNotification
+        isOpen={showChairNotification}
+        onClose={() => setShowChairNotification(false)}
+        message="Thank you for considering me for the vacant seat in this role. I deeply appreciate your interest. If entrusted with this opportunity, I promise to bring not only dedication and excellence—but also peace of mind."
+      />
     </main>
   );
 }

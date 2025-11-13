@@ -57,7 +57,7 @@ const Hero = () => {
               </span>
             </h1>
             <h2 className="text-2xl lg:text-3xl text-gray-300 font-light">
-              Full-Stack Developer & Creative Problem Solver
+              Full-Stack Engineer | Software Engineer | AI Enthusiast
             </h2>
           </motion.div>
 
@@ -66,14 +66,15 @@ const Hero = () => {
             variants={itemVariants}
             className="text-lg text-gray-400 max-w-2xl leading-relaxed backdrop-blur-sm"
           >
-            Passionate about crafting exceptional digital experiences with modern web technologies. 
-            Specializing in React, Next.js, and Three.js to build innovative, user-centric applications 
-            that make a difference.
+            Full-Stack Engineer specializing in React, Next.js, FastAPI, and Express. 
+            Currently working on AI solutions at Albertsons Companies as a Full-Stack Engineer / AI Engineer, 
+            designing scalable system architectures and delivering enterprise-grade applications. 
+            Certified by IBM, Meta, and Microsoft with published research in IEEE.
           </motion.p>
 
           {/* Tech Stack Pills */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-            {['React', 'Next.js', 'TypeScript', 'Three.js', 'Node.js', 'TailwindCSS'].map((tech) => (
+            {['React', 'Next.js', 'FastAPI', 'Express', 'Docker', 'Kubernetes', 'GCP', 'Azure', 'AWS', 'Python', 'Node.js', 'TypeScript', 'MongoDB', 'PostgreSQL', 'Linux', 'More...'].map((tech) => (
               <span
                 key={tech}
                 className="px-4 py-2 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-300 dark:text-gray-200 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors"
@@ -107,7 +108,7 @@ const Hero = () => {
             </Link>
 
             <a
-              href="/Allen_Diaz_Resume.pdf"
+              href="/AllenDiaz_CV.pdf"
               download
               className="px-8 py-4 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-xl text-gray-300 dark:text-gray-200 font-semibold hover:bg-white/10 dark:hover:bg-white/20 transition-all hover:scale-105 flex items-center gap-2"
             >
@@ -158,23 +159,12 @@ const Hero = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity animate-pulse" />
             
             {/* Photo container */}
-            <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/10 dark:border-white/20 backdrop-blur-sm bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 transition-colors">
-              {/* Placeholder - Replace with actual photo */}
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-6xl font-bold text-white">
-                    AD
-                  </div>
-                  <p className="text-gray-400 text-sm">Professional Photo</p>
-                </div>
-              </div>
-              
-              {/* Uncomment when you have a photo */}
-              {/* <img
-                src="/images/profile.jpg"
-                alt="Allen Diaz"
-                className="w-full h-full object-cover"
-              /> */}
+            <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/10 dark:border-white/20 backdrop-blur-sm bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 transition-colors shadow-2xl">
+              <img
+                src="/images/profile-picture.jpg"
+                alt="Allen Diaz - Full-Stack Developer"
+                className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+              />
             </div>
 
             {/* Floating stats */}
@@ -186,18 +176,18 @@ const Hero = () => {
             >
               <div className="bg-white/10 dark:bg-white/20 backdrop-blur-md border border-white/20 dark:border-white/30 rounded-xl px-6 py-3 flex items-center gap-6 transition-colors">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">5+</div>
-                  <div className="text-xs text-gray-400">Years Exp</div>
+                  <div className="text-2xl font-bold text-white">3+</div>
+                  <div className="text-xs text-gray-400">Experience</div>
                 </div>
                 <div className="w-px h-8 bg-white/20" />
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">50+</div>
+                  <div className="text-2xl font-bold text-white">30+</div>
                   <div className="text-xs text-gray-400">Projects</div>
                 </div>
                 <div className="w-px h-8 bg-white/20" />
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">100%</div>
-                  <div className="text-xs text-gray-400">Satisfaction</div>
+                  <div className="text-2xl font-bold text-white">35+</div>
+                  <div className="text-xs text-gray-400">Certifications</div>
                 </div>
               </div>
             </motion.div>

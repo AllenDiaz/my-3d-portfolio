@@ -82,7 +82,7 @@ export default function Navbar() {
               </button>
             )}
             <a
-              href="/Allen_Diaz_Resume.pdf"
+              href="/AllenDiaz_CV.pdf"
               download
               className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center gap-2"
             >
@@ -141,7 +141,7 @@ export default function Navbar() {
                 </button>
               )}
               <a
-                href="/Allen_Diaz_Resume.pdf"
+                href="/AllenDiaz_CV.pdf"
                 download
                 className="mt-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-semibold text-center flex items-center justify-center gap-2"
               >
