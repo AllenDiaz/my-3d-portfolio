@@ -2,77 +2,68 @@
 
 import { motion } from 'framer-motion';
 import { GraduationCap, Award, BookOpen, Calendar } from 'lucide-react';
+import Image from 'next/image';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 const EducationSection = () => {
   const education = [
     {
-      degree: 'Bachelor of Science in Computer Science',
-      school: 'University of the Philippines',
-      location: 'Manila, Philippines',
-      period: '2014 - 2018',
-      gpa: '3.8/4.0',
-      description: 'Focused on software engineering, data structures, algorithms, and web development. Active member of the Computer Science Society.',
+      degree: 'Bachelor of Science in Information Technology',
+      school: 'Central Luzon State University',
+      location: 'Nueva Ecija, Philippines',
+      period: '2019 - 2024',
+      gpa: 'University Scholar',
+      description: 'Major in Systems Development with focus on software development, web technologies, and database management. Recognized as University Scholar for academic excellence.',
       achievements: [
-        'Dean\'s Lister for 6 consecutive semesters',
-        'Best Capstone Project Award',
-        'Graduated with Honors',
+        'University Scholar',
+        'Major in Systems Development',
+        'Strong foundation in IT systems and software development',
       ],
-      relevant: ['Software Engineering', 'Web Development', 'Database Systems', 'Algorithm Design'],
+      relevant: ['Systems Development', 'Web Technologies', 'Database Management', 'Software Engineering', 'IT Infrastructure'],
       color: 'from-blue-500 to-cyan-500',
     },
     {
-      degree: 'Full-Stack Web Development Bootcamp',
-      school: 'Coding Dojo',
+      degree: 'Web Developer Bootcamp',
+      school: 'Colt Steele',
       location: 'Online',
-      period: '2018',
+      period: '2025',
       gpa: 'Certificate of Completion',
-      description: 'Intensive 14-week program covering full-stack web development with focus on modern JavaScript frameworks and best practices.',
+      description: 'Comprehensive web development course covering full-stack development with modern tools and best practices.',
       achievements: [
-        'Built 10+ full-stack applications',
-        'Top performer in cohort',
-        'Completed advanced JavaScript track',
+        'Completed comprehensive web development curriculum',
+        'Built multiple full-stack projects',
+        'Mastered modern web technologies',
       ],
-      relevant: ['React', 'Node.js', 'MongoDB', 'Express.js', 'RESTful APIs'],
+      relevant: ['HTML5', 'CSS3', 'JavaScript', 'Node.js', 'Express.js', 'MongoDB', 'RESTful APIs'],
       color: 'from-purple-500 to-pink-500',
     },
   ];
 
   const certifications = [
     {
-      name: 'AWS Certified Solutions Architect',
-      issuer: 'Amazon Web Services',
-      date: '2023',
-      icon: '☁️',
+      name: 'The Web Developer Bootcamp 2025',
+      issuer: 'Colt Steele - Udemy',
+      date: '2025',
+      image: '/images/the-web-developer-bootcamp-2025.jpg',
     },
     {
-      name: 'Google Cloud Professional Developer',
-      issuer: 'Google Cloud',
-      date: '2023',
-      icon: '🌐',
+      name: 'Generative AI for Everyone',
+      issuer: 'DeepLearning.AI Academy',
+      date: '2024',
+      image: '/images/generative-ai-for-everyone-academy.jpg',
     },
     {
-      name: 'Meta React Developer Professional',
-      issuer: 'Meta (Facebook)',
-      date: '2022',
-      icon: '⚛️',
+      name: 'IBM JavaScript Full Stack Specialization',
+      issuer: 'IBM - Coursera',
+      date: '2024',
+      image: '/images/IBM-JAVASCRIPT-FULLSTACK-SPECIALIZATIONS.jpeg',
     },
     {
-      name: 'MongoDB Certified Developer',
-      issuer: 'MongoDB University',
-      date: '2022',
-      icon: '🍃',
-    },
-    {
-      name: 'Advanced JavaScript Certification',
-      issuer: 'freeCodeCamp',
-      date: '2021',
-      icon: '📜',
-    },
-    {
-      name: 'UI/UX Design Certification',
-      issuer: 'Coursera',
-      date: '2021',
-      icon: '🎨',
+      name: 'Industry Professional Credentials Track',
+      issuer: 'Professional Development',
+      date: '2024',
+      image: '/images/Industy-professional-credentials-track.jpeg',
     },
   ];
 
@@ -200,23 +191,36 @@ const EducationSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {certifications.map((cert, index) => (
-            <motion.div
-              key={cert.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -3 }}
-              className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all cursor-pointer"
-            >
-              <div className="text-4xl mb-3">{cert.icon}</div>
-              <h4 className="text-white font-semibold mb-2 text-sm">{cert.name}</h4>
-              <div className="text-xs text-gray-400 mb-1">{cert.issuer}</div>
-              <div className="text-xs text-blue-400 font-medium">{cert.date}</div>
-            </motion.div>
-          ))}
-        </div>
+        <PhotoProvider>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {certifications.map((cert, index) => (
+              <motion.div
+                key={cert.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -3 }}
+                className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all cursor-pointer"
+              >
+                <PhotoView src={cert.image}>
+                  <div className="relative h-48 w-full bg-white/5">
+                    <Image
+                      src={cert.image}
+                      alt={cert.name}
+                      fill
+                      className="object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                </PhotoView>
+                <div className="p-4">
+                  <h4 className="text-white font-semibold mb-2 text-sm">{cert.name}</h4>
+                  <div className="text-xs text-gray-400 mb-1">{cert.issuer}</div>
+                  <div className="text-xs text-blue-400 font-medium">{cert.date}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </PhotoProvider>
       </motion.div>
 
       {/* Learning Stats */}

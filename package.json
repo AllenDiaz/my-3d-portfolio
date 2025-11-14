@@ -34,6 +34,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.66.0",
+    "react-photo-view": "^1.2.7",
     "stats.js": "^0.17.0",
     "three": "^0.181.0",
     "tunnel-rat": "^0.1.2",
