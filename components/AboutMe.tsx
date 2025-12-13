@@ -97,9 +97,10 @@ const AboutMe = () => {
                 </p>
                 <p>
                   I thrive on solving complex problems, exploring new technologies, and contributing to open-source 
-                  projects. When I'm not coding, you'll find me running, shooting hoops on the basketball court, 
-                  or sharing knowledge with the developer community. For me, continuous learning isn't just a 
-                  habit—it's a mindset.
+                  projects. Currently contributing to AI-powered systems at Albertsons Companies, blending full-stack 
+                  development with machine learning to optimize business processes. When I'm not coding, you'll find me 
+                  running, shooting hoops on the basketball court, or sharing knowledge with the developer community. 
+                  For me, continuous learning isn't just a habit—it's a mindset.
                 </p>
               </div>
 
@@ -109,9 +110,9 @@ const AboutMe = () => {
                 <div className="grid gap-4">
                   {[
                     { icon: Layout, title: 'Frontend Development', desc: 'Creating responsive and interactive UIs with React, Next.js, and modern CSS' },
-                    { icon: Server, title: 'Backend Development', desc: 'Building robust APIs and server-side logic with Node.js and databases' },
+                    { icon: Server, title: 'Backend Development', desc: 'Building robust APIs and server-side logic with different backend frameworks and databases' },
                     { icon: Smartphone, title: 'Responsive Design', desc: 'Ensuring seamless experiences across all devices and screen sizes' },
-                    { icon: Code2, title: '3D Web Experiences', desc: 'Developing immersive 3D interfaces using Three.js and WebGL' },
+                    { icon: Code2, title: 'Cloud & DevOps', desc: 'Deploying and orchestrating applications using Docker, Kubernetes, and cloud platforms' },
                   ].map((service) => (
                     <div
                       key={service.title}

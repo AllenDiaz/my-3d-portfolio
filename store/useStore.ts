@@ -4,10 +4,18 @@ interface Project {
   id: string;
   title: string;
   description: string;
+  longDescription?: string;
   technologies: string[];
+  category: 'web' | 'mobile' | 'ai' | 'fullstack' | 'data' | 'other';
+  featured: boolean;
   imageUrl?: string;
+  thumbnailUrl?: string;
   githubUrl?: string;
   liveUrl?: string;
+  demoVideoUrl?: string;
+  completedDate?: string;
+  teamSize?: number;
+  role?: string;
 }
 
 interface StoreState {
@@ -72,6 +80,8 @@ export const useStore = create<StoreState>((set) => ({
       title: 'Project Alpha',
       description: 'A full-stack web application with modern technologies',
       technologies: ['React', 'Node.js', 'MongoDB', 'TypeScript'],
+      category: 'fullstack',
+      featured: true,
       githubUrl: 'https://github.com',
       liveUrl: 'https://example.com'
     },
@@ -80,6 +90,8 @@ export const useStore = create<StoreState>((set) => ({
       title: 'Project Beta',
       description: '3D interactive portfolio with Three.js',
       technologies: ['Three.js', 'React Three Fiber', 'Next.js'],
+      category: 'web',
+      featured: true,
       githubUrl: 'https://github.com',
       liveUrl: 'https://example.com'
     },
@@ -88,6 +100,8 @@ export const useStore = create<StoreState>((set) => ({
       title: 'Project Gamma',
       description: 'E-commerce platform with payment integration',
       technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind'],
+      category: 'fullstack',
+      featured: true,
       githubUrl: 'https://github.com',
       liveUrl: 'https://example.com'
     }
