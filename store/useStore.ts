@@ -1,22 +1,8 @@
 import { create } from 'zustand';
+import { projectsData, type Project } from '@/data/projects';
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  longDescription?: string;
-  technologies: string[];
-  category: 'web' | 'mobile' | 'ai' | 'fullstack' | 'data' | 'other';
-  featured: boolean;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  githubUrl?: string;
-  liveUrl?: string;
-  demoVideoUrl?: string;
-  completedDate?: string;
-  teamSize?: number;
-  role?: string;
-}
+// Re-export Project type for convenience
+export type { Project };
 
 interface StoreState {
   // Selected interactive object
@@ -48,11 +34,18 @@ interface StoreState {
   setShowCharacter: (show: boolean) => void;
   
   // Projects data
+  allProjects: Project[];
   projects: Project[];
   setProjects: (projects: Project[]) => void;
+  
+  // Project getters and filters
+  featuredProjects: () => Project[];
+  getProjectsByCategory: (category: Project['category']) => Project[];
+  searchProjects: (query: string) => Project[];
+  getProjectById: (id: string) => Project | undefined;
 }
 
-export const useStore = create<StoreState>((set) => ({
+export const useStore = create<StoreState>((set, get) => ({
   selectedObject: null,
   setSelectedObject: (objectId) => set({ selectedObject: objectId }),
   
@@ -74,37 +67,46 @@ export const useStore = create<StoreState>((set) => ({
   showCharacter: false,
   setShowCharacter: (show) => set({ showCharacter: show }),
   
-  projects: [
-    {
-      id: '1',
-      title: 'Project Alpha',
-      description: 'A full-stack web application with modern technologies',
-      technologies: ['React', 'Node.js', 'MongoDB', 'TypeScript'],
-      category: 'fullstack',
-      featured: true,
-      githubUrl: 'https://github.com',
-      liveUrl: 'https://example.com'
-    },
-    {
-      id: '2',
-      title: 'Project Beta',
-      description: '3D interactive portfolio with Three.js',
-      technologies: ['Three.js', 'React Three Fiber', 'Next.js'],
-      category: 'web',
-      featured: true,
-      githubUrl: 'https://github.com',
-      liveUrl: 'https://example.com'
-    },
-    {
-      id: '3',
-      title: 'Project Gamma',
-      description: 'E-commerce platform with payment integration',
-      technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind'],
-      category: 'fullstack',
-      featured: true,
-      githubUrl: 'https://github.com',
-      liveUrl: 'https://example.com'
-    }
-  ],
+  // All projects from data file
+  allProjects: projectsData,
+  
+  // Current filtered/displayed projects (defaults to all)
+  projects: projectsData,
   setProjects: (projects) => set({ projects }),
+  
+  // Get only featured projects
+  featuredProjects: () => {
+    const state = get();
+    return state.allProjects.filter(project => project.featured);
+  },
+  
+  // Get projects by category
+  getProjectsByCategory: (category: Project['category']) => {
+    const state = get();
+    return state.allProjects.filter(project => project.category === category);
+  },
+  
+  // Search projects by title, description, or technologies
+  searchProjects: (query: string) => {
+    const state = get();
+    const lowercaseQuery = query.toLowerCase().trim();
+    
+    if (!lowercaseQuery) {
+      return state.allProjects;
+    }
+    
+    return state.allProjects.filter(project =>
+      project.title.toLowerCase().includes(lowercaseQuery) ||
+      project.description.toLowerCase().includes(lowercaseQuery) ||
+      project.longDescription?.toLowerCase().includes(lowercaseQuery) ||
+      project.technologies.some(tech => tech.toLowerCase().includes(lowercaseQuery)) ||
+      project.category.toLowerCase().includes(lowercaseQuery)
+    );
+  },
+  
+  // Get project by ID
+  getProjectById: (id: string) => {
+    const state = get();
+    return state.allProjects.find(project => project.id === id);
+  },
 }));
