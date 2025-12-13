@@ -5,6 +5,7 @@ import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
 import DeskLamp from './DeskLamp';
+import DeskTablet from './DeskTablet';
 import SceneSetup from './SceneSetup';
 import BinaryWall from './BinaryWall';
 import PostProcessing from './PostProcessing';
@@ -85,6 +86,9 @@ export default function MainScene() {
         itemType="mouse" 
         label="Navigate"
       />
+      
+      {/* Interactive Desk Tablet - Navigate to Projects Page */}
+      <DeskTablet position={[0.3, 0.82, -1.25]} />
       
       <DeskItem 
         position={[0.9, 0.82, -1.3]} 
