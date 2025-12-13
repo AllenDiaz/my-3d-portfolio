@@ -15,16 +15,19 @@ export default function Computer({ position, projectId }: ComputerProps) {
   const monitorRef = useRef<Mesh>(null);
   const screenRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const { setActiveProject, setShowProjectPanel, projects } = useStore();
+  const { setActiveProject, setShowProjectPanel, getProjectById } = useStore();
+  
+  // Get the actual project data
+  const project = useMemo(() => getProjectById(projectId), [projectId, getProjectById]);
 
-  // Create dynamic screen texture
+  // Create dynamic screen texture with project info
   const screenTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 320;
     const ctx = canvas.getContext('2d');
     
-    if (ctx) {
+    if (ctx && project) {
       // Background gradient
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       gradient.addColorStop(0, '#0a1929');
@@ -48,26 +51,58 @@ export default function Computer({ position, projectId }: ComputerProps) {
         ctx.stroke();
       }
       
-      // Text
-      ctx.fillStyle = '#4a90e2';
-      ctx.font = 'bold 24px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Project ${projectId}`, canvas.width / 2, canvas.height / 2 - 20);
+      // Featured badge
+      if (project.featured) {
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('★ FEATURED', 20, 30);
+      }
       
-      ctx.font = '16px monospace';
+      // Project title - wrap if too long
+      ctx.fillStyle = '#4a90e2';
+      ctx.font = 'bold 22px monospace';
+      ctx.textAlign = 'center';
+      const title = project.title;
+      const maxWidth = canvas.width - 40;
+      const words = title.split(' ');
+      let line = '';
+      let y = canvas.height / 2 - 30;
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && i > 0) {
+          ctx.fillText(line, canvas.width / 2, y);
+          line = words[i] + ' ';
+          y += 28;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, canvas.width / 2, y);
+      
+      // Click prompt
+      ctx.font = '14px monospace';
       ctx.fillStyle = '#6ab0f3';
-      ctx.fillText('Click to view details', canvas.width / 2, canvas.height / 2 + 10);
+      ctx.fillText('Click to view details', canvas.width / 2, canvas.height - 40);
+      
+      // Category badge
+      ctx.font = '12px monospace';
+      ctx.fillStyle = '#8b5cf6';
+      ctx.textAlign = 'center';
+      ctx.fillText(project.category.toUpperCase(), canvas.width / 2, canvas.height - 20);
       
       // Decorative elements
       ctx.fillStyle = '#4a90e240';
-      ctx.fillRect(20, 20, 60, 4);
-      ctx.fillRect(20, 30, 40, 4);
+      ctx.fillRect(20, canvas.height - 60, 60, 3);
+      ctx.fillRect(canvas.width - 80, canvas.height - 60, 60, 3);
     }
     
     const texture = new CanvasTexture(canvas);
     texture.needsUpdate = true;
     return texture;
-  }, [projectId]);
+  }, [projectId, project]);
 
   // Subtle floating animation
   useFrame((state) => {
@@ -85,7 +120,6 @@ export default function Computer({ position, projectId }: ComputerProps) {
   });
 
   const handleClick = () => {
-    const project = projects.find(p => p.id === projectId);
     if (project) {
       setActiveProject(project);
       setShowProjectPanel(true);
@@ -154,7 +188,7 @@ export default function Computer({ position, projectId }: ComputerProps) {
       </mesh>
 
       {/* Hover Text */}
-      {hovered && (
+      {hovered && project && (
         <Html
           position={[0, 0.6, 0]}
           center
@@ -165,7 +199,8 @@ export default function Computer({ position, projectId }: ComputerProps) {
           }}
         >
           <div className="bg-black/90 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap backdrop-blur-sm border border-gray-700">
-            Click to view project
+            {project.featured && <span className="text-yellow-400 mr-2">★</span>}
+            {project.title}
           </div>
         </Html>
       )}

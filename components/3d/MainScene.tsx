@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
@@ -16,6 +17,12 @@ import { useStore } from '@/store/useStore';
 export default function MainScene() {
   const lightsOn = useStore((state) => state.lightsOn);
   const showCharacter = useStore((state) => state.showCharacter);
+  const featuredProjects = useStore((state) => state.featuredProjects);
+  
+  // Get first 3 featured projects for monitors
+  const monitorProjects = useMemo(() => {
+    return featuredProjects().slice(0, 3);
+  }, [featuredProjects]);
   
   return (
     <>
@@ -55,12 +62,16 @@ export default function MainScene() {
       {/* Holographic Display */}
       <HolographicDisplay position={[0, 2, -4.5]} />
 
-      {/* Interactive Computers/Monitors */}
-      <Computer position={[-0.5, 0.8, -1.9]} projectId="1" />
-      <Computer position={[0.5, 0.8, -1.9]} projectId="2" />
-      
-      {/* A third monitor on the side table */}
-      <Computer position={[4, 0.65, -3]} projectId="3" />
+      {/* Interactive Computers/Monitors - Featured Projects Only */}
+      {monitorProjects.length >= 1 && (
+        <Computer position={[-0.5, 0.8, -1.9]} projectId={monitorProjects[0].id} />
+      )}
+      {monitorProjects.length >= 2 && (
+        <Computer position={[0.5, 0.8, -1.9]} projectId={monitorProjects[1].id} />
+      )}
+      {monitorProjects.length >= 3 && (
+        <Computer position={[4, 0.65, -3]} projectId={monitorProjects[2].id} />
+      )}
 
       {/* Desk Items */}
       <DeskItem 
