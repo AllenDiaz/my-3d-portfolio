@@ -8,7 +8,7 @@ import { useStore } from '@/store/useStore';
 
 interface DeskItemProps {
   position: [number, number, number];
-  itemType: 'keyboard' | 'mouse' | 'notebook' | 'coffee' | 'phone';
+  itemType: 'keyboard' | 'mouse' | 'notebook' | 'coffee' | 'phone' | 'badge';
   onClick?: () => void;
   label?: string;
 }
@@ -149,6 +149,56 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
               emissiveIntensity={hovered ? 0.3 : 0}
             />
           </mesh>
+        );
+
+      case 'badge':
+        return (
+          <group>
+            {/* ID Card Body */}
+            <mesh castShadow>
+              <boxGeometry args={[0.12, 0.01, 0.16]} />
+              <meshStandardMaterial 
+                color={hovered ? "#ffffff" : "#f0f0f0"}
+                roughness={0.3}
+                metalness={0.1}
+              />
+            </mesh>
+            {/* Blue Header Strip */}
+            <mesh position={[0, 0.011, 0.05]} castShadow>
+              <boxGeometry args={[0.11, 0.001, 0.04]} />
+              <meshStandardMaterial 
+                color={hovered ? "#3b82f6" : "#2563eb"}
+                emissive={hovered ? "#3b82f6" : "#000000"}
+                emissiveIntensity={hovered ? 0.3 : 0}
+              />
+            </mesh>
+            {/* Photo Area */}
+            <mesh position={[0, 0.011, 0]} castShadow>
+              <boxGeometry args={[0.045, 0.001, 0.05]} />
+              <meshStandardMaterial 
+                color="#6b7280"
+                roughness={0.8}
+              />
+            </mesh>
+            {/* Lanyard Clip */}
+            <mesh position={[0, 0.015, 0.08]} castShadow>
+              <cylinderGeometry args={[0.008, 0.008, 0.008]} />
+              <meshStandardMaterial 
+                color="#9ca3af"
+                metalness={0.7}
+                roughness={0.3}
+              />
+            </mesh>
+            {/* Glow effect when hovered */}
+            {hovered && (
+              <pointLight
+                position={[0, 0.1, 0]}
+                intensity={0.3}
+                distance={0.5}
+                color="#3b82f6"
+              />
+            )}
+          </group>
         );
 
       default:

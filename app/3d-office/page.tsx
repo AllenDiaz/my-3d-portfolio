@@ -8,6 +8,7 @@ import SystemNotification from '@/components/ui/SystemNotification';
 import CVModal from '@/components/ui/CVModal';
 import PaperNotification from '@/components/ui/PaperNotification';
 import SkillsModal from '@/components/ui/SkillsModal';
+import ExperienceModal from '@/components/ui/ExperienceModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -31,6 +32,8 @@ export default function ThreeDOfficePage() {
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const showSkillsModal = useStore((state) => state.showSkillsModal);
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
+  const showExperienceModal = useStore((state) => state.showExperienceModal);
+  const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
   const showCVModal = useStore((state) => state.showCVModal);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   
@@ -87,6 +90,12 @@ export default function ThreeDOfficePage() {
       <SkillsModal
         isOpen={showSkillsModal}
         onClose={() => setShowSkillsModal(false)}
+      />
+      
+      {/* Experience Modal */}
+      <ExperienceModal
+        isOpen={showExperienceModal}
+        onClose={() => setShowExperienceModal(false)}
       />
       
       {/* CV Modal */}

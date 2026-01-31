@@ -20,6 +20,7 @@ export default function MainScene() {
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
+  const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -111,6 +112,13 @@ export default function MainScene() {
         position={[-1.1, 0.82, -1.7]} 
         itemType="phone" 
         label="Contact Me"
+      />
+      
+      <DeskItem 
+        position={[1.3, 0.82, -1.7]} 
+        itemType="badge" 
+        label="Work Experience"
+        onClick={() => setShowExperienceModal(true)}
       />
 
       {/* Post-Processing Effects */}
