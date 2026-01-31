@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
-import DeskLamp from './DeskLamp';
 import DeskTablet from './DeskTablet';
 import SceneSetup from './SceneSetup';
 import BinaryWall from './BinaryWall';
@@ -18,6 +17,7 @@ import { useStore } from '@/store/useStore';
 export default function MainScene() {
   const lightsOn = useStore((state) => state.lightsOn);
   const showCharacter = useStore((state) => state.showCharacter);
+  const setShowCVModal = useStore((state) => state.setShowCVModal);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -94,6 +94,7 @@ export default function MainScene() {
         position={[0.9, 0.82, -1.3]} 
         itemType="notebook" 
         label="Resume & Bio"
+        onClick={() => setShowCVModal(true)}
       />
       
       <DeskItem 
@@ -107,9 +108,6 @@ export default function MainScene() {
         itemType="phone" 
         label="Contact Me"
       />
-
-      {/* Interactive Desk Lamp */}
-      <DeskLamp position={[1.2, 0.82, -1.5]} />
 
       {/* Post-Processing Effects */}
       <PostProcessing />

@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 import LightToggle from '@/components/ui/LightToggle';
 import SystemNotification from '@/components/ui/SystemNotification';
+import CVModal from '@/components/ui/CVModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -24,6 +25,8 @@ const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
 export default function ThreeDOfficePage() {
   const showChairNotification = useStore((state) => state.showChairNotification);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  const showCVModal = useStore((state) => state.showCVModal);
+  const setShowCVModal = useStore((state) => state.setShowCVModal);
   
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
@@ -65,7 +68,13 @@ export default function ThreeDOfficePage() {
       <SystemNotification
         isOpen={showChairNotification}
         onClose={() => setShowChairNotification(false)}
-        message="Thank you for considering me for the vacant seat in this role. I deeply appreciate your interest. If entrusted with this opportunity, I promise to bring not only dedication and excellence—but also peace of mind."
+        message="$ git commit -m 'feat: add dedicated developer to your team' && git push origin production --force-with-excellence 🚀 Ready to merge innovation, dedication, and peace of mind into your codebase!"
+      />
+      
+      {/* CV Modal */}
+      <CVModal
+        isOpen={showCVModal}
+        onClose={() => setShowCVModal(false)}
       />
     </main>
   );

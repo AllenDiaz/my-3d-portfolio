@@ -29,6 +29,10 @@ interface StoreState {
   showChairNotification: boolean;
   setShowChairNotification: (show: boolean) => void;
   
+  // CV Modal state
+  showCVModal: boolean;
+  setShowCVModal: (show: boolean) => void;
+  
   // Character visibility state
   showCharacter: boolean;
   setShowCharacter: (show: boolean) => void;
@@ -63,6 +67,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   showChairNotification: false,
   setShowChairNotification: (show) => set({ showChairNotification: show }),
+  
+  showCVModal: false,
+  setShowCVModal: (show) => set({ showCVModal: show }),
   
   showCharacter: false,
   setShowCharacter: (show) => set({ showCharacter: show }),
