@@ -33,6 +33,10 @@ interface StoreState {
   showCoffeeNotification: boolean;
   setShowCoffeeNotification: (show: boolean) => void;
   
+  // Skills Modal state
+  showSkillsModal: boolean;
+  setShowSkillsModal: (show: boolean) => void;
+  
   // CV Modal state
   showCVModal: boolean;
   setShowCVModal: (show: boolean) => void;
@@ -74,6 +78,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   showCoffeeNotification: false,
   setShowCoffeeNotification: (show) => set({ showCoffeeNotification: show }),
+  
+  showSkillsModal: false,
+  setShowSkillsModal: (show) => set({ showSkillsModal: show }),
   
   showCVModal: false,
   setShowCVModal: (show) => set({ showCVModal: show }),

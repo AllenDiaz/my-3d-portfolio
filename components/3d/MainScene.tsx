@@ -19,6 +19,7 @@ export default function MainScene() {
   const showCharacter = useStore((state) => state.showCharacter);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
+  const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -80,6 +81,7 @@ export default function MainScene() {
         position={[-0.8, 0.82, -1.5]} 
         itemType="keyboard" 
         label="Skills & Technologies"
+        onClick={() => setShowSkillsModal(true)}
       />
       
       <DeskItem 

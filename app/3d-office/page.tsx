@@ -7,6 +7,7 @@ import LightToggle from '@/components/ui/LightToggle';
 import SystemNotification from '@/components/ui/SystemNotification';
 import CVModal from '@/components/ui/CVModal';
 import PaperNotification from '@/components/ui/PaperNotification';
+import SkillsModal from '@/components/ui/SkillsModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -28,6 +29,8 @@ export default function ThreeDOfficePage() {
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
   const showCoffeeNotification = useStore((state) => state.showCoffeeNotification);
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
+  const showSkillsModal = useStore((state) => state.showSkillsModal);
+  const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
   const showCVModal = useStore((state) => state.showCVModal);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   
@@ -78,6 +81,12 @@ export default function ThreeDOfficePage() {
       <PaperNotification
         isOpen={showCoffeeNotification}
         onClose={() => setShowCoffeeNotification(false)}
+      />
+      
+      {/* Skills Modal */}
+      <SkillsModal
+        isOpen={showSkillsModal}
+        onClose={() => setShowSkillsModal(false)}
       />
       
       {/* CV Modal */}
