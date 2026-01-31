@@ -18,6 +18,7 @@ export default function MainScene() {
   const lightsOn = useStore((state) => state.lightsOn);
   const showCharacter = useStore((state) => state.showCharacter);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
+  const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -101,6 +102,7 @@ export default function MainScene() {
         position={[1.1, 0.82, -1.8]} 
         itemType="coffee" 
         label="Coffee break!"
+        onClick={() => setShowCoffeeNotification(true)}
       />
       
       <DeskItem 

@@ -6,6 +6,7 @@ import ProjectPanel from '@/components/ui/ProjectPanel';
 import LightToggle from '@/components/ui/LightToggle';
 import SystemNotification from '@/components/ui/SystemNotification';
 import CVModal from '@/components/ui/CVModal';
+import PaperNotification from '@/components/ui/PaperNotification';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -25,6 +26,8 @@ const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
 export default function ThreeDOfficePage() {
   const showChairNotification = useStore((state) => state.showChairNotification);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  const showCoffeeNotification = useStore((state) => state.showCoffeeNotification);
+  const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const showCVModal = useStore((state) => state.showCVModal);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   
@@ -69,6 +72,12 @@ export default function ThreeDOfficePage() {
         isOpen={showChairNotification}
         onClose={() => setShowChairNotification(false)}
         message="$ git commit -m 'feat: add dedicated developer to your team' && git push origin production --force-with-excellence 🚀 Ready to merge innovation, dedication, and peace of mind into your codebase!"
+      />
+      
+      {/* Paper Notification for Coffee */}
+      <PaperNotification
+        isOpen={showCoffeeNotification}
+        onClose={() => setShowCoffeeNotification(false)}
       />
       
       {/* CV Modal */}
