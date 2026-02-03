@@ -20,7 +20,7 @@ export default function ProjectPanel() {
   };
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {showProjectPanel && activeProject && (
         <>
           {/* Backdrop */}
@@ -28,31 +28,16 @@ export default function ProjectPanel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
             className="fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm z-40 transition-colors"
             onClick={handleClose}
           />
 
           {/* Panel */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85, y: 30 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              y: 0,
-              transition: {
-                type: 'spring',
-                damping: 20,
-                stiffness: 250,
-                mass: 0.8
-              }
-            }}
-            exit={{ 
-              opacity: 0, 
-              scale: 0.9, 
-              y: 20,
-              transition: { duration: 0.2 }
-            }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl mx-4"
           >
             <div className="bg-zinc-900 dark:bg-zinc-800 rounded-2xl shadow-2xl border border-zinc-800 dark:border-zinc-700 overflow-hidden transition-colors">

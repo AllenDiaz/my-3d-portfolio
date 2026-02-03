@@ -21,6 +21,7 @@ export default function MainScene() {
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
   const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
+  const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -119,6 +120,13 @@ export default function MainScene() {
         itemType="badge" 
         label="Work Experience"
         onClick={() => setShowExperienceModal(true)}
+      />
+      
+      <DeskItem 
+        position={[-1.3, 0.82, -1.3]} 
+        itemType="certificate" 
+        label="Certifications"
+        onClick={() => setShowCertificateModal(true)}
       />
 
       {/* Post-Processing Effects */}

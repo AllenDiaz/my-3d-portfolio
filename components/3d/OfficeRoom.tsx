@@ -134,7 +134,8 @@ export default function OfficeRoom() {
 
       {/* Chair */}
       <group 
-        position={[0, 0, 1]}
+        position={[-2.5, 0, -1.5]}
+        rotation={[0, Math.PI / 4, 0]}
         onClick={handleChairClick}
         onPointerOver={(e) => {
           e.stopPropagation();

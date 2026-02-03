@@ -3,12 +3,12 @@
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
-import LightToggle from '@/components/ui/LightToggle';
 import SystemNotification from '@/components/ui/SystemNotification';
 import CVModal from '@/components/ui/CVModal';
 import PaperNotification from '@/components/ui/PaperNotification';
 import SkillsModal from '@/components/ui/SkillsModal';
 import ExperienceModal from '@/components/ui/ExperienceModal';
+import CertificateModal from '@/components/ui/CertificateModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -34,6 +34,8 @@ export default function ThreeDOfficePage() {
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
   const showExperienceModal = useStore((state) => state.showExperienceModal);
   const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
+  const showCertificateModal = useStore((state) => state.showCertificateModal);
+  const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const showCVModal = useStore((state) => state.showCVModal);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   
@@ -42,9 +44,6 @@ export default function ThreeDOfficePage() {
       {/* Navigation */}
       <Navbar />
 
-      {/* Light Toggle Button */}
-      <LightToggle />
-
       {/* 3D Office Experience */}
       <div className="relative w-full h-screen bg-black dark:bg-black overflow-hidden transition-colors">
         {/* 3D Scene Background */}
@@ -52,13 +51,22 @@ export default function ThreeDOfficePage() {
           <MainScene />
         </Scene3D>
 
-        {/* Page Title Overlay */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white">
-              3D <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">Office Portfolio</span>
-            </h1>
-            <p className="text-gray-400">Click on objects to explore my projects</p>
+        {/* Object Interaction Guidelines */}
+        <div className="absolute top-24 right-6 z-10 pointer-events-none">
+          <div className="bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 text-white max-w-xs">
+            <h3 className="text-sm font-semibold mb-2 text-gray-300">
+              Object IDs
+            </h3>
+            <ul className="space-y-1 text-xs text-gray-400">
+              <li>📱 Tablet → All projects</li>
+              <li>🪪 ID Card → All Work Experience</li>
+              <li>🏆 Certificate → Professional Certifications</li>
+              <li>💻 Computer → Featured Projects</li>
+              <li>☕ Coffee → Message for Employer/Client</li>
+              <li>🪑 Chair → Sytem Notification</li>
+              <li>⌨️  Keyboard → Skills and Technologies</li>
+              <li>📄 Paper → Resume</li>
+            </ul>
           </div>
         </div>
 
@@ -96,6 +104,12 @@ export default function ThreeDOfficePage() {
       <ExperienceModal
         isOpen={showExperienceModal}
         onClose={() => setShowExperienceModal(false)}
+      />
+      
+      {/* Certificate Modal */}
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
       />
       
       {/* CV Modal */}

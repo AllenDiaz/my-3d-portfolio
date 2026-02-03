@@ -41,6 +41,10 @@ interface StoreState {
   showExperienceModal: boolean;
   setShowExperienceModal: (show: boolean) => void;
   
+  // Certificate Modal state
+  showCertificateModal: boolean;
+  setShowCertificateModal: (show: boolean) => void;
+  
   // CV Modal state
   showCVModal: boolean;
   setShowCVModal: (show: boolean) => void;
@@ -88,6 +92,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   showExperienceModal: false,
   setShowExperienceModal: (show) => set({ showExperienceModal: show }),
+  
+  showCertificateModal: false,
+  setShowCertificateModal: (show) => set({ showCertificateModal: show }),
   
   showCVModal: false,
   setShowCVModal: (show) => set({ showCVModal: show }),

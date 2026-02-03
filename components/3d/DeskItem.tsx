@@ -8,7 +8,7 @@ import { useStore } from '@/store/useStore';
 
 interface DeskItemProps {
   position: [number, number, number];
-  itemType: 'keyboard' | 'mouse' | 'notebook' | 'coffee' | 'phone' | 'badge';
+  itemType: 'keyboard' | 'mouse' | 'notebook' | 'coffee' | 'phone' | 'badge' | 'certificate';
   onClick?: () => void;
   label?: string;
 }
@@ -196,6 +196,59 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
                 intensity={0.3}
                 distance={0.5}
                 color="#3b82f6"
+              />
+            )}
+          </group>
+        );
+
+      case 'certificate':
+        return (
+          <group>
+            {/* Certificate Frame */}
+            <mesh castShadow>
+              <boxGeometry args={[0.14, 0.01, 0.18]} />
+              <meshStandardMaterial 
+                color={hovered ? "#8b4513" : "#654321"}
+                roughness={0.6}
+                metalness={0.1}
+              />
+            </mesh>
+            {/* Certificate Paper */}
+            <mesh position={[0, 0.011, 0]} castShadow>
+              <boxGeometry args={[0.12, 0.001, 0.16]} />
+              <meshStandardMaterial 
+                color={hovered ? "#fef3c7" : "#fde68a"}
+                roughness={0.7}
+                emissive={hovered ? "#fcd34d" : "#000000"}
+                emissiveIntensity={hovered ? 0.2 : 0}
+              />
+            </mesh>
+            {/* Gold Seal */}
+            <mesh position={[0, 0.012, -0.05]} castShadow>
+              <cylinderGeometry args={[0.015, 0.015, 0.002, 16]} />
+              <meshStandardMaterial 
+                color="#fbbf24"
+                metalness={0.9}
+                roughness={0.1}
+                emissive={hovered ? "#fbbf24" : "#000000"}
+                emissiveIntensity={hovered ? 0.4 : 0}
+              />
+            </mesh>
+            {/* Ribbon Decoration */}
+            <mesh position={[0, 0.012, -0.05]} castShadow>
+              <cylinderGeometry args={[0.007, 0.007, 0.003, 8]} />
+              <meshStandardMaterial 
+                color="#dc2626"
+                roughness={0.4}
+              />
+            </mesh>
+            {/* Glow effect when hovered */}
+            {hovered && (
+              <pointLight
+                position={[0, 0.1, 0]}
+                intensity={0.4}
+                distance={0.5}
+                color="#fbbf24"
               />
             )}
           </group>
