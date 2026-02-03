@@ -6,7 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 export default function ProjectPanel() {
-  const { activeProject, showProjectPanel, setShowProjectPanel, setActiveProject } = useStore();
+  const { 
+    activeProject, 
+    showProjectPanel, 
+    setShowProjectPanel, 
+    setActiveProject,
+    setShowRestrictedLinkModal 
+  } = useStore();
   const router = useRouter();
 
   const handleClose = () => {
@@ -17,6 +23,13 @@ export default function ProjectPanel() {
   const handleViewAllProjects = () => {
     handleClose();
     setTimeout(() => router.push('/projects'), 400);
+  };
+
+  const handleLinkClick = (e: React.MouseEvent, url: string | undefined, linkType: 'code' | 'live') => {
+    if (url === 'RESTRICTED') {
+      e.preventDefault();
+      setShowRestrictedLinkModal(true, linkType);
+    }
   };
 
   return (
@@ -129,24 +142,26 @@ export default function ProjectPanel() {
                 <div className="flex flex-wrap gap-4">
                   {activeProject.githubUrl && (
                     <a
-                      href={activeProject.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={activeProject.githubUrl === 'RESTRICTED' ? '#' : activeProject.githubUrl}
+                      target={activeProject.githubUrl === 'RESTRICTED' ? undefined : "_blank"}
+                      rel={activeProject.githubUrl === 'RESTRICTED' ? undefined : "noopener noreferrer"}
+                      onClick={(e) => handleLinkClick(e, activeProject.githubUrl, 'code')}
                       className="flex items-center gap-2 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors font-medium"
                     >
                       <Github className="w-5 h-5" />
-                      View Code
+                      {activeProject.githubUrl === 'RESTRICTED' ? 'View Code (Restricted)' : 'View Code'}
                     </a>
                   )}
                   {activeProject.liveUrl && (
                     <a
-                      href={activeProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={activeProject.liveUrl === 'RESTRICTED' ? '#' : activeProject.liveUrl}
+                      target={activeProject.liveUrl === 'RESTRICTED' ? undefined : "_blank"}
+                      rel={activeProject.liveUrl === 'RESTRICTED' ? undefined : "noopener noreferrer"}
+                      onClick={(e) => handleLinkClick(e, activeProject.liveUrl, 'live')}
                       className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
                     >
                       <ExternalLink className="w-5 h-5" />
-                      Live Demo
+                      {activeProject.liveUrl === 'RESTRICTED' ? 'Live Demo (Restricted)' : 'Live Demo'}
                     </a>
                   )}
                 </div>

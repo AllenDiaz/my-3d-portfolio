@@ -9,6 +9,7 @@ import PaperNotification from '@/components/ui/PaperNotification';
 import SkillsModal from '@/components/ui/SkillsModal';
 import ExperienceModal from '@/components/ui/ExperienceModal';
 import CertificateModal from '@/components/ui/CertificateModal';
+import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -38,6 +39,9 @@ export default function ThreeDOfficePage() {
   const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const showCVModal = useStore((state) => state.showCVModal);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
+  const showRestrictedLinkModal = useStore((state) => state.showRestrictedLinkModal);
+  const setShowRestrictedLinkModal = useStore((state) => state.setShowRestrictedLinkModal);
+  const restrictedLinkType = useStore((state) => state.restrictedLinkType);
   
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
@@ -116,6 +120,13 @@ export default function ThreeDOfficePage() {
       <CVModal
         isOpen={showCVModal}
         onClose={() => setShowCVModal(false)}
+      />
+      
+      {/* Restricted Link Modal */}
+      <RestrictedLinkModal
+        isOpen={showRestrictedLinkModal}
+        onClose={() => setShowRestrictedLinkModal(false)}
+        linkType={restrictedLinkType || 'code'}
       />
     </main>
   );

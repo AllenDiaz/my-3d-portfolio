@@ -5,12 +5,20 @@ import { motion } from 'framer-motion';
 import { useStore, type Project } from '@/store/useStore';
 import { Github, ExternalLink, Star, Search, Filter, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 
 const categories = ['all', 'web', 'mobile', 'ai', 'fullstack', 'data', 'other'] as const;
 type Category = typeof categories[number];
 
 export default function ProjectsPage() {
-  const { allProjects, getProjectsByCategory } = useStore();
+  const { 
+    allProjects, 
+    getProjectsByCategory,
+    showRestrictedLinkModal,
+    restrictedLinkType,
+    setShowRestrictedLinkModal 
+  } = useStore();
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -153,6 +161,13 @@ export default function ProjectsPage() {
           </motion.div>
         )}
       </main>
+      
+      {/* Restricted Link Modal */}
+      <RestrictedLinkModal
+        isOpen={showRestrictedLinkModal}
+        onClose={() => setShowRestrictedLinkModal(false)}
+        linkType={restrictedLinkType || 'code'}
+      />
     </div>
   );
 }
@@ -165,6 +180,19 @@ interface ProjectCardProps {
 
 function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { setShowRestrictedLinkModal } = useStore();
+  const router = useRouter();
+
+  const handleLinkClick = (e: React.MouseEvent, url: string | undefined, linkType: 'code' | 'live') => {
+    if (url === 'RESTRICTED') {
+      e.preventDefault();
+      setShowRestrictedLinkModal(true, linkType);
+    }
+  };
+
+  const handleCardClick = () => {
+    router.push(`/projects/${project.id}`);
+  };
 
   return (
     <motion.article
@@ -173,7 +201,7 @@ function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
       transition={{ delay: index * 0.05 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`group relative bg-zinc-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-zinc-700 hover:border-zinc-600 transition-all duration-300 ${
+      className={`group relative bg-zinc-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-zinc-700 hover:border-zinc-600 transition-all duration-300 cursor-pointer ${
         featured ? 'md:col-span-1' : ''
       }`}
     >
@@ -187,19 +215,44 @@ function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
         </div>
       )}
 
-      {/* Image or Gradient Placeholder */}
-      <div className={`relative ${featured ? 'h-64' : 'h-48'} bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 overflow-hidden`}>
-        <motion.div
-          animate={{ scale: isHovered ? 1.1 : 1 }}
-          transition={{ duration: 0.4 }}
-          className="w-full h-full bg-gradient-to-br from-blue-600/50 via-purple-600/50 to-pink-600/50"
-        />
-        <div className="absolute inset-0 bg-black/20" />
+      {/* Image or Gradient Placeholder - Clickable */}
+      <div 
+        onClick={handleCardClick}
+        className={`relative ${featured ? 'h-64' : 'h-48'} bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 overflow-hidden`}
+      >
+        {project.thumbnailUrl ? (
+          <motion.div
+            animate={{ scale: isHovered ? 1.05 : 1 }}
+            transition={{ duration: 0.4 }}
+            className="relative w-full h-full"
+          >
+            <Image
+              src={project.thumbnailUrl}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          </motion.div>
+        ) : (
+          <>
+            <motion.div
+              animate={{ scale: isHovered ? 1.1 : 1 }}
+              transition={{ duration: 0.4 }}
+              className="w-full h-full bg-gradient-to-br from-blue-600/50 via-purple-600/50 to-pink-600/50"
+            />
+            <div className="absolute inset-0 bg-black/20" />
+          </>
+        )}
       </div>
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
+        <h3 
+          onClick={handleCardClick}
+          className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors cursor-pointer"
+        >
           {project.title}
         </h3>
         
@@ -238,24 +291,26 @@ function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
         <div className="flex gap-3">
           {project.githubUrl && (
             <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={project.githubUrl === 'RESTRICTED' ? '#' : project.githubUrl}
+              target={project.githubUrl === 'RESTRICTED' ? undefined : "_blank"}
+              rel={project.githubUrl === 'RESTRICTED' ? undefined : "noopener noreferrer"}
+              onClick={(e) => handleLinkClick(e, project.githubUrl, 'code')}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors text-sm"
             >
               <Github className="w-4 h-4" />
-              Code
+              {project.githubUrl === 'RESTRICTED' ? 'Code 🔒' : 'Code'}
             </a>
           )}
           {project.liveUrl && (
             <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={project.liveUrl === 'RESTRICTED' ? '#' : project.liveUrl}
+              target={project.liveUrl === 'RESTRICTED' ? undefined : "_blank"}
+              rel={project.liveUrl === 'RESTRICTED' ? undefined : "noopener noreferrer"}
+              onClick={(e) => handleLinkClick(e, project.liveUrl, 'live')}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-sm"
             >
               <ExternalLink className="w-4 h-4" />
-              Live
+              {project.liveUrl === 'RESTRICTED' ? 'Live 🔒' : 'Live'}
             </a>
           )}
         </div>
