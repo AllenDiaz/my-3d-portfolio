@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Star, Calendar, User, FolderOpen } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Star, Calendar, User, FolderOpen, FileText } from 'lucide-react';
 import { useStore, type Project } from '@/store/useStore';
 import Image from 'next/image';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
@@ -54,6 +54,16 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         '/images/projects/fc/fc4.png',
         '/images/projects/fc/fc5.png',
         '/images/projects/fc/fc6.png',
+      ];
+    }
+    if (projectId === 'phirecord-healthcare-system') {
+      return [
+        '/images/projects/pr/pr1.png',
+        '/images/projects/pr/pr2.png',
+        '/images/projects/pr/pr3.png',
+        '/images/projects/pr/pr4.png',
+        '/images/projects/pr/pr5.png',
+        '/images/projects/pr/pr6.png',
       ];
     }
     return project?.thumbnailUrl ? [project.thumbnailUrl] : [];
@@ -175,6 +185,17 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               >
                 <ExternalLink className="w-5 h-5" />
                 {project.liveUrl === 'RESTRICTED' ? 'Live Demo (Restricted)' : 'Live Demo'}
+              </a>
+            )}
+            {project.publicationUrl && (
+              <a
+                href={project.publicationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
+              >
+                <FileText className="w-5 h-5" />
+                View Publication (IEEE)
               </a>
             )}
           </div>

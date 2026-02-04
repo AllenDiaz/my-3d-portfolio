@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '@/store/useStore';
-import { X, ExternalLink, Github, ArrowRight, Star, Lock } from 'lucide-react';
+import { X, ExternalLink, Github, ArrowRight, Star, Lock, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -199,6 +199,18 @@ export default function ProjectPanel() {
                         </>
                       )}
                     </button>
+                  )}
+                  {activeProject.publicationUrl && (
+                    <a
+                      href={activeProject.publicationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span className="hidden sm:inline">View Publication</span>
+                      <span className="sm:hidden">IEEE</span>
+                    </a>
                   )}
                 </div>
 

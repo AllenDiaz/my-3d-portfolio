@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useStore, type Project } from '@/store/useStore';
-import { Github, ExternalLink, Star, Search, Filter, ArrowLeft } from 'lucide-react';
+import { Github, ExternalLink, Star, Search, Filter, ArrowLeft, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
@@ -313,6 +313,17 @@ function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
             >
               <ExternalLink className="w-4 h-4" />
               {project.liveUrl === 'RESTRICTED' ? 'Live 🔒' : 'Live'}
+            </a>
+          )}
+          {project.publicationUrl && (
+            <a
+              href={project.publicationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors text-sm"
+            >
+              <FileText className="w-4 h-4" />
+              IEEE
             </a>
           )}
         </div>

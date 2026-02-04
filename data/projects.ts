@@ -17,6 +17,7 @@ export interface Project {
   githubUrl?: string;
   liveUrl?: string;
   demoVideoUrl?: string;
+  publicationUrl?: string;
   completedDate?: string;
   teamSize?: number;
   role?: string;
@@ -176,6 +177,134 @@ The event page features a sophisticated calendar system that allows users to:
     completedDate: '2024-12',
     teamSize: 1,
     role: 'Full Stack Developer',
+  },
+
+  // ===============================
+  // PHIRECORD - HEALTHCARE MANAGEMENT SYSTEM - FEATURED
+  // ===============================
+  {
+    id: 'phirecord-healthcare-system',
+    title: 'PhiRecord - Healthcare Management System',
+    description: 'Enterprise-grade healthcare management system for medical records management in rural health facilities across the Philippines. Features multi-role authentication, HIPAA-compliant data handling, and inter-hospital referral system. Published in IEEE 2024 ISCI.',
+    longDescription: `Comprehensive healthcare management system designed to streamline medical records management across hospitals, healthcare professionals, and patients in the Philippines. Built with security and scalability at its core, facilitating secure management of Protected Health Information (PHI) with HIPAA-compliant data handling.
+
+**Academic Recognition:**
+Published and presented at 2024 IEEE 6th Symposium on Computers & Informatics (ISCI)
+IEEE Publication: https://ieeexplore.ieee.org/document/10668022
+
+**Multi-Role Authentication System:**
+• Role-Based Access Control (RBAC) for 4 user types: Admin, Hospital, Doctor, and Patient
+• Two-Factor Authentication (2FA) via Email (PHPMailer) and SMS (Twilio)
+• Secure Session Management with CSRF protection
+• Pending Approval Workflow for new registrations with ID verification
+• Session Fixation Prevention with session regeneration on login
+
+**Medical Records Management:**
+• Admission Forms - Complete patient admission records with vital signs tracking
+• Prenatal Checkup Forms - Specialized maternal healthcare records with gravida/para tracking
+• Medical Certificates - Digital certificate generation and management
+• Prescription Management - Doctor-issued prescriptions linked to patient records
+• Soft Deletes - Archive system for historical records with audit trail
+
+**Hospital Management Dashboard:**
+• Patient Management - Track active, pending, and archived patient records
+• Doctor Management - Verify and manage healthcare providers
+• Inter-Hospital Referral System - Transfer patient records between facilities
+• Real-time Analytics - Dashboard metrics for administrative oversight
+• Role-specific dashboards with intuitive navigation
+
+**Document Management:**
+• PDF Generation - Export medical records and certificates (DomPDF/TCPDF)
+• Secure File Upload - Document verification with League Flysystem
+• Profile Management - User profile pictures and ID document storage
+• MIME type and size restrictions for security
+
+**Communication System:**
+• Email Notifications - Automated emails for registration approval and login codes
+• SMS Verification - Phone-based OTP for enhanced security (Twilio SDK)
+• Request System - Patient requests for medical documents with approval workflow
+• Real-time validation with client-side form validation
+
+**Architecture Highlights:**
+• Clean Architecture Principles - Separation of Concerns with Controllers, Services, Entities, and Repositories
+• Design Patterns - Repository, Service Layer, Factory, Provider, Middleware, and DTOs
+• Dependency Injection - Constructor injection with PHP-DI 6 for testability
+• PSR Standards - PSR-4 autoloading, PSR-7 HTTP messages
+• Normalized Database Schema - 3NF design with proper entity relationships
+
+**Security Implementation:**
+• Role-Based Middleware - Route protection per user role
+• CSRF Token Validation - Form tampering prevention
+• XSS Protection - Output escaping and input sanitization
+• SQL Injection Prevention - Prepared statements via Doctrine ORM
+• Password Hashing - bcrypt/Argon2 secure hashing
+• File Upload Validation - MIME type and size restrictions
+
+**Project Metrics:**
+• 15,000+ Lines of PHP Code
+• 50+ Database Migrations (version-controlled)
+• 20+ Specialized Controllers
+• 17+ Doctrine Entities
+• 19+ Business Logic Services
+• 15+ Custom Middleware Components
+• 100+ RESTful API Routes
+
+**Business Impact:**
+• Reduces administrative overhead by 60%
+• Improves patient data accessibility by 80%
+• Enables seamless inter-hospital collaboration
+• Ensures compliance with healthcare data regulations
+• Digital record management eliminates physical storage needs
+• Faster patient processing with quick medical history access
+
+**Technical Challenges Solved:**
+• Multi-Tenant Architecture - Isolated hospital data with shared infrastructure
+• Complex Permissions - Granular access control for sensitive medical data
+• Document Generation - Dynamic PDF creation from database records
+• Two-Factor Authentication - Multi-channel verification system (Email/SMS)
+• Zero-Downtime Database Migrations - Version-controlled schema updates
+• Session Security - Protection against hijacking and fixation
+• Optimized Database Queries - Eager loading to prevent N+1 queries
+
+**Deployment & DevOps:**
+• Dockerized Infrastructure - Easy deployment across environments with Docker Compose
+• Nginx Configuration - High-performance web server setup
+• MySQL Container - Production database with InnoDB engine
+• Asset Optimization - Minified CSS/JS with Webpack Encore
+• PHPUnit Testing - Unit testing framework for code quality`,
+    technologies: [
+      'PHP 8.1',
+      'Slim Framework 4',
+      'Doctrine ORM 2',
+      'Doctrine DBAL 3',
+      'PHP-DI 6',
+      'MySQL 8.0',
+      'Bootstrap 5.3',
+      'jQuery',
+      'DataTables',
+      'Webpack Encore',
+      'Docker',
+      'Docker Compose',
+      'Nginx',
+      'Twilio SDK',
+      'PHPMailer',
+      'DomPDF',
+      'TCPDF',
+      'Symfony Console',
+      'PHPUnit',
+      'Composer',
+      'Git'
+    ],
+    categories: ['fullstack', 'data'],
+    featured: true,
+    thumbnailUrl: '/images/projects/pr/pr1.png',
+    imageUrl: '/images/projects/pr/pr1.png',
+    githubUrl: 'https://github.com/AllenDiaz/Phirecord',
+    liveUrl: 'RESTRICTED',
+    publicationUrl: 'https://ieeexplore.ieee.org/document/10668022',
+    completedDate: '2024-08',
+    teamSize: 1,
+    role: 'Full Stack Developer & System Architect',
   },
 ];
 
