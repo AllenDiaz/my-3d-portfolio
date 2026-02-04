@@ -87,11 +87,12 @@ export default function Computer({ position, projectId }: ComputerProps) {
       ctx.fillStyle = '#6ab0f3';
       ctx.fillText('Click to view details', canvas.width / 2, canvas.height - 40);
       
-      // Category badge
+      // Category badges
       ctx.font = '12px monospace';
       ctx.fillStyle = '#8b5cf6';
       ctx.textAlign = 'center';
-      ctx.fillText(project.category.toUpperCase(), canvas.width / 2, canvas.height - 20);
+      const categoriesText = project.categories.map(c => c.toUpperCase()).join(' | ');
+      ctx.fillText(categoriesText, canvas.width / 2, canvas.height - 20);
       
       // Decorative elements
       ctx.fillStyle = '#4a90e240';

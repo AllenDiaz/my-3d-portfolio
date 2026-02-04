@@ -128,9 +128,9 @@ export const useStore = create<StoreState>((set, get) => ({
   },
   
   // Get projects by category
-  getProjectsByCategory: (category: Project['category']) => {
+  getProjectsByCategory: (category: 'web' | 'mobile' | 'ai' | 'fullstack' | 'data' | 'other') => {
     const state = get();
-    return state.allProjects.filter(project => project.category === category);
+    return state.allProjects.filter(project => project.categories.includes(category));
   },
   
   // Search projects by title, description, or technologies
@@ -147,7 +147,7 @@ export const useStore = create<StoreState>((set, get) => ({
       project.description.toLowerCase().includes(lowercaseQuery) ||
       project.longDescription?.toLowerCase().includes(lowercaseQuery) ||
       project.technologies.some(tech => tech.toLowerCase().includes(lowercaseQuery)) ||
-      project.category.toLowerCase().includes(lowercaseQuery)
+      project.categories.some(cat => cat.toLowerCase().includes(lowercaseQuery))
     );
   },
   

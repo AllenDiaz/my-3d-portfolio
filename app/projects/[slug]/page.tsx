@@ -46,6 +46,16 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         '/images/projects/dora/dora-4.png',
       ];
     }
+    if (projectId === 'friends-connection-ministry') {
+      return [
+        '/images/projects/fc/fc1.png',
+        '/images/projects/fc/fc2.png',
+        '/images/projects/fc/fc3.png',
+        '/images/projects/fc/fc4.png',
+        '/images/projects/fc/fc5.png',
+        '/images/projects/fc/fc6.png',
+      ];
+    }
     return project?.thumbnailUrl ? [project.thumbnailUrl] : [];
   };
 
@@ -115,10 +125,14 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
               {/* Metadata */}
               <div className="flex flex-wrap gap-6 text-sm text-gray-400">
-                {project.category && (
+                {project.categories && project.categories.length > 0 && (
                   <div className="flex items-center gap-2">
                     <FolderOpen className="w-4 h-4" />
-                    <span className="capitalize">{project.category}</span>
+                    <div className="flex gap-2">
+                      {project.categories.map(cat => (
+                        <span key={cat} className="capitalize">{cat}</span>
+                      ))}
+                    </div>
                   </div>
                 )}
                 {project.completedDate && (
@@ -265,10 +279,18 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                     <dd className="text-gray-300 font-medium">{project.completedDate}</dd>
                   </>
                 )}
-                {project.category && (
+                {project.categories && project.categories.length > 0 && (
                   <>
-                    <dt className="text-gray-500">Category</dt>
-                    <dd className="text-gray-300 font-medium capitalize">{project.category}</dd>
+                    <dt className="text-gray-500">Categories</dt>
+                    <dd className="text-gray-300 font-medium">
+                      <div className="flex flex-wrap gap-2">
+                        {project.categories.map(cat => (
+                          <span key={cat} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded capitalize text-xs">
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    </dd>
                   </>
                 )}
               </dl>

@@ -24,7 +24,7 @@ export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredProjects = allProjects.filter((project) => {
-    const matchesCategory = selectedCategory === 'all' || project.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || project.categories.includes(selectedCategory);
     const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -278,12 +278,14 @@ function ProjectCard({ project, index, featured = false }: ProjectCardProps) {
         </div>
 
         {/* Metadata */}
-        <div className="flex items-center gap-4 mb-4 text-xs text-gray-400">
-          <span className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded capitalize">
-            {project.category}
-          </span>
+        <div className="flex items-center gap-2 mb-4 text-xs flex-wrap">
+          {project.categories.map((cat) => (
+            <span key={cat} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded capitalize">
+              {cat}
+            </span>
+          ))}
           {project.completedDate && (
-            <span>{project.completedDate}</span>
+            <span className="text-gray-400">{project.completedDate}</span>
           )}
         </div>
 
