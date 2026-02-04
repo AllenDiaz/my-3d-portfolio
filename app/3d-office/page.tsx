@@ -56,8 +56,8 @@ export default function ThreeDOfficePage() {
         </Scene3D>
 
         {/* Object Interaction Guidelines */}
-        <div className="absolute top-24 right-6 z-10 pointer-events-none">
-          <div className="bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 text-white max-w-xs">
+        <div className="absolute top-24 right-4 sm:right-6 z-10 pointer-events-none hidden md:block">
+          <div className="bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-3 sm:p-4 text-white max-w-xs">
             <h3 className="text-sm font-semibold mb-2 text-gray-300">
               Object IDs
             </h3>
@@ -74,13 +74,29 @@ export default function ThreeDOfficePage() {
           </div>
         </div>
 
+        {/* Mobile Instructions - Shown only on small screens */}
+        <div className="absolute top-24 left-4 right-4 z-10 pointer-events-none md:hidden">
+          <div className="bg-black/60 backdrop-blur-sm border border-gray-700/50 rounded-lg p-3 text-white">
+            <p className="text-xs text-gray-300 text-center">
+              <span className="font-semibold">Tap</span> objects to explore • <span className="font-semibold">Swipe</span> to rotate
+            </p>
+          </div>
+        </div>
+
         {/* Floating UI Overlay */}
         <ProjectPanel />
 
-        {/* Instructions Overlay */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <div className="bg-black/80 dark:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-gray-700 dark:border-gray-600 text-sm transition-colors">
+        {/* Instructions Overlay - Desktop */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none hidden sm:block">
+          <div className="bg-black/80 dark:bg-black/90 backdrop-blur-sm text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-gray-700 dark:border-gray-600 text-xs sm:text-sm transition-colors">
             <span className="font-semibold">Click</span> objects to explore • <span className="font-semibold">Drag</span> to rotate • <span className="font-semibold">Scroll</span> to zoom
+          </div>
+        </div>
+
+        {/* Mobile Bottom Instructions */}
+        <div className="absolute bottom-6 left-4 right-4 z-30 pointer-events-none sm:hidden">
+          <div className="bg-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-lg border border-gray-700 text-xs text-center">
+            <span className="font-semibold">Tap</span> to interact • <span className="font-semibold">Pinch</span> to zoom
           </div>
         </div>
       </div>

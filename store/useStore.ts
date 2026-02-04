@@ -65,7 +65,7 @@ interface StoreState {
   
   // Project getters and filters
   featuredProjects: () => Project[];
-  getProjectsByCategory: (category: Project['category']) => Project[];
+  getProjectsByCategory: (category: 'web' | 'mobile' | 'ai' | 'fullstack' | 'data' | 'other') => Project[];
   searchProjects: (query: string) => Project[];
   getProjectById: (id: string) => Project | undefined;
 }
