@@ -61,9 +61,19 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         '/images/projects/pr/pr1.png',
         '/images/projects/pr/pr2.png',
         '/images/projects/pr/pr3.png',
-        '/images/projects/pr/pr4.png',
-        '/images/projects/pr/pr5.png',
+        '/images/projects/pr/pr4.jpeg',
+        '/images/projects/pr/pr5.jpeg',
         '/images/projects/pr/pr6.png',
+      ];
+    }
+    if (projectId === '3d-interactive-portfolio') {
+      return [
+        '/images/projects/p/p1.png',
+        '/images/projects/p/p2.png',
+        '/images/projects/p/p3.png',
+        '/images/projects/p/p4.png',
+        '/images/projects/p/p5.png',
+        '/images/projects/p/p6.png',
       ];
     }
     return project?.thumbnailUrl ? [project.thumbnailUrl] : [];

@@ -306,6 +306,149 @@ IEEE Publication: https://ieeexplore.ieee.org/document/10668022
     teamSize: 1,
     role: 'Full Stack Developer & System Architect',
   },
+
+  // ===============================
+  // 3D INTERACTIVE PORTFOLIO - FEATURED
+  // ===============================
+  {
+    id: '3d-interactive-portfolio',
+    title: '3D Interactive Portfolio with React Three Fiber',
+    description: 'Immersive 3D portfolio experience built with Next.js 15, React Three Fiber, and advanced WebGL techniques. Features cinematic camera animations, real-time reflections, custom GLSL shaders, particle systems, and performance optimization for 60 FPS across all devices.',
+    longDescription: `A cutting-edge, fully interactive 3D portfolio showcasing modern web technologies and advanced 3D graphics programming. Built with Next.js 15, React Three Fiber, and Three.js, featuring professional-grade visual effects and optimized performance.
+
+**Immersive 3D Experience:**
+• Cinematic Camera Introduction - GSAP-powered 3-phase animation (aerial view → zoom → settle) with camera shake
+• Interactive 3D Office Environment - Fully explorable workspace with realistic materials and lighting
+• Real-Time Reflections - MeshReflectorMaterial with 512x512 resolution and depth-based falloff
+• Dynamic Lighting System - Toggleable desk lamp with ambient, directional, and spotlight sources
+• Particle System - 300 floating particles with realistic physics and organic movement
+
+**Advanced Visual Effects:**
+• Post-Processing Pipeline - Bloom, SSAO, Depth of Field, Vignette, and Chromatic Aberration
+• Custom GLSL Shaders - Holographic display with animated grid patterns and scan line effects
+• PBR Materials - Physically-based rendering with high metalness (0.9-0.95) and environment reflections
+• Binary Shader Walls - Matrix-style animated binary code with custom fragment shaders
+• Dynamic Screen Content - Canvas-based procedural textures with project information
+
+**Interactive Elements:**
+• Clickable Project Monitors - Three interactive displays showing featured projects
+• Interactive Desk Objects - 5 desk items (keyboard, mouse, tablet, coffee mug, phone) with hover effects
+• Animated Character - 3D character model with smooth animations and interactions
+• Ambient Sound System - Multi-layered audio with Web Audio API (sine waves, LFO modulation, white noise)
+• Theme Toggle - Dark/light mode with smooth transitions and system preference detection
+
+**Performance Optimization:**
+• Adaptive Device Pixel Ratio - Automatically adjusts quality based on device capabilities
+• Real-Time FPS Monitoring - Performance optimizer that maintains 60 FPS across devices
+• Event Throttling - Optimized event handlers to prevent performance degradation
+• Lazy Loading - Dynamic imports for 3D components with Next.js dynamic loading
+• LOD System - Level of detail management for complex geometries
+
+**Technical Architecture:**
+• React Three Fiber - Declarative 3D rendering with React components
+• Three.js Core - Advanced WebGL rendering and shader programming
+• Zustand State Management - Global state for UI interactions and project data
+• Framer Motion - Smooth UI animations and transitions
+• GSAP - Professional-grade camera animations and timeline control
+• @react-three/drei - Utility components (OrbitControls, Environment, MeshReflectorMaterial)
+• @react-three/postprocessing - Post-processing effects pipeline
+
+**Component Architecture:**
+• Scene3D.tsx - Canvas wrapper with performance optimization and adaptive DPR
+• MainScene.tsx - Scene composition integrating all 3D elements
+• SceneSetup.tsx - Camera controls, multi-light setup, and environment configuration
+• PerformanceOptimizer.tsx - Real-time performance monitoring and quality adjustment
+• PostProcessing.tsx - Visual effects pipeline with bloom, SSAO, and DOF
+• CinematicCamera.tsx - GSAP-powered camera animation sequences
+• HolographicDisplay.tsx - Custom shader-based holographic element
+• FloatingParticles.tsx - Particle system with physics simulation
+• AmbientSound.tsx - Web Audio API sound system with multiple layers
+• Computer.tsx - Interactive monitors with dynamic canvas textures
+• DeskLamp.tsx - Toggleable lighting with realistic shadows
+• OfficeRoom.tsx - Complete office environment with reflective surfaces
+• BinaryWall.tsx - Animated shader walls with Matrix-style effects
+
+**Key Features Showcase:**
+• Multi-Category Project System - Projects can have multiple categories (fullstack + ai, web + fullstack)
+• IEEE Publication Integration - Academic publication links with green badge indicators
+• Restricted Content System - Modal system for restricted GitHub repos and live demos
+• Responsive Design - Mobile-first approach with adaptive layouts
+• Image Galleries - Multi-image support for project showcases
+• Real-Time Search & Filtering - Advanced project filtering by category and search terms
+• Project Detail Pages - Dynamic routes with comprehensive project information
+• About Section - Education, experience timeline, and skills showcase with modals
+
+**Development Excellence:**
+• 100% TypeScript - Full type safety across all components
+• Modular Architecture - Clean separation of concerns with reusable components
+• Custom Hooks - useStore for global state, useFrame for animations
+• Performance Monitoring - Built-in FPS counter and quality adjustment
+• Comprehensive Documentation - Detailed README files and code comments
+• Zero Lint Errors - ESLint configuration with strict rules
+• Modern React Patterns - Server components, client components, and async data
+
+**Visual Quality:**
+• Professional Cinematic Quality - Film-grade post-processing effects
+• Photorealistic Materials - PBR workflow with proper metalness and roughness
+• Living Atmosphere - Particle system creates depth and realism
+• Smooth Animations - 60 FPS maintained across all interactions
+• Multi-Sensory Experience - Audio-visual immersion with ambient soundscape
+
+**Browser Technologies:**
+• WebGL 2.0 - Advanced 3D graphics rendering
+• Web Audio API - Real-time audio synthesis and effects
+• Canvas API - Procedural texture generation
+• WebGL Shaders - Custom GLSL vertex and fragment shaders
+• Performance API - Real-time performance measurement
+• Intersection Observer - Efficient viewport detection
+
+**Project Metrics:**
+• 10 New 3D Components - Advanced interactive elements
+• 5 Enhanced Components - Upgraded existing features
+• 15+ Custom Files - Comprehensive architecture
+• 300+ Particles - Real-time physics simulation
+• 60 FPS Target - Optimized for smooth performance
+• Multi-Platform Support - Desktop, tablet, and mobile responsive
+
+**Learning Outcomes:**
+• Advanced Three.js and React Three Fiber development
+• Custom GLSL shader programming (vertex + fragment)
+• Performance optimization for real-time 3D graphics
+• GSAP animation sequencing and timeline control
+• Web Audio API multi-layer sound synthesis
+• PBR material creation and lighting design
+• Post-processing effects pipeline implementation
+• State management with Zustand
+• Next.js 15 App Router with dynamic imports
+• TypeScript advanced patterns and generics`,
+    technologies: [
+      'Next.js 15',
+      'React 19',
+      'React Three Fiber',
+      'Three.js',
+      'TypeScript',
+      'GSAP',
+      'Zustand',
+      '@react-three/drei',
+      '@react-three/postprocessing',
+      'Framer Motion',
+      'Tailwind CSS',
+      'WebGL',
+      'GLSL Shaders',
+      'Web Audio API',
+      'Canvas API',
+      'Vercel'
+    ],
+    categories: ['web', 'fullstack'],
+    featured: true,
+    thumbnailUrl: '/images/projects/p/p1.png',
+    imageUrl: '/images/projects/p/p1.png',
+    githubUrl: 'https://github.com/AllenDiaz/my-3d-portfolio',
+    liveUrl: 'https://allen-diaz-porfolio.vercel.app/',
+    completedDate: '2026-02',
+    teamSize: 1,
+    role: 'Full Stack Developer & 3D Graphics Engineer',
+  },
 ];
 
 // ===============================
