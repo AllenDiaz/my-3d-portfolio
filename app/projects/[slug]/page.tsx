@@ -76,6 +76,15 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         '/images/projects/p/p6.png',
       ];
     }
+    if (projectId === 'yelpcamp-fullstack') {
+      return [
+        '/images/projects/camp/camp1.png',
+        '/images/projects/camp/camp2.png',
+        '/images/projects/camp/camp3.png',
+        '/images/projects/camp/camp4.png',
+        '/images/projects/camp/camp5.png',
+      ];
+    }
     return project?.thumbnailUrl ? [project.thumbnailUrl] : [];
   };
 
@@ -335,6 +344,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         isOpen={showRestrictedLinkModal}
         onClose={() => setShowRestrictedLinkModal(false)}
         linkType={restrictedLinkType || 'code'}
+        projectId={project?.id}
       />
     </div>
   );

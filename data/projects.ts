@@ -449,6 +449,220 @@ IEEE Publication: https://ieeexplore.ieee.org/document/10668022
     teamSize: 1,
     role: 'Full Stack Developer & 3D Graphics Engineer',
   },
+
+  // ===============================
+  // YELPCAMP - FULL-STACK WEB APPLICATION - FEATURED
+  // ===============================
+  {
+    id: 'yelpcamp-fullstack',
+    title: 'YelpCamp - Campground Discovery Platform',
+    description: 'Modern full-stack web application for discovering, sharing, and reviewing campgrounds. Migrated from monolithic EJS to decoupled REST API + Next.js 16 architecture with JWT authentication, MapTiler clustering, Cloudinary uploads, and Docker containerization.',
+    longDescription: `A production-ready, full-stack web application that allows users to discover, share, and review campgrounds. Features a decoupled architecture with RESTful API backend and responsive Next.js frontend, demonstrating advanced web development skills including authentication, cloud services integration, interactive mapping, and containerization.
+
+**Architecture Migration Achievement:**
+Successfully migrated from monolithic server-rendered architecture (Express + EJS + Passport.js sessions) to modern decoupled architecture (Express REST API + Next.js + JWT) demonstrating ability to refactor and modernize legacy codebases.
+
+**User Authentication & Authorization:**
+• JWT-based Stateless Authentication - Token-based auth with automatic refresh and logout
+• Secure Password Hashing - bcrypt implementation with salt rounds
+• Protected Routes - Role-based access control for campground authors
+• Persistent Authentication State - Token management with Zustand state
+• Authorization Middleware - Express middleware for protected API endpoints
+• Automatic Token Expiration - Secure session management with token refresh
+
+**Campground Management System:**
+• Full CRUD Operations - Create, read, update, and delete campgrounds
+• Multi-Image Upload - Support for multiple images per campground via Cloudinary SDK
+• Interactive Image Carousel - Gallery with navigation controls
+• Automatic Geocoding - Convert text addresses to coordinates with MapTiler API
+• Author Authorization - Only campground creators can edit/delete their listings
+• Form Validation - Client-side (React Hook Form) and server-side (Joi) validation
+• Image Management - Upload, preview, and delete functionality
+
+**Interactive Mapping Features:**
+• Dynamic Cluster Map - MapTiler SDK with real-time clustering of nearby campgrounds
+• Individual Location Maps - Preview map for each campground detail page
+• Interactive Markers - Clickable markers with popup campground information
+• Zoom Controls - Full navigation with zoom and pan capabilities
+• Geospatial Queries - MongoDB geospatial indexing for location-based searches
+• Custom Styling - Teal-themed map markers matching brand identity
+
+**Review & Rating System:**
+• Star Rating System - 1-5 star visual rating with user feedback
+• Text Reviews - Detailed user reviews with author attribution
+• Review Authorization - Users can only delete their own reviews
+• Aggregate Ratings - Display average ratings per campground
+• Review Counts - Total review statistics per location
+• Chronological Display - Newest reviews first with timestamps
+
+**Modern UI/UX Design:**
+• Dark Mode Support - Three theme options (Light, Dark, System) with localStorage persistence
+• Responsive Design - Mobile-first approach working seamlessly on all devices
+• Toast Notifications - User feedback for actions (success, error, info)
+• Loading States - Skeleton screens and spinners for better UX
+• Error Handling - Comprehensive error messages with recovery options
+• Form Validation Feedback - Real-time validation with error messages
+• Smooth Animations - Tailwind CSS transitions and hover effects
+
+**API Architecture & Security:**
+• RESTful API Design - 12+ endpoints following REST principles
+• Interactive Swagger Documentation - OpenAPI 3.0 specs at /api-docs
+• JWT Token Management - Secure stateless authentication
+• NoSQL Injection Prevention - Express Mongo Sanitize middleware
+• XSS Protection - sanitize-html for user input
+• Security Headers - Helmet middleware for HTTP headers
+• CORS Configuration - Cross-origin resource sharing setup
+• Request Logging - Morgan HTTP request logger
+• Schema Validation - Joi validation for all API requests
+
+**Database Design & Optimization:**
+• MongoDB with Mongoose ODM - NoSQL database with schema validation
+• Normalized Schema Design - User → Campground → Review relationships
+• Referenced Relationships - Population for efficient queries
+• Virtual Properties - Computed fields for dynamic data
+• Cascade Delete Operations - Automatic cleanup of related documents
+• Geospatial Indexing - 2dsphere index for location queries
+• Compound Indexes - Optimized query performance
+
+**Cloud Services Integration:**
+• Cloudinary SDK - Cloud-based image storage and transformation
+• Image Upload Pipeline - Multer middleware for file handling
+• Image Optimization - Automatic compression and format conversion
+• CDN Delivery - Fast image loading via Cloudinary CDN
+• Storage Management - Programmatic image deletion
+• Multiple Upload Support - Batch image processing
+
+**Frontend Architecture:**
+• Next.js 16 App Router - Modern React framework with server components
+• TypeScript - Full type safety with interfaces and types
+• Zustand State Management - Lightweight global state
+• TanStack Query - Data fetching, caching, and synchronization
+• React Hook Form - Declarative form validation
+• Axios with Interceptors - HTTP client with token injection
+• Custom Hooks - Reusable logic for auth, API calls, and theme
+• Component Library - 15+ reusable UI components
+
+**Backend Architecture:**
+• Node.js + Express.js - RESTful API server
+• Middleware Pattern - Authentication, validation, error handling
+• Controller Pattern - Separation of route handlers
+• Model Pattern - Mongoose schemas and methods
+• Service Layer - Business logic abstraction
+• Error Handling Middleware - Centralized error management
+• Async Error Wrapper - Clean async/await error handling
+
+**DevOps & Containerization:**
+• Docker Containerization - Multi-container setup with Docker Compose
+• Development Dockerfile - Hot-reload with nodemon and volume mounting
+• Production Dockerfile - Optimized multi-stage builds
+• MongoDB Container - Persistent volume for database
+• Environment Configuration - Separate dev/prod environment variables
+• Container Orchestration - Service communication and networking
+• Health Checks - Container readiness and liveness probes
+
+**Development Workflow:**
+• Git Version Control - Feature branches and meaningful commits
+• Environment Variables - Configuration management with .env
+• Seed Data - Testing data for development
+• API Testing - Swagger UI for endpoint testing
+• Hot Module Replacement - Fast development iteration
+• Error Logging - Comprehensive logging for debugging
+
+**Key Features Showcase:**
+• Landing Page - Hero section with call-to-action and featured campgrounds
+• Browse Gallery - Grid view with images, ratings, and quick info
+• Cluster Map Page - Explore campgrounds geographically with clustering
+• Campground Details - Full information with reviews, images, and location map
+• User Dashboard - Manage your campground listings
+• Create/Edit Forms - Multi-step forms with validation
+• Review Management - Add, view, and delete reviews
+• Theme Persistence - User preferences saved across sessions
+• Mobile Navigation - Hamburger menu with smooth transitions
+
+**Technical Challenges Solved:**
+• JWT Migration - Converted from session-based Passport.js to stateless JWT authentication
+• Token Management - Implemented automatic token refresh and expiration handling
+• Image Pipeline - Built complete upload, storage, and deletion workflow with Cloudinary
+• Map Integration - Integrated MapTiler SDK with clustering and geocoding
+• State Synchronization - Managed global state across multiple components
+• Docker Networking - Configured multi-container communication
+• CORS Issues - Resolved cross-origin authentication challenges
+• Type Safety - Implemented comprehensive TypeScript interfaces
+
+**Security Implementations:**
+• Password Encryption - bcrypt with configurable salt rounds
+• JWT Secret Management - Environment variable security
+• Input Sanitization - Prevention of NoSQL injection and XSS
+• HTTP Security Headers - Helmet middleware configuration
+• CSRF Protection - Token-based form security
+• Rate Limiting - API endpoint throttling (future enhancement)
+• Secure Cookie Handling - httpOnly and secure flags
+
+**Performance Optimizations:**
+• Image CDN - Cloudinary for fast image delivery
+• Database Indexing - Optimized query performance
+• API Caching - TanStack Query caching strategy
+• Lazy Loading - Code splitting with Next.js dynamic imports
+• Optimized Bundle Size - Tree shaking and minification
+• Geospatial Queries - Efficient location-based searches
+
+**Project Metrics:**
+• 5,000+ Lines of Code
+• 12+ RESTful API Endpoints
+• 15+ React Components
+• 3 Database Models (User, Campground, Review)
+• 20+ Implemented Features
+• Comprehensive Swagger API Documentation
+• Docker Multi-Container Setup
+• Full TypeScript Coverage
+
+**Learning Outcomes:**
+• Architectural refactoring from monolithic to microservices-ready
+• JWT authentication and token lifecycle management
+• RESTful API design and documentation
+• Docker containerization and orchestration
+• Cloud services integration (Cloudinary, MapTiler)
+• TypeScript for type-safe development
+• Modern React patterns with Next.js 16
+• Database design and optimization
+• Security best practices implementation
+• DevOps workflow and deployment strategies`,
+    technologies: [
+      'Next.js 16',
+      'React',
+      'TypeScript',
+      'Express.js',
+      'Node.js',
+      'MongoDB',
+      'Mongoose',
+      'JWT',
+      'Bcrypt',
+      'Zustand',
+      'TanStack Query',
+      'React Hook Form',
+      'Axios',
+      'Tailwind CSS 4',
+      'MapTiler SDK',
+      'Cloudinary',
+      'Multer',
+      'Joi',
+      'Swagger',
+      'Docker',
+      'Docker Compose',
+      'Helmet',
+      'Morgan',
+      'Git'
+    ],
+    categories: ['fullstack', 'web'],
+    featured: true,
+    thumbnailUrl: '/images/projects/camp/camp1.png',
+    imageUrl: '/images/projects/camp/camp1.png',
+    githubUrl: 'https://github.com/AllenDiaz/YelpCamp-Replicate',
+    liveUrl: 'RESTRICTED',
+    completedDate: '2024-11',
+    teamSize: 1,
+    role: 'Full Stack Developer',
+  },
 ];
 
 // ===============================

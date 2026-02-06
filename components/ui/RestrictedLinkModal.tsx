@@ -7,9 +7,12 @@ interface RestrictedLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
   linkType: 'code' | 'live';
+  projectId?: string;
 }
 
-export default function RestrictedLinkModal({ isOpen, onClose, linkType }: RestrictedLinkModalProps) {
+export default function RestrictedLinkModal({ isOpen, onClose, linkType, projectId }: RestrictedLinkModalProps) {
+  const isYelpCamp = projectId === 'yelpcamp-fullstack';
+  const isPhiRecord = projectId === 'phirecord-healthcare-system';
   return (
     <AnimatePresence>
       {isOpen && (
@@ -75,29 +78,82 @@ export default function RestrictedLinkModal({ isOpen, onClose, linkType }: Restr
 
               {/* Content */}
               <div className="p-6">
-                <div className="flex items-start gap-3 mb-6">
-                  <div className="p-2 bg-orange-500/20 rounded-lg mt-1">
-                    <Building2 className="w-5 h-5 text-orange-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">
-                      Proprietary Company Project
-                    </h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      This project was developed exclusively for and is owned by the company I work for. 
-                      The {linkType === 'code' ? 'source code' : 'live application'} is proprietary and 
-                      only accessible within the company's internal network.
-                    </p>
-                  </div>
-                </div>
+                {isYelpCamp && linkType === 'live' ? (
+                  <>
+                    <div className="flex items-start gap-3 mb-6">
+                      <div className="p-2 bg-blue-500/20 rounded-lg mt-1">
+                        <Building2 className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-2">
+                          Demo Available in Interview
+                        </h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          This project is not currently deployed to a public server. However, I can demonstrate 
+                          the full functionality during an interview using the local Docker development environment.
+                        </p>
+                      </div>
+                    </div>
 
-                <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 mb-6">
-                  <p className="text-gray-400 text-xs leading-relaxed">
-                    <strong className="text-gray-300">Note:</strong> While I cannot share the {linkType === 'code' ? 'code' : 'demo'}, 
-                    I'm happy to discuss the technical implementation, architecture decisions, and problem-solving 
-                    approaches used in this project during an interview or consultation.
-                  </p>
-                </div>
+                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 mb-6">
+                      <p className="text-gray-400 text-xs leading-relaxed">
+                        <strong className="text-gray-300">What I can show:</strong> Complete walkthrough of the application 
+                        including user authentication, campground CRUD operations, interactive maps with clustering, 
+                        image uploads, review system, and the full Docker containerized setup.
+                      </p>
+                    </div>
+                  </>
+                ) : isPhiRecord && linkType === 'live' ? (
+                  <>
+                    <div className="flex items-start gap-3 mb-6">
+                      <div className="p-2 bg-orange-500/20 rounded-lg mt-1">
+                        <Building2 className="w-5 h-5 text-orange-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-2">
+                          Deployed in Rural Health Facilities
+                        </h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          This healthcare management system is deployed exclusively for rural health facilities 
+                          in the Philippines. Access is restricted to authorized medical personnel only.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 mb-6">
+                      <p className="text-gray-400 text-xs leading-relaxed">
+                        <strong className="text-gray-300">Published Research:</strong> View the IEEE publication 
+                        for technical details and architecture overview.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start gap-3 mb-6">
+                      <div className="p-2 bg-orange-500/20 rounded-lg mt-1">
+                        <Building2 className="w-5 h-5 text-orange-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-2">
+                          Proprietary Company Project
+                        </h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          This project was developed exclusively for and is owned by the company I work for. 
+                          The {linkType === 'code' ? 'source code' : 'live application'} is proprietary and 
+                          only accessible within the company's internal network.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 mb-6">
+                      <p className="text-gray-400 text-xs leading-relaxed">
+                        <strong className="text-gray-300">Note:</strong> While I cannot share the {linkType === 'code' ? 'code' : 'demo'}, 
+                        I'm happy to discuss the technical implementation, architecture decisions, and problem-solving 
+                        approaches used in this project during an interview or consultation.
+                      </p>
+                    </div>
+                  </>
+                )}
 
                 {/* Action Button */}
                 <button
