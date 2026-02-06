@@ -11,12 +11,10 @@ import PostProcessing from './PostProcessing';
 import FloatingParticles from './FloatingParticles';
 import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
-import AnimatedCharacter from './AnimatedCharacter';
 import { useStore } from '@/store/useStore';
 
 export default function MainScene() {
   const lightsOn = useStore((state) => state.lightsOn);
-  const showCharacter = useStore((state) => state.showCharacter);
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
@@ -51,15 +49,6 @@ export default function MainScene() {
 
       {/* Office Environment */}
       <OfficeRoom />
-
-      {/* Animated Character - appears when chair is clicked */}
-      {showCharacter && (
-        <AnimatedCharacter 
-          position={[0, 0.55, 1]} 
-          scale={1}
-          visible={showCharacter}
-        />
-      )}
 
       {/* Atmospheric Particles */}
       <FloatingParticles count={300} />

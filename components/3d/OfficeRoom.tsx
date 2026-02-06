@@ -11,12 +11,10 @@ export default function OfficeRoom() {
   const chairRef = useRef<Mesh>(null);
   const [chairHovered, setChairHovered] = useState(false);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
-  const setShowCharacter = useStore((state) => state.setShowCharacter);
   
   const handleChairClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     setShowChairNotification(true);
-    setShowCharacter(true);
   };
   
   return (
