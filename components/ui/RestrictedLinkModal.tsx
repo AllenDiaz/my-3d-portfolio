@@ -51,7 +51,8 @@ export default function RestrictedLinkModal({ isOpen, onClose, linkType, project
                 
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors backdrop-blur-sm z-10"
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors backdrop-blur-sm z-20 border border-white/20 cursor-pointer"
+                  aria-label="Close modal"
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>

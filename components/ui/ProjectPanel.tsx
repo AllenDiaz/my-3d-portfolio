@@ -92,7 +92,8 @@ export default function ProjectPanel() {
                 
                 <button
                   onClick={handleClose}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors backdrop-blur-sm z-10"
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors backdrop-blur-sm z-20 cursor-pointer border border-white/20"
+                  aria-label="Close project panel"
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>

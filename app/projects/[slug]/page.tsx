@@ -268,12 +268,26 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             {project.longDescription && (
               <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-4">About This Project</h2>
-                <div className="prose prose-invert max-w-none">
-                  {project.longDescription.split('\n').map((paragraph, idx) => (
-                    <p key={idx} className="text-gray-300 leading-relaxed mb-4">
-                      {paragraph}
-                    </p>
-                  ))}
+                <div className="prose prose-invert max-w-none space-y-4">
+                  {project.longDescription.split('\n').map((paragraph, idx) => {
+                    if (!paragraph.trim()) return null;
+                    
+                    // Parse markdown bold syntax **text** and convert to <strong>
+                    const parts = paragraph.split(/(\*\*.*?\*\*)/g);
+                    
+                    return (
+                      <p key={idx} className="text-gray-300 leading-relaxed">
+                        {parts.map((part, partIdx) => {
+                          // Check if this part is bold
+                          if (part.startsWith('**') && part.endsWith('**')) {
+                            const boldText = part.slice(2, -2); // Remove ** from both ends
+                            return <strong key={partIdx} className="font-bold text-white">{boldText}</strong>;
+                          }
+                          return <span key={partIdx}>{part}</span>;
+                        })}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
             )}
