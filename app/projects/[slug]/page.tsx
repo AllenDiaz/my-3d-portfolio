@@ -58,12 +58,14 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     }
     if (projectId === 'phirecord-healthcare-system') {
       return [
-        '/images/projects/pr/pr1.png',
-        '/images/projects/pr/pr2.png',
-        '/images/projects/pr/pr3.png',
+        '/images/projects/pr/pr1.jpeg',
+        '/images/projects/pr/pr2.jpeg',
+        '/images/projects/pr/pr3.jpeg',
         '/images/projects/pr/pr4.jpeg',
         '/images/projects/pr/pr5.jpeg',
-        '/images/projects/pr/pr6.png',
+        '/images/projects/pr/pr6.jpeg',
+        '/images/projects/pr/pr7.jpeg',
+        '/images/projects/pr/pr8.jpeg',
       ];
     }
     if (projectId === '3d-interactive-portfolio') {
