@@ -10,6 +10,7 @@ import SkillsModal from '@/components/ui/SkillsModal';
 import ExperienceModal from '@/components/ui/ExperienceModal';
 import CertificateModal from '@/components/ui/CertificateModal';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
+import AllProjectsModal from '@/components/ui/AllProjectsModal';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
@@ -42,6 +43,8 @@ export default function ThreeDOfficePage() {
   const showRestrictedLinkModal = useStore((state) => state.showRestrictedLinkModal);
   const setShowRestrictedLinkModal = useStore((state) => state.setShowRestrictedLinkModal);
   const restrictedLinkType = useStore((state) => state.restrictedLinkType);
+  const showAllProjectsModal = useStore((state) => state.showAllProjectsModal);
+  const setShowAllProjectsModal = useStore((state) => state.setShowAllProjectsModal);
   
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
@@ -143,6 +146,12 @@ export default function ThreeDOfficePage() {
         isOpen={showRestrictedLinkModal}
         onClose={() => setShowRestrictedLinkModal(false)}
         linkType={restrictedLinkType || 'code'}
+      />
+      
+      {/* All Projects Modal */}
+      <AllProjectsModal
+        isOpen={showAllProjectsModal}
+        onClose={() => setShowAllProjectsModal(false)}
       />
     </main>
   );

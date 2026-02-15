@@ -4,7 +4,7 @@ import { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Mesh, CanvasTexture } from 'three';
-import { useRouter } from 'next/navigation';
+import { useStore } from '@/store/useStore';
 
 interface DeskTabletProps {
   position: [number, number, number];
@@ -14,7 +14,7 @@ export default function DeskTablet({ position }: DeskTabletProps) {
   const tabletRef = useRef<Mesh>(null);
   const screenRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const router = useRouter();
+  const setShowAllProjectsModal = useStore((state) => state.setShowAllProjectsModal);
 
   // Create tablet screen texture
   const screenTexture = useMemo(() => {
@@ -128,7 +128,7 @@ export default function DeskTablet({ position }: DeskTabletProps) {
   });
 
   const handleClick = () => {
-    router.push('/projects');
+    setShowAllProjectsModal(true);
   };
 
   return (

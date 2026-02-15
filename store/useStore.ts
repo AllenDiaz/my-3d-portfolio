@@ -49,6 +49,10 @@ interface StoreState {
   showCVModal: boolean;
   setShowCVModal: (show: boolean) => void;
   
+  // All Projects Modal state
+  showAllProjectsModal: boolean;
+  setShowAllProjectsModal: (show: boolean) => void;
+  
   // Restricted Link Modal state
   showRestrictedLinkModal: boolean;
   restrictedLinkType: 'code' | 'live' | null;
@@ -103,6 +107,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   showCVModal: false,
   setShowCVModal: (show) => set({ showCVModal: show }),
+  
+  showAllProjectsModal: false,
+  setShowAllProjectsModal: (show) => set({ showAllProjectsModal: show }),
   
   showRestrictedLinkModal: false,
   restrictedLinkType: null,
