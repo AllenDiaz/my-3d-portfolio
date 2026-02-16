@@ -54,7 +54,7 @@ export default function ExperienceModal({ isOpen, onClose }: ExperienceModalProp
       title: 'Full Stack Developer Freelancer',
       company: 'Freelance',
       location: 'Remote',
-      period: 'August 2020 - Present',
+      period: 'August 2020 - September 2024',
       type: 'Freelance',
       description: 'Creating system solutions for small businesses and organizations. Notable client: International Baptist Church of Pinellas INC in Florida, USA.',
       achievements: [

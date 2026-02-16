@@ -67,6 +67,7 @@ export default function ThreeDOfficePage() {
             <ul className="space-y-1 text-xs text-gray-400">
               <li>📱 Tablet → All projects</li>
               <li>🪪 ID Card → All Work Experience</li>
+              <li>📱 iPad → All projects</li>
               <li>🏆 Certificate → Professional Certifications</li>
               <li>💻 Computer → Featured Projects</li>
               <li>☕ Coffee → Message for Employer/Client</li>
