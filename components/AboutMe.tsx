@@ -90,7 +90,7 @@ const AboutMe = () => {
               <h3 className="text-3xl font-bold text-white mb-4">My Story</h3>
               <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p>
-                  I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a Full-Stack Engineer 
+                  I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a Senior Full-Stack Engineer 
                   with 3+ years of experience turning ideas into powerful, scalable web applications. My journey 
                   began in high school with a simple curiosity about how the web works—and evolved into a passion 
                   for building efficient, user-friendly digital solutions.

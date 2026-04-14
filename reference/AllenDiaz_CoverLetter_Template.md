@@ -1,5 +1,5 @@
 # ALLEN DIAZ
-**Full Stack Engineer | AI & Cloud Solutions Specialist**
+**Senior Full Stack Engineer | AI & Cloud Solutions Specialist**
 
 📧 allendiaz.developer@gmail.com | 🌍 Philippines (Remote)  
 💼 [Portfolio](https://allen-diaz-dev.vercel.app/) | [GitHub](https://github.com/AllenDiaz)
@@ -16,7 +16,7 @@
 
 Dear **[Hiring Manager Name / Hiring Team]**,
 
-I am excited to apply for the **[POSITION TITLE]** position at **[COMPANY NAME]**. With 3+ years of professional experience as a Full Stack Engineer specializing in **[AI/Cloud/Web Development - customize based on job]**, I am confident that my technical expertise and proven track record align perfectly with your team's needs.
+I am excited to apply for the **[POSITION TITLE]** position at **[COMPANY NAME]**. With 3+ years of professional experience as a Senior Full Stack Engineer specializing in **[AI/Cloud/Web Development - customize based on job]**, I am confident that my technical expertise and proven track record align perfectly with your team's needs.
 
 ### **Why [COMPANY NAME]?**
 
@@ -31,7 +31,7 @@ Example:
 
 ### **Relevant Experience & Achievements**
 
-**Current Role: Full Stack Engineer at Albertsons Companies Philtech**
+**Current Role: Senior Full Stack Engineer at Albertsons Companies Philtech**
 
 My most impactful project is **DORA (Document Recognition Assistant)**, an enterprise AI-powered invoice processing platform:
 - Processes **10,000+ invoices monthly** with **95%+ accuracy** using Google Cloud AI (Gemini 2.0)
@@ -147,7 +147,7 @@ Thank you for considering my application. I look forward to the possibility of c
 **Best regards,**
 
 **Allen Diaz**  
-Full Stack Engineer | AI & Cloud Solutions Specialist
+Senior Full Stack Engineer | AI & Cloud Solutions Specialist
 
 📧 allendiaz.developer@gmail.com  
 💼 [allen-diaz-dev.vercel.app](https://allen-diaz-dev.vercel.app/)  

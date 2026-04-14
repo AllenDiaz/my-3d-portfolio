@@ -90,7 +90,7 @@ All versions emphasize your strongest achievements:
 - Built with Next.js, FastAPI, PostgreSQL, GCP
 
 ### 🏆 **Professional Impact**
-- Current: Full Stack Engineer at Albertsons Companies
+- Current: Senior Full Stack Engineer at Albertsons Companies
 - 3+ years professional experience
 - Enterprise systems serving thousands
 - IEEE-published research

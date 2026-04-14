@@ -1,5 +1,5 @@
 # ALLEN DIAZ
-**Full Stack Engineer | AI & Cloud Solutions Specialist**
+**Senior Full Stack Engineer | AI & Cloud Solutions Specialist**
 
 📧 allendiaz.developer@gmail.com | 🌍 Philippines (Remote)  
 💼 [Portfolio](https://allen-diaz-dev.vercel.app/) | [GitHub](https://github.com/AllenDiaz)
@@ -14,7 +14,7 @@ I am writing to express my strong interest in the Full Stack Engineer position. 
 
 ### **Current Role & Key Achievement**
 
-As a Full Stack Engineer at Albertsons Companies Philtech, I lead development for the AI Team INCITE. My flagship project, **DORA (Document Recognition Assistant)**, is an AI-powered invoice processing platform that:
+As a Senior Full Stack Engineer at Albertsons Companies Philtech, I lead development for the AI Team INCITE. My flagship project, **DORA (Document Recognition Assistant)**, is an AI-powered invoice processing platform that:
 - Processes **10,000+ invoices monthly** with **95%+ accuracy**
 - Uses **Google Cloud AI (Gemini 2.0)** for intelligent document extraction
 - Built with **Next.js 14, TypeScript, FastAPI, and PostgreSQL on GCP**

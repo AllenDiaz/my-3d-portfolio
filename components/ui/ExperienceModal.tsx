@@ -14,10 +14,28 @@ export default function ExperienceModal({ isOpen, onClose }: ExperienceModalProp
 
   const experiences = [
     {
+      title: 'Senior Full Stack Engineer',
+      company: 'Safeway Albertsons Philtech',
+      location: 'Philippines',
+      period: 'April 2026 - Present',
+      type: 'Full-time',
+      description: 'Promoted to Senior Full Stack Engineer, continuing to drive innovation and technical excellence in the AI Team INCITE (Innovation & Continuous Improvement Team).',
+      achievements: [
+        'Leading full-stack development initiatives for AI-powered systems',
+        'Mentoring junior developers and conducting code reviews',
+        'Architecting scalable solutions using modern tech stack',
+        'Driving best practices and technical standards across the team',
+      ],
+      technologies: ['Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL', 'GCP', 'Docker'],
+      color: 'from-blue-500 to-cyan-500',
+      bgColor: 'bg-blue-500/20',
+      borderColor: 'border-blue-500/50',
+    },
+    {
       title: 'Full Stack Engineer',
       company: 'Safeway Albertsons Philtech',
       location: 'Philippines',
-      period: 'June 2025 - Present',
+      period: 'June 2025 - April 2026',
       type: 'Full-time',
       description: 'Worked for the AI Team INCITE (Innovation & Continuous Improvement Team). Led the Full Stack AI system project for Philtech Finance - a Document Analyzer and Reviewer.',
       achievements: [
@@ -27,9 +45,9 @@ export default function ExperienceModal({ isOpen, onClose }: ExperienceModalProp
         'Deployed system on Google Cloud Platform (GCP) with Cloud SQL (PostgreSQL) and Cloud Storage',
       ],
       technologies: ['Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL', 'GCP', 'Docker'],
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-500/20',
-      borderColor: 'border-blue-500/50',
+      color: 'from-purple-500 to-blue-500',
+      bgColor: 'bg-purple-500/20',
+      borderColor: 'border-purple-500/50',
     },
     {
       title: 'Software Engineer Apprentice',

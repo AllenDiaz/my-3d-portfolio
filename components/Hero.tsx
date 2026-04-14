@@ -57,7 +57,7 @@ const Hero = () => {
               </span>
             </h1>
             <h2 className="text-2xl lg:text-3xl text-gray-300 font-light">
-              Full-Stack Engineer | Software Engineer | AI Enthusiast
+              Senior Full-Stack Engineer | Software Engineer | AI Enthusiast
             </h2>
           </motion.div>
 
@@ -66,9 +66,9 @@ const Hero = () => {
             variants={itemVariants}
             className="text-lg text-gray-400 max-w-2xl leading-relaxed backdrop-blur-sm"
           >
-            Full-Stack Engineer specializing in React, Next.js, FastAPI, and Express. 
-            Currently working on AI solutions at Albertsons Companies as a Full-Stack Engineer / AI Engineer, 
-            designing scalable system architectures and delivering enterprise-grade applications. 
+            Senior Full-Stack Engineer specializing in React, Next.js, FastAPI, and Express. 
+            Currently leading AI solutions at Albertsons Companies as a Senior Full-Stack Engineer / AI Engineer, 
+            designing scalable system architectures, mentoring developers, and delivering enterprise-grade applications. 
             Certified by IBM, Meta, and Microsoft with published research in IEEE.
           </motion.p>
 

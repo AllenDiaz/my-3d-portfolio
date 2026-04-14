@@ -1,5 +1,5 @@
 # ALLEN DIAZ
-**Full Stack Engineer | AI & Cloud Solutions Specialist**
+**Senior Full Stack Engineer | AI & Cloud Solutions Specialist**
 
 📧 allendiaz.developer@gmail.com  
 🌍 Remote / Philippines  
@@ -15,7 +15,7 @@ I am writing to express my strong interest in the Full Stack Engineer position a
 
 ### **Why I'm a Strong Fit**
 
-Currently serving as a Full Stack Engineer at Albertsons Companies Philtech, I lead the development of enterprise AI systems for the INCITE team (Innovation & Continuous Improvement Team). My most notable achievement is **DORA (Document Recognition Assistant)**, an AI-powered invoice processing platform that:
+Currently serving as a Senior Full Stack Engineer at Albertsons Companies Philtech, I lead the development of enterprise AI systems for the INCITE team (Innovation & Continuous Improvement Team). My most notable achievement is **DORA (Document Recognition Assistant)**, an AI-powered invoice processing platform that:
 
 - **Processes 10,000+ invoices monthly** with 95%+ accuracy using Google Cloud AI (Gemini 2.0)
 - **Reduces manual data entry by 70%**, saving thousands of hours for the finance team
@@ -90,7 +90,13 @@ My technical foundation spans the entire development stack:
 
 ### **Professional Experience Highlights**
 
-**Full Stack Engineer** | Albertsons Companies Philtech | June 2025 - Present
+**Senior Full Stack Engineer** | Albertsons Companies Philtech | April 2026 - Present
+- Promoted to Senior Full Stack Engineer leading technical initiatives and mentoring developers
+- Leading full-stack development for AI-powered systems in the INCITE team
+- Driving best practices, code quality standards, and technical excellence across projects
+- Architecting scalable solutions and conducting comprehensive code reviews
+
+**Full Stack Engineer** | Albertsons Companies Philtech | June 2025 - April 2026
 - Lead developer for **AI Team INCITE** building document processing systems
 - Architected full-stack application from UI to deployment on GCP
 - Developed **14 backend endpoints** using FastAPI with SQLAlchemy ORM and Pydantic
@@ -180,7 +186,7 @@ Thank you for considering my application. I look forward to the possibility of c
 **Best regards,**
 
 **Allen Diaz**  
-Full Stack Engineer | AI & Cloud Solutions Specialist
+Senior Full Stack Engineer | AI & Cloud Solutions Specialist
 
 📧 allendiaz.developer@gmail.com  
 💼 [allen-diaz-dev.vercel.app](https://allen-diaz-dev.vercel.app/)  
