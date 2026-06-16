@@ -67,3 +67,22 @@ body {
 .animate-scan {
   animation: scan 8s linear infinite;
 }
+
+/* Visible keyboard-focus indicator across all interactive elements */
+:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Honor reduced-motion preference globally for CSS-driven animation/transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

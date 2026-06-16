@@ -11,9 +11,21 @@ export default function CinematicCamera() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const hasAnimated = useRef(false);
 
+  // Respect users who prefer reduced motion: skip the fly-in entirely.
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
   useEffect(() => {
     if (!cameraRef.current || hasAnimated.current) return;
     hasAnimated.current = true;
+
+    // Reduced motion: snap straight to the resting position, no GSAP fly-in.
+    if (prefersReducedMotion) {
+      cameraRef.current.position.set(0, 1.5, 5);
+      cameraRef.current.lookAt(0, 1, 0);
+      return;
+    }
 
     // Cinematic intro animation
     const timeline = gsap.timeline({
@@ -50,12 +62,12 @@ export default function CinematicCamera() {
         repeat: 3
       });
 
-  }, []);
+  }, [prefersReducedMotion]);
 
-  // Subtle camera breathing effect
+  // Subtle camera breathing effect (disabled under reduced motion)
   useFrame((state) => {
-    if (!cameraRef.current || !hasAnimated.current) return;
-    
+    if (!cameraRef.current || !hasAnimated.current || prefersReducedMotion) return;
+
     const time = state.clock.elapsedTime;
     
     // Very subtle breathing motion
