@@ -1,7 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { X, Lock, Building2 } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface RestrictedLinkModalProps {
   isOpen: boolean;
@@ -14,27 +15,15 @@ export default function RestrictedLinkModal({ isOpen, onClose, linkType, project
   const isYelpCamp = projectId === 'yelpcamp-fullstack';
   const isPhiRecord = projectId === 'phirecord-healthcare-system';
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
-            onClick={onClose}
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-full max-w-md mx-4"
-          >
-            <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl shadow-2xl border border-zinc-700 overflow-hidden">
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      maxWidthClass="max-w-md"
+      showClose={false}
+      ariaLabel="Restricted access"
+      zIndexClass="z-[100]"
+    >
+      <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl shadow-2xl border border-zinc-700 overflow-hidden">
               {/* Header with animated gradient */}
               <div className="relative p-6 bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 overflow-hidden">
                 <motion.div
@@ -165,9 +154,6 @@ export default function RestrictedLinkModal({ isOpen, onClose, linkType, project
                 </button>
               </div>
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+    </ModalShell>
   );
 }
