@@ -1,6 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
 import SystemNotification from '@/components/ui/SystemNotification';
@@ -42,7 +45,9 @@ export default function ThreeDOfficePage() {
   const restrictedLinkType = useStore((state) => state.restrictedLinkType);
   const showAllProjectsModal = useStore((state) => state.showAllProjectsModal);
   const setShowAllProjectsModal = useStore((state) => state.setShowAllProjectsModal);
-  
+
+  const [legendOpen, setLegendOpen] = useState(true);
+
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
       {/* Navigation */}
@@ -55,23 +60,42 @@ export default function ThreeDOfficePage() {
           <MainScene />
         </Scene3D>
 
-        {/* Object Interaction Guidelines */}
-        <div className="absolute top-24 right-4 sm:right-6 z-10 pointer-events-none hidden md:block">
-          <div className="bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-3 sm:p-4 text-white max-w-xs">
-            <h3 className="text-sm font-semibold mb-2 text-gray-300">
-              Object IDs
-            </h3>
-            <ul className="space-y-1 text-xs text-gray-400">
-              <li>📱 Tablet → All projects</li>
-              <li>🪪 ID Card → All Work Experience</li>
-              <li>📱 iPad → All projects</li>
-              <li>🏆 Certificate → Professional Certifications</li>
-              <li>💻 Computer → Featured Projects</li>
-              <li>☕ Coffee → Message for Employer/Client</li>
-              <li>🪑 Chair → Sytem Notification</li>
-              <li>⌨️  Keyboard → Skills and Technologies</li>
-              <li>📄 Paper → Resume</li>
-            </ul>
+        {/* Object Interaction Guidelines - collapsible */}
+        <div className="absolute top-24 right-4 sm:right-6 z-10 hidden md:block pointer-events-auto">
+          <div className="bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg text-white max-w-xs overflow-hidden">
+            <button
+              onClick={() => setLegendOpen((v) => !v)}
+              aria-expanded={legendOpen}
+              className="flex w-full items-center justify-between gap-4 px-3 sm:px-4 py-2.5 text-left transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 cursor-pointer"
+            >
+              <span className="text-sm font-semibold font-mono text-gray-300">Object IDs</span>
+              {legendOpen ? (
+                <ChevronUp className="h-4 w-4 text-gray-400" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-gray-400" />
+              )}
+            </button>
+            <AnimatePresence initial={false}>
+              {legendOpen && (
+                <motion.ul
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  className="space-y-1 px-3 sm:px-4 pb-3 text-xs font-mono text-gray-400"
+                >
+                  <li>📱 Tablet → All projects</li>
+                  <li>🪪 ID Card → All Work Experience</li>
+                  <li>📱 iPad → All projects</li>
+                  <li>🏆 Certificate → Professional Certifications</li>
+                  <li>💻 Computer → Featured Projects</li>
+                  <li>☕ Coffee → Message for Employer/Client</li>
+                  <li>🪑 Chair → System Notification</li>
+                  <li>⌨️ Keyboard → Skills and Technologies</li>
+                  <li>📄 Paper → Resume</li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
