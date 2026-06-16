@@ -2,20 +2,44 @@
 
 import { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html, MeshReflectorMaterial } from '@react-three/drei';
+import { Html } from '@react-three/drei';
 import { Mesh, CanvasTexture } from 'three';
 import { useStore } from '@/store/useStore';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
 interface ComputerProps {
   position: [number, number, number];
   projectId: string;
 }
 
+/**
+ * Polished chrome material for the monitor body. Uses meshPhysicalMaterial (clearcoat)
+ * on capable tiers for believable lacquer/glass; falls back to meshStandardMaterial on low.
+ */
+function ChromeMaterial({ physical, color }: { physical: boolean; color: string }) {
+  if (physical) {
+    return (
+      <meshPhysicalMaterial
+        color={color}
+        metalness={0.9}
+        roughness={0.08}
+        clearcoat={1}
+        clearcoatRoughness={0.1}
+        envMapIntensity={1.5}
+      />
+    );
+  }
+  return (
+    <meshStandardMaterial color={color} metalness={0.9} roughness={0.1} envMapIntensity={1.5} />
+  );
+}
+
 export default function Computer({ position, projectId }: ComputerProps) {
   const monitorRef = useRef<Mesh>(null);
   const screenRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const { setActiveProject, setShowProjectPanel, getProjectById } = useStore();
+  const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier } = useStore();
+  const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
   
   // Get the actual project data
   const project = useMemo(() => getProjectById(projectId), [projectId, getProjectById]);
@@ -131,42 +155,27 @@ export default function Computer({ position, projectId }: ComputerProps) {
     <group position={position}>
       {/* Monitor Base */}
       <mesh position={[0, -0.05, 0]} castShadow>
-        <cylinderGeometry args={[0.15, 0.18, 0.02]} />
-        <meshStandardMaterial 
-          color="#0a0a0a"
-          metalness={0.95}
-          roughness={0.05}
-          envMapIntensity={1.5}
-        />
+        <cylinderGeometry args={[0.15, 0.18, 0.02, 48]} />
+        <ChromeMaterial physical={physical} color="#0a0a0a" />
       </mesh>
 
       {/* Monitor Stand */}
       <mesh position={[0, 0.1, 0]} castShadow>
-        <cylinderGeometry args={[0.02, 0.02, 0.3]} />
-        <meshStandardMaterial 
-          color="#0a0a0a"
-          metalness={0.95}
-          roughness={0.05}
-          envMapIntensity={1.5}
-        />
+        <cylinderGeometry args={[0.02, 0.02, 0.3, 32]} />
+        <ChromeMaterial physical={physical} color="#0a0a0a" />
       </mesh>
 
       {/* Monitor Frame */}
-      <mesh 
+      <mesh
         ref={monitorRef}
-        position={[0, 0.3, 0]} 
+        position={[0, 0.3, 0]}
         castShadow
         onClick={handleClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
         <boxGeometry args={[0.7, 0.45, 0.05]} />
-        <meshStandardMaterial 
-          color={hovered ? "#1a1a1a" : "#0a0a0a"}
-          metalness={0.9}
-          roughness={0.1}
-          envMapIntensity={1.5}
-        />
+        <ChromeMaterial physical={physical} color={hovered ? "#1a1a1a" : "#0a0a0a"} />
       </mesh>
 
       {/* Monitor Screen */}

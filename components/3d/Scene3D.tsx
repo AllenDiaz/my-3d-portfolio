@@ -3,6 +3,7 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
 import { Loader } from '@react-three/drei';
+import * as THREE from 'three';
 import PerformanceOptimizer from './PerformanceOptimizer';
 import { useStore } from '@/store/useStore';
 import { detectDeviceTier, QUALITY_PRESETS, type QualityTier } from '@/lib/deviceTier';
@@ -41,6 +42,16 @@ export default function Scene3D({ children }: Scene3DProps) {
           powerPreference: 'high-performance',
           stencil: false,
           depth: true
+        }}
+        onCreated={({ gl }) => {
+          // ACES Filmic tone mapping + explicit color management for a cinematic,
+          // non-clipping image (the renderer otherwise defaults to NoToneMapping).
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.1;
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          // Soft shadow map on capable tiers; hard PCF on low-end.
+          gl.shadowMap.type =
+            preset.softShadows === 'hard' ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
         }}
         dpr={[1, preset.dprMax]}
         style={{

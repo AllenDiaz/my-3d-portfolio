@@ -1,9 +1,10 @@
 'use client';
 
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { useStore } from '@/store/useStore';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import CinematicCamera from './CinematicCamera';
 
 interface SceneSetupProps {
@@ -13,6 +14,8 @@ interface SceneSetupProps {
 export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupProps) {
   const { camera } = useThree();
   const lightsOn = useStore((state) => state.lightsOn);
+  const qualityTier = useStore((state) => state.qualityTier);
+  const preset = QUALITY_PRESETS[qualityTier];
 
   useEffect(() => {
     // Set initial camera position if not using cinematic intro
@@ -23,6 +26,16 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
   return (
     <>
+      {/* Percentage-closer soft shadows (PCSS) on the high tier for soft, realistic
+          shadow penumbra. Cheaper tiers fall back to the PCF map set in Scene3D. */}
+      {preset.softShadows === 'pcss' && (
+        <SoftShadows size={25} samples={16} focus={0.5} />
+      )}
+
+      {/* Subtle exponential fog so the room dissolves into the void rather than a wall.
+          Color matches the canvas background (#0a0a0a) for a seamless fade. */}
+      <fogExp2 attach="fog" args={['#0a0a0a', 0.03]} />
+
       {/* Camera */}
       {enableCinematicIntro ? (
         <CinematicCamera />
@@ -54,6 +67,8 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
+        shadow-bias={-0.0001}
+        shadow-normalBias={0.02}
         shadow-camera-far={50}
         shadow-camera-left={-10}
         shadow-camera-right={10}

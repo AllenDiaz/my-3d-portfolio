@@ -18,12 +18,47 @@ export interface QualityPreset {
   dprMax: number;
   /** EffectComposer MSAA sample count (0 disables). */
   multisampling: number;
+  /** Shadow softness technique: PCSS (drei SoftShadows), soft PCF, or hard PCF. */
+  softShadows: 'pcss' | 'pcf' | 'hard';
+  /** Contact-shadow render resolution beneath furniture (0 disables). */
+  contactShadowResolution: number;
+  /** Floor reflection render resolution (0 = plain non-reflective floor). */
+  reflectionResolution: number;
+  /** Whether hero objects may use the costlier meshPhysicalMaterial (clearcoat). */
+  physicalMaterials: boolean;
 }
 
 export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
-  high: { particleCount: 300, postProcessing: 'full', dprMax: 2, multisampling: 8 },
-  medium: { particleCount: 150, postProcessing: 'reduced', dprMax: 1.5, multisampling: 4 },
-  low: { particleCount: 60, postProcessing: 'off', dprMax: 1, multisampling: 0 },
+  high: {
+    particleCount: 300,
+    postProcessing: 'full',
+    dprMax: 2,
+    multisampling: 8,
+    softShadows: 'pcss',
+    contactShadowResolution: 1024,
+    reflectionResolution: 1024,
+    physicalMaterials: true,
+  },
+  medium: {
+    particleCount: 150,
+    postProcessing: 'reduced',
+    dprMax: 1.5,
+    multisampling: 4,
+    softShadows: 'pcf',
+    contactShadowResolution: 512,
+    reflectionResolution: 512,
+    physicalMaterials: true,
+  },
+  low: {
+    particleCount: 60,
+    postProcessing: 'off',
+    dprMax: 1,
+    multisampling: 0,
+    softShadows: 'hard',
+    contactShadowResolution: 0,
+    reflectionResolution: 0,
+    physicalMaterials: false,
+  },
 };
 
 /**

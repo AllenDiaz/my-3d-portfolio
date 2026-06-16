@@ -11,6 +11,23 @@ interface FloatingParticlesProps {
 export default function FloatingParticles({ count = 200 }: FloatingParticlesProps) {
   const pointsRef = useRef<THREE.Points>(null);
 
+  // Soft circular sprite so particles read as dust/bokeh motes, not hard squares
+  const spriteTexture = useMemo(() => {
+    const size = 64;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.4, 'rgba(255,255,255,0.6)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
   // Create particle positions and velocities
   const particles = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -84,10 +101,11 @@ export default function FloatingParticles({ count = 200 }: FloatingParticlesProp
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        map={spriteTexture}
+        size={0.05}
         color="#ffffff"
         transparent
-        opacity={0.4}
+        opacity={0.5}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}

@@ -18,7 +18,7 @@ export default function PostProcessing() {
       <EffectComposer multisampling={preset.multisampling}>
         <Bloom
           intensity={lightsOn ? 0.5 : 0.3}
-          luminanceThreshold={0.2}
+          luminanceThreshold={0.25}
           luminanceSmoothing={0.9}
           mipmapBlur
         />
@@ -42,7 +42,7 @@ export default function PostProcessing() {
       {/* Bloom for glowing monitors and lights */}
       <Bloom
         intensity={lightsOn ? 0.5 : 0.3}
-        luminanceThreshold={0.2}
+        luminanceThreshold={0.25}
         luminanceSmoothing={0.9}
         mipmapBlur
       />
@@ -58,10 +58,10 @@ export default function PostProcessing() {
         color="black"
       />
 
-      {/* Depth of Field for cinematic focus */}
+      {/* Depth of Field - focal plane on the desk, softer aperture */}
       <DepthOfField
-        focusDistance={0.01}
-        focalLength={0.2}
+        focusDistance={0.035}
+        focalLength={0.08}
         bokehScale={lightsOn ? 2 : 3}
         height={480}
       />
@@ -72,9 +72,9 @@ export default function PostProcessing() {
         darkness={lightsOn ? 0.5 : 0.7}
       />
 
-      {/* Subtle chromatic aberration for realism */}
+      {/* Chromatic aberration - subtle but now actually perceptible */}
       <ChromaticAberration
-        offset={[0.0005, 0.0005] as [number, number]}
+        offset={[0.0012, 0.0012] as [number, number]}
       />
     </EffectComposer>
   );

@@ -1,16 +1,20 @@
 'use client';
 
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Mesh, BoxGeometry } from 'three';
-import { MeshReflectorMaterial } from '@react-three/drei';
+import { MeshReflectorMaterial, ContactShadows, RoundedBox } from '@react-three/drei';
 import { useStore } from '@/store/useStore';
 import { ThreeEvent } from '@react-three/fiber';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
+import { MATERIALS } from '@/lib/materials';
 
 export default function OfficeRoom() {
   const floorRef = useRef<Mesh>(null);
   const chairRef = useRef<Mesh>(null);
   const [chairHovered, setChairHovered] = useState(false);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  const qualityTier = useStore((state) => state.qualityTier);
+  const preset = QUALITY_PRESETS[qualityTier];
   
   const handleChairClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -19,53 +23,59 @@ export default function OfficeRoom() {
   
   return (
     <group>
-      {/* Floor with Reflections */}
-      <mesh 
+      {/* Floor — reflective on capable tiers, plain on low-end (reflections render the
+          scene to an offscreen target every frame, the heaviest cost in the room). */}
+      <mesh
         ref={floorRef}
-        rotation={[-Math.PI / 2, 0, 0]} 
+        rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0, 0]}
         receiveShadow
       >
         <planeGeometry args={[20, 20]} />
-        <MeshReflectorMaterial
-          blur={[300, 100]}
-          resolution={512}
-          mixBlur={1}
-          mixStrength={0.3}
-          roughness={0.7}
-          depthScale={1.2}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.4}
-          color="#1a1a1a"
-          metalness={0.5}
-        />
+        {preset.reflectionResolution > 0 ? (
+          <MeshReflectorMaterial
+            blur={[200, 60]}
+            resolution={preset.reflectionResolution}
+            mixBlur={1}
+            mixStrength={0.45}
+            roughness={0.6}
+            depthScale={1.2}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.4}
+            color="#1a1a1a"
+            metalness={0.6}
+          />
+        ) : (
+          <meshStandardMaterial color="#161616" roughness={0.6} metalness={0.4} />
+        )}
       </mesh>
 
-      {/* Back Wall */}
-      <mesh position={[0, 3, -5]} receiveShadow>
-        <planeGeometry args={[20, 6]} />
-        <meshStandardMaterial 
-          color="#0f0f0f"
-          roughness={0.9}
+      {/* Contact shadows ground the desk/chair on capable tiers */}
+      {preset.contactShadowResolution > 0 && (
+        <ContactShadows
+          position={[0, 0.01, -1.5]}
+          scale={12}
+          resolution={preset.contactShadowResolution}
+          blur={2.5}
+          opacity={0.6}
+          far={4}
+          color="#000000"
         />
+      )}
+
+      {/* Back Wall */}
+      <mesh position={[0, 3, -5]} receiveShadow material={MATERIALS.matteWall}>
+        <planeGeometry args={[20, 6]} />
       </mesh>
 
       {/* Left Wall */}
-      <mesh position={[-10, 3, 5]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
+      <mesh position={[-10, 3, 5]} rotation={[0, Math.PI / 2, 0]} receiveShadow material={MATERIALS.matteWall}>
         <planeGeometry args={[20, 6]} />
-        <meshStandardMaterial 
-          color="#0f0f0f"
-          roughness={0.9}
-        />
       </mesh>
 
       {/* Right Wall */}
-      <mesh position={[10, 3, 5]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
+      <mesh position={[10, 3, 5]} rotation={[0, -Math.PI / 2, 0]} receiveShadow material={MATERIALS.matteWall}>
         <planeGeometry args={[20, 6]} />
-        <meshStandardMaterial 
-          color="#0f0f0f"
-          roughness={0.9}
-        />
       </mesh>
 
       {/* Ceiling */}
@@ -79,54 +89,23 @@ export default function OfficeRoom() {
 
       {/* Desk Base */}
       <group position={[0, 0, -2]}>
-        {/* Desktop */}
-        <mesh position={[0, 0.75, 0]} castShadow receiveShadow>
-          <boxGeometry args={[3, 0.1, 1.5]} />
-          <meshStandardMaterial 
-            color="#2a2a2a"
-            roughness={0.4}
-            metalness={0.6}
-          />
-        </mesh>
+        {/* Desktop — rounded edges for a less blocky look */}
+        <RoundedBox args={[3, 0.1, 1.5]} radius={0.02} smoothness={4} position={[0, 0.75, 0]} castShadow receiveShadow>
+          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.6} />
+        </RoundedBox>
 
-        {/* Left Leg */}
-        <mesh position={[-1.3, 0.375, -0.6]} castShadow>
+        {/* Legs (shared dark-metal material) */}
+        <mesh position={[-1.3, 0.375, -0.6]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
-          <meshStandardMaterial 
-            color="#1a1a1a"
-            metalness={0.8}
-            roughness={0.2}
-          />
         </mesh>
-
-        {/* Right Leg */}
-        <mesh position={[1.3, 0.375, -0.6]} castShadow>
+        <mesh position={[1.3, 0.375, -0.6]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
-          <meshStandardMaterial 
-            color="#1a1a1a"
-            metalness={0.8}
-            roughness={0.2}
-          />
         </mesh>
-
-        {/* Left Front Leg */}
-        <mesh position={[-1.3, 0.375, 0.6]} castShadow>
+        <mesh position={[-1.3, 0.375, 0.6]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
-          <meshStandardMaterial 
-            color="#1a1a1a"
-            metalness={0.8}
-            roughness={0.2}
-          />
         </mesh>
-
-        {/* Right Front Leg */}
-        <mesh position={[1.3, 0.375, 0.6]} castShadow>
+        <mesh position={[1.3, 0.375, 0.6]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
-          <meshStandardMaterial 
-            color="#1a1a1a"
-            metalness={0.8}
-            roughness={0.2}
-          />
         </mesh>
       </group>
 
@@ -147,31 +126,29 @@ export default function OfficeRoom() {
         }}
       >
         {/* Seat */}
-        <mesh position={[0, 0.5, 0]} castShadow>
-          <boxGeometry args={[0.6, 0.1, 0.6]} />
-          <meshStandardMaterial 
+        <RoundedBox args={[0.6, 0.1, 0.6]} radius={0.03} smoothness={4} position={[0, 0.5, 0]} castShadow>
+          <meshStandardMaterial
             color={chairHovered ? "#2a2a4e" : "#1a1a2e"}
             roughness={0.7}
             emissive={chairHovered ? "#3a3a6e" : "#000000"}
             emissiveIntensity={chairHovered ? 0.3 : 0}
           />
-        </mesh>
+        </RoundedBox>
 
         {/* Backrest */}
-        <mesh position={[0, 0.9, -0.25]} castShadow>
-          <boxGeometry args={[0.6, 0.8, 0.1]} />
-          <meshStandardMaterial 
+        <RoundedBox args={[0.6, 0.8, 0.1]} radius={0.03} smoothness={4} position={[0, 0.9, -0.25]} castShadow>
+          <meshStandardMaterial
             color={chairHovered ? "#2a2a4e" : "#1a1a2e"}
             roughness={0.7}
             emissive={chairHovered ? "#3a3a6e" : "#000000"}
             emissiveIntensity={chairHovered ? 0.3 : 0}
           />
-        </mesh>
+        </RoundedBox>
 
         {/* Central Pole */}
         <mesh position={[0, 0.2, 0]} castShadow>
-          <cylinderGeometry args={[0.05, 0.05, 0.3]} />
-          <meshStandardMaterial 
+          <cylinderGeometry args={[0.05, 0.05, 0.3, 32]} />
+          <meshStandardMaterial
             color="#0a0a0a"
             metalness={0.9}
             roughness={0.1}
@@ -217,28 +194,23 @@ export default function OfficeRoom() {
       <group position={[4, 0, -3]}>
         {/* Table Top */}
         <mesh position={[0, 0.6, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[0.4, 0.4, 0.05]} />
-          <meshStandardMaterial 
+          <cylinderGeometry args={[0.4, 0.4, 0.05, 48]} />
+          <meshStandardMaterial
             color="#2a2a2a"
             roughness={0.5}
             metalness={0.5}
           />
         </mesh>
-        
-        {/* Leg */}
-        <mesh position={[0, 0.3, 0]} castShadow>
-          <cylinderGeometry args={[0.05, 0.08, 0.6]} />
-          <meshStandardMaterial 
-            color="#1a1a1a"
-            metalness={0.8}
-            roughness={0.2}
-          />
+
+        {/* Leg (shared dark-metal material) */}
+        <mesh position={[0, 0.3, 0]} castShadow material={MATERIALS.darkMetal}>
+          <cylinderGeometry args={[0.05, 0.08, 0.6, 32]} />
         </mesh>
 
         {/* Plant Pot */}
         <mesh position={[0, 0.7, 0]} castShadow>
-          <cylinderGeometry args={[0.12, 0.1, 0.15]} />
-          <meshStandardMaterial 
+          <cylinderGeometry args={[0.12, 0.1, 0.15, 32]} />
+          <meshStandardMaterial
             color="#8b4513"
             roughness={0.9}
           />
@@ -246,8 +218,8 @@ export default function OfficeRoom() {
 
         {/* Plant */}
         <mesh position={[0, 0.85, 0]} castShadow>
-          <sphereGeometry args={[0.15, 8, 8]} />
-          <meshStandardMaterial 
+          <sphereGeometry args={[0.15, 32, 32]} />
+          <meshStandardMaterial
             color="#2d5016"
             roughness={0.8}
           />
