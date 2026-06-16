@@ -12,9 +12,14 @@ import FloatingParticles from './FloatingParticles';
 import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
 import { useStore } from '@/store/useStore';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
 export default function MainScene() {
   const lightsOn = useStore((state) => state.lightsOn);
+  const qualityTier = useStore((state) => state.qualityTier);
+
+  // Device tier is detected in Scene3D and stored globally; read the preset here
+  const preset = QUALITY_PRESETS[qualityTier];
   const setShowCVModal = useStore((state) => state.setShowCVModal);
   const setShowCoffeeNotification = useStore((state) => state.setShowCoffeeNotification);
   const setShowSkillsModal = useStore((state) => state.setShowSkillsModal);
@@ -50,8 +55,8 @@ export default function MainScene() {
       {/* Office Environment */}
       <OfficeRoom />
 
-      {/* Atmospheric Particles */}
-      <FloatingParticles count={300} />
+      {/* Atmospheric Particles - count scales with device tier */}
+      <FloatingParticles count={preset.particleCount} />
 
       {/* Holographic Display */}
       <HolographicDisplay position={[0, 2, -4.5]} />

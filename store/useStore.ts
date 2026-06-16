@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { projectsData, type Project } from '@/data/projects';
+import type { QualityTier } from '@/lib/deviceTier';
 
 // Re-export Project type for convenience
 export type { Project };
@@ -24,6 +25,10 @@ interface StoreState {
   // Light mode state
   lightsOn: boolean;
   setLightsOn: (lightsOn: boolean) => void;
+
+  // Rendering quality tier (set once from device detection on mount)
+  qualityTier: QualityTier;
+  setQualityTier: (tier: QualityTier) => void;
   
   // Chair notification state
   showChairNotification: boolean;
@@ -89,6 +94,10 @@ export const useStore = create<StoreState>((set, get) => ({
   
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),
+
+  // Default to 'high' for SSR; overwritten on mount via detectDeviceTier()
+  qualityTier: 'high',
+  setQualityTier: (tier) => set({ qualityTier: tier }),
   
   showChairNotification: false,
   setShowChairNotification: (show) => set({ showChairNotification: show }),

@@ -1,15 +1,30 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Loader } from '@react-three/drei';
 import PerformanceOptimizer from './PerformanceOptimizer';
+import { useStore } from '@/store/useStore';
+import { detectDeviceTier, QUALITY_PRESETS, type QualityTier } from '@/lib/deviceTier';
 
 interface Scene3DProps {
   children: React.ReactNode;
 }
 
 export default function Scene3D({ children }: Scene3DProps) {
+  const setQualityTier = useStore((state) => state.setQualityTier);
+
+  // Scene3D is dynamically imported with ssr:false, so this only runs client-side.
+  // Detect synchronously via lazy init so the first Canvas render already uses the
+  // correct DPR on mobile, then publish the tier to the store for the rest of the scene.
+  const [tier] = useState<QualityTier>(detectDeviceTier);
+
+  useEffect(() => {
+    setQualityTier(tier);
+  }, [tier, setQualityTier]);
+
+  const preset = QUALITY_PRESETS[tier];
+
   return (
     <>
       <Canvas
@@ -27,7 +42,7 @@ export default function Scene3D({ children }: Scene3DProps) {
           stencil: false,
           depth: true
         }}
-        dpr={[1, 2]}
+        dpr={[1, preset.dprMax]}
         style={{
           width: '100%',
           height: '100vh',

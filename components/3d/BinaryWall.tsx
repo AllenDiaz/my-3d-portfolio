@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -154,6 +154,14 @@ export default function BinaryWall({
       materialRef.current.uniforms.time.value = state.clock.elapsedTime;
     }
   });
+
+  // Dispose GPU resources (canvas texture + shader material) on unmount
+  useEffect(() => {
+    return () => {
+      texture.dispose();
+      shaderMaterial.dispose();
+    };
+  }, [texture, shaderMaterial]);
 
   return (
     <mesh ref={meshRef} position={position} rotation={rotation}>

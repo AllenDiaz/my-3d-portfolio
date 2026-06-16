@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Download, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -160,9 +161,13 @@ const Hero = () => {
             
             {/* Photo container */}
             <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/10 dark:border-white/20 backdrop-blur-sm bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 transition-colors shadow-2xl">
-              <img
+              <Image
                 src="/images/profile-picture.jpg"
                 alt="Allen Diaz - Full-Stack Developer"
+                width={320}
+                height={320}
+                priority
+                sizes="320px"
                 className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
               />
             </div>

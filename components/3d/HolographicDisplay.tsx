@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -22,7 +22,8 @@ export default function HolographicDisplay({ position = [0, 1.5, -3] }: Holograp
     }
   });
 
-  const shaderMaterial = new THREE.ShaderMaterial({
+  // Create the shader material once (not on every render) to avoid leaking GPU memory
+  const shaderMaterial = useMemo(() => new THREE.ShaderMaterial({
     uniforms: {
       time: { value: 0 },
       color: { value: new THREE.Color(0x00ffff) }
@@ -71,7 +72,14 @@ export default function HolographicDisplay({ position = [0, 1.5, -3] }: Holograp
     transparent: true,
     side: THREE.DoubleSide,
     blending: THREE.AdditiveBlending
-  });
+  }), []);
+
+  // Dispose GPU resources when the component unmounts
+  useEffect(() => {
+    return () => {
+      shaderMaterial.dispose();
+    };
+  }, [shaderMaterial]);
 
   return (
     <group position={position}>
