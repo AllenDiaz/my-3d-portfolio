@@ -11,16 +11,13 @@ import ExperienceModal from '@/components/ui/ExperienceModal';
 import CertificateModal from '@/components/ui/CertificateModal';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 import AllProjectsModal from '@/components/ui/AllProjectsModal';
+import SceneLoader from '@/components/ui/SceneLoader';
 import { useStore } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), {
   ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-screen bg-black">
-      <div className="text-white text-xl">Loading 3D Experience...</div>
-    </div>
-  ),
+  loading: () => <SceneLoader />,
 });
 
 const MainScene = dynamic(() => import('@/components/3d/MainScene'), {

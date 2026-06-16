@@ -7,6 +7,7 @@ import { ArrowRight, Code2, User, FolderOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import SceneLoader from '@/components/ui/SceneLoader';
 
 // Dynamic import of 3D components with no SSR
 const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), { ssr: false });
@@ -46,11 +47,7 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* 3D Office Background */}
         <div className="absolute inset-0 z-0">
-          <Suspense fallback={
-            <div className="w-full h-full bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-              <div className="text-white text-xl">Loading 3D Scene...</div>
-            </div>
-          }>
+          <Suspense fallback={<SceneLoader />}>
             <Scene3D>
               <MainScene />
             </Scene3D>
