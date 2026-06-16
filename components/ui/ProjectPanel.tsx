@@ -101,21 +101,30 @@ export default function ProjectPanel() {
                   <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                     {activeProject.title}
                   </h2>
-                  <div className="flex flex-wrap gap-2">
+                  <motion.div
+                    className="flex flex-wrap gap-2"
+                    initial="hidden"
+                    animate="show"
+                    variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } } }}
+                  >
                     {activeProject.technologies.slice(0, 5).map((tech) => (
-                      <span
+                      <motion.span
                         key={tech}
+                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
                         className="px-2 sm:px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium"
                       >
                         {tech}
-                      </span>
+                      </motion.span>
                     ))}
                     {activeProject.technologies.length > 5 && (
-                      <span className="px-2 sm:px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white/70 font-medium">
+                      <motion.span
+                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                        className="px-2 sm:px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white/70 font-medium"
+                      >
                         +{activeProject.technologies.length - 5} more
-                      </span>
+                      </motion.span>
                     )}
-                  </div>
+                  </motion.div>
                 </div>
               </div>
 
@@ -165,9 +174,11 @@ export default function ProjectPanel() {
                 {/* Links */}
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   {activeProject.githubUrl && (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={(e) => handleLinkClick(e, activeProject.githubUrl, 'code')}
-                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors font-medium text-sm"
+                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors font-medium text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                     >
                       {activeProject.githubUrl === 'RESTRICTED' ? (
                         <>
@@ -181,12 +192,14 @@ export default function ProjectPanel() {
                           View Code
                         </>
                       )}
-                    </button>
+                    </motion.button>
                   )}
                   {activeProject.liveUrl && (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={(e) => handleLinkClick(e, activeProject.liveUrl, 'live')}
-                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
+                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                     >
                       {activeProject.liveUrl === 'RESTRICTED' ? (
                         <>
@@ -200,19 +213,21 @@ export default function ProjectPanel() {
                           Live Demo
                         </>
                       )}
-                    </button>
+                    </motion.button>
                   )}
                   {activeProject.publicationUrl && (
-                    <a
+                    <motion.a
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       href={activeProject.publicationUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm"
+                      className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                     >
                       <FileText className="w-4 h-4" />
                       <span className="hidden sm:inline">View Publication</span>
                       <span className="sm:hidden">IEEE</span>
-                    </a>
+                    </motion.a>
                   )}
                 </div>
 
@@ -240,8 +255,10 @@ export default function ProjectPanel() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleViewAllProjects}
-                  className="mt-4 sm:mt-6 w-full flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-semibold group shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  className="mt-4 sm:mt-6 w-full flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-semibold group shadow-lg hover:shadow-xl text-sm sm:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 >
                   <span>View All Projects</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
