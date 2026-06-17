@@ -47,7 +47,7 @@ export default function Scene3D({ children }: Scene3DProps) {
           // ACES Filmic tone mapping + explicit color management for a cinematic,
           // non-clipping image (the renderer otherwise defaults to NoToneMapping).
           gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.1;
+          gl.toneMappingExposure = 1.35;
           gl.outputColorSpace = THREE.SRGBColorSpace;
           // Soft shadow map on capable tiers; hard PCF on low-end.
           gl.shadowMap.type =

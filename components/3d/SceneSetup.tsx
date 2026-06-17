@@ -31,7 +31,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
   // Mood: dim the overall exposure when the lights are toggled off
   useEffect(() => {
-    gl.toneMappingExposure = lightsOn ? 1.1 : 0.65;
+    gl.toneMappingExposure = lightsOn ? 1.35 : 0.8;
   }, [gl, lightsOn]);
 
   useEffect(() => {
@@ -75,13 +75,13 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
       {/* Lighting - "late-night dev studio": cool indigo base, warm amber key,
           teal neon spill from the binary walls */}
-      {/* Ambient base (cool, dim) */}
-      <ambientLight color="#16213a" intensity={lightsOn ? 0.22 : 0.05} />
+      {/* Ambient base (cool, but bright enough to read the room) */}
+      <ambientLight color="#2c3a5c" intensity={lightsOn ? 0.5 : 0.1} />
 
       {/* Main Directional Light */}
       <directionalLight
         position={[5, 8, 5]}
-        intensity={lightsOn ? 0.8 : 0.1}
+        intensity={lightsOn ? 1.2 : 0.15}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -97,8 +97,8 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       {/* Fill Light (cool, soft) */}
       <directionalLight
         position={[-5, 5, -5]}
-        intensity={lightsOn ? 0.2 : 0.05}
-        color="#2a3a5e"
+        intensity={lightsOn ? 0.4 : 0.08}
+        color="#3a4a72"
       />
 
       {/* Desk lamp - warm amber practical, the emotional key light */}
@@ -143,13 +143,13 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         position={[0, 5.5, 0]}
         angle={Math.PI / 3}
         penumbra={0.5}
-        intensity={lightsOn ? 0.4 : 0.05}
+        intensity={lightsOn ? 0.7 : 0.08}
         castShadow
         color="#ffffff"
       />
 
-      {/* Environment Map for Reflections - warmer night interior, story-consistent */}
-      <Environment preset="night" environmentIntensity={0.4} />
+      {/* Environment Map for Reflections - interior IBL, bright enough to lift the room */}
+      <Environment preset="apartment" environmentIntensity={0.85} />
     </>
   );
 }
