@@ -12,6 +12,7 @@ import PostProcessing from './PostProcessing';
 import FloatingParticles from './FloatingParticles';
 import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
+import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
@@ -35,7 +36,7 @@ export default function MainScene() {
   }, [featuredProjects]);
   
   return (
-    <>
+    <Selection>
       {/* Ambient Sound System */}
       <AmbientSound enabled={true} />
       
@@ -132,6 +133,6 @@ export default function MainScene() {
 
       {/* Post-Processing Effects */}
       <PostProcessing />
-    </>
+    </Selection>
   );
 }

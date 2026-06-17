@@ -3,6 +3,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
+import { Select } from '@react-three/postprocessing';
 import { Mesh, CanvasTexture } from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -154,6 +155,7 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
   };
 
   return (
+    <Select enabled={hovered}>
     <group position={position} rotation={rotation}>
       {/* Monitor Base */}
       <mesh position={[0, -0.05, 0]} castShadow>
@@ -243,5 +245,6 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
         />
       )}
     </group>
+    </Select>
   );
 }

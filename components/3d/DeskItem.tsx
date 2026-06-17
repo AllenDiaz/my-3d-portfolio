@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
+import { Select } from '@react-three/postprocessing';
 import { Mesh } from 'three';
 import { useHoverFeedback } from './useHoverFeedback';
 
@@ -260,6 +261,7 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
   };
 
   return (
+    <Select enabled={hovered}>
     <group
       ref={itemRef}
       position={position}
@@ -284,5 +286,6 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
         </Html>
       )}
     </group>
+    </Select>
   );
 }

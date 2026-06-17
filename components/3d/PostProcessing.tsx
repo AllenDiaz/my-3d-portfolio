@@ -1,6 +1,6 @@
 'use client';
 
-import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration, N8AO, Noise } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration, N8AO, Noise, Outline } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
@@ -32,6 +32,7 @@ export default function PostProcessing() {
           color="black"
         />
         <Vignette offset={0.3} darkness={lightsOn ? 0.5 : 0.7} />
+        <Outline edgeStrength={3} visibleEdgeColor={0x22d3a0} hiddenEdgeColor={0x22d3a0} blur />
       </EffectComposer>
     );
   }
@@ -77,6 +78,9 @@ export default function PostProcessing() {
       <ChromaticAberration
         offset={[0.0012, 0.0012] as [number, number]}
       />
+
+      {/* Hover outline for interactive objects */}
+      <Outline edgeStrength={3.5} visibleEdgeColor={0x22d3a0} hiddenEdgeColor={0x22d3a0} blur />
 
       {/* Film grain - cinematic late-night finish (high tier only) */}
       <Noise premultiply opacity={0.025} />
