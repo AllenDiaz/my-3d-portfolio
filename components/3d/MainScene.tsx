@@ -5,6 +5,7 @@ import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
 import DeskTablet from './DeskTablet';
+import DeskClutter from './DeskClutter';
 import SceneSetup from './SceneSetup';
 import BinaryWall from './BinaryWall';
 import PostProcessing from './PostProcessing';
@@ -125,6 +126,9 @@ export default function MainScene() {
         label="Certifications"
         onClick={() => setShowCertificateModal(true)}
       />
+
+      {/* Non-interactive desk decor (sticky notes, USB hub) */}
+      <DeskClutter />
 
       {/* Post-Processing Effects */}
       <PostProcessing />
