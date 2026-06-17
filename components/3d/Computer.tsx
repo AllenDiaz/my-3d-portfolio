@@ -179,6 +179,24 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
         <ChromeMaterial physical={physical} color={hovered ? "#1a1a1a" : "#0a0a0a"} />
       </mesh>
 
+      {/* Raised bezel bars framing the screen for depth */}
+      <mesh position={[0, 0.5, 0.027]} castShadow>
+        <boxGeometry args={[0.7, 0.04, 0.02]} />
+        <ChromeMaterial physical={physical} color="#141414" />
+      </mesh>
+      <mesh position={[0, 0.1, 0.027]} castShadow>
+        <boxGeometry args={[0.7, 0.04, 0.02]} />
+        <ChromeMaterial physical={physical} color="#141414" />
+      </mesh>
+      <mesh position={[-0.33, 0.3, 0.027]} castShadow>
+        <boxGeometry args={[0.04, 0.45, 0.02]} />
+        <ChromeMaterial physical={physical} color="#141414" />
+      </mesh>
+      <mesh position={[0.33, 0.3, 0.027]} castShadow>
+        <boxGeometry args={[0.04, 0.45, 0.02]} />
+        <ChromeMaterial physical={physical} color="#141414" />
+      </mesh>
+
       {/* Monitor Screen */}
       <mesh
         ref={screenRef}
