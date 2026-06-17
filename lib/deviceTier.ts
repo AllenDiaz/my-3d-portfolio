@@ -30,7 +30,7 @@ export interface QualityPreset {
 
 export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
   high: {
-    particleCount: 300,
+    particleCount: 160,
     postProcessing: 'full',
     dprMax: 2,
     multisampling: 8,
@@ -40,7 +40,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     physicalMaterials: true,
   },
   medium: {
-    particleCount: 150,
+    particleCount: 90,
     postProcessing: 'reduced',
     dprMax: 1.5,
     multisampling: 4,

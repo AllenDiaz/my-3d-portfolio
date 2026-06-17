@@ -35,16 +35,16 @@ export default function FloatingParticles({ count = 200 }: FloatingParticlesProp
     
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      
-      // Random positions within room bounds
-      positions[i3] = (Math.random() - 0.5) * 18; // x
-      positions[i3 + 1] = Math.random() * 6; // y
-      positions[i3 + 2] = (Math.random() - 0.5) * 18; // z
-      
-      // Random velocities for floating effect
-      velocities[i3] = (Math.random() - 0.5) * 0.02;
-      velocities[i3 + 1] = Math.random() * 0.01 + 0.01; // Upward drift
-      velocities[i3 + 2] = (Math.random() - 0.5) * 0.02;
+
+      // Confined to the lit desk volume so motes read as "dust in the light"
+      positions[i3] = (Math.random() - 0.5) * 10; // x: ±5
+      positions[i3 + 1] = Math.random() * 5; // y
+      positions[i3 + 2] = -1.5 + (Math.random() - 0.5) * 8; // z centred on the desk
+
+      // Gentle drift
+      velocities[i3] = (Math.random() - 0.5) * 0.012;
+      velocities[i3 + 1] = Math.random() * 0.006 + 0.006; // slow upward drift
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.012;
     }
     
     return { positions, velocities };
@@ -69,17 +69,15 @@ export default function FloatingParticles({ count = 200 }: FloatingParticlesProp
       positions[i3] += Math.sin(time * 0.5 + i) * 0.001;
       positions[i3 + 2] += Math.cos(time * 0.5 + i) * 0.001;
       
-      // Reset particles that float too high or drift out of bounds
-      if (positions[i3 + 1] > 6) {
+      // Recycle particles that leave the confined desk volume
+      if (positions[i3 + 1] > 5) {
         positions[i3 + 1] = 0;
       }
-      
-      // Keep particles within room bounds
-      if (Math.abs(positions[i3]) > 9) {
-        positions[i3] = (Math.random() - 0.5) * 18;
+      if (Math.abs(positions[i3]) > 5) {
+        positions[i3] = (Math.random() - 0.5) * 10;
       }
-      if (Math.abs(positions[i3 + 2]) > 9) {
-        positions[i3 + 2] = (Math.random() - 0.5) * 18;
+      if (positions[i3 + 2] < -5.5 || positions[i3 + 2] > 2.5) {
+        positions[i3 + 2] = -1.5 + (Math.random() - 0.5) * 8;
       }
     }
     
