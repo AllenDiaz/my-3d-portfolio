@@ -56,9 +56,10 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         zoomSpeed={0.8}
       />
 
-      {/* Lighting */}
-      {/* Ambient Light */}
-      <ambientLight intensity={lightsOn ? 0.3 : 0.05} />
+      {/* Lighting - "late-night dev studio": cool indigo base, warm amber key,
+          teal neon spill from the binary walls */}
+      {/* Ambient base (cool, dim) */}
+      <ambientLight color="#16213a" intensity={lightsOn ? 0.22 : 0.05} />
 
       {/* Main Directional Light */}
       <directionalLight
@@ -76,34 +77,35 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         shadow-camera-bottom={-10}
       />
 
-      {/* Fill Light */}
+      {/* Fill Light (cool, soft) */}
       <directionalLight
         position={[-5, 5, -5]}
-        intensity={lightsOn ? 0.3 : 0.05}
+        intensity={lightsOn ? 0.2 : 0.05}
+        color="#2a3a5e"
       />
 
-      {/* Desk Light */}
+      {/* Desk lamp - warm amber practical, the emotional key light */}
       <pointLight
         position={[0, 2, -2]}
-        intensity={lightsOn ? 0.6 : 0.1}
-        distance={5}
-        color="#ffd89b"
+        intensity={lightsOn ? 0.9 : 0.1}
+        distance={4}
+        color="#ffb066"
         castShadow
       />
 
-      {/* Accent Lights */}
+      {/* Neon spill from the binary walls (teal/green, on-palette) */}
       <pointLight
         position={[-4, 2, -4]}
-        intensity={lightsOn ? 0.3 : 0.05}
-        distance={3}
-        color="#4a90e2"
+        intensity={lightsOn ? 0.3 : 0.06}
+        distance={5}
+        color="#22d3a0"
       />
 
       <pointLight
         position={[4, 2, -3]}
-        intensity={lightsOn ? 0.3 : 0.05}
-        distance={3}
-        color="#9b59b6"
+        intensity={lightsOn ? 0.3 : 0.06}
+        distance={5}
+        color="#22d3a0"
       />
 
       {/* Ceiling Light */}
@@ -116,8 +118,8 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         color="#ffffff"
       />
 
-      {/* Environment Map for Reflections */}
-      <Environment preset="city" />
+      {/* Environment Map for Reflections - warmer night interior, story-consistent */}
+      <Environment preset="night" environmentIntensity={0.4} />
     </>
   );
 }
