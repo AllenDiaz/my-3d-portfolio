@@ -34,12 +34,13 @@ export default function OfficeRoom() {
         <planeGeometry args={[20, 20]} />
         {preset.reflectionResolution > 0 ? (
           <MeshReflectorMaterial
-            blur={[200, 60]}
+            blur={[300, 90]}
             resolution={preset.reflectionResolution}
             mixBlur={1}
-            mixStrength={0.45}
+            mixStrength={0.35}
+            mixContrast={1.2}
             roughness={0.6}
-            depthScale={1.2}
+            depthScale={1.0}
             minDepthThreshold={0.4}
             maxDepthThreshold={1.4}
             color="#1a1a1a"
