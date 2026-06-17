@@ -10,6 +10,7 @@ import { QUALITY_PRESETS } from '@/lib/deviceTier';
 interface ComputerProps {
   position: [number, number, number];
   projectId: string;
+  rotation?: [number, number, number];
 }
 
 /**
@@ -34,7 +35,7 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
   );
 }
 
-export default function Computer({ position, projectId }: ComputerProps) {
+export default function Computer({ position, projectId, rotation = [0, 0, 0] }: ComputerProps) {
   const monitorRef = useRef<Mesh>(null);
   const screenRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
@@ -152,7 +153,7 @@ export default function Computer({ position, projectId }: ComputerProps) {
   };
 
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation}>
       {/* Monitor Base */}
       <mesh position={[0, -0.05, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.18, 0.02, 48]} />

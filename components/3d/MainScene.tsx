@@ -62,15 +62,16 @@ export default function MainScene() {
       {/* Holographic Display */}
       <HolographicDisplay position={[0, 2, -4.5]} />
 
-      {/* Interactive Computers/Monitors - Featured Projects Only */}
+      {/* Interactive Computers/Monitors - unified triple array on the desk plane,
+          hero project centred, flanking monitors angled inward toward the viewer */}
       {monitorProjects.length >= 1 && (
-        <Computer position={[-0.5, 0.8, -1.9]} projectId={monitorProjects[0].id} />
+        <Computer position={[0, 0.8, -2.0]} projectId={monitorProjects[0].id} />
       )}
       {monitorProjects.length >= 2 && (
-        <Computer position={[0.5, 0.8, -1.9]} projectId={monitorProjects[1].id} />
+        <Computer position={[-0.8, 0.8, -1.92]} rotation={[0, 0.18, 0]} projectId={monitorProjects[1].id} />
       )}
       {monitorProjects.length >= 3 && (
-        <Computer position={[4, 0.65, -3]} projectId={monitorProjects[2].id} />
+        <Computer position={[0.8, 0.8, -1.92]} rotation={[0, -0.18, 0]} projectId={monitorProjects[2].id} />
       )}
 
       {/* Desk Items */}
