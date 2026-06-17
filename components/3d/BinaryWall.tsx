@@ -73,8 +73,10 @@ export default function BinaryWall({
       },
       vertexShader: `
         varying vec2 vUv;
+        varying vec3 vWorldPosition;
         void main() {
           vUv = uv;
+          vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
@@ -84,7 +86,8 @@ export default function BinaryWall({
         uniform vec3 glowColor;
         uniform float intensity;
         varying vec2 vUv;
-        
+        varying vec3 vWorldPosition;
+
         // Pseudo-random function for more chaotic behavior
         float random(vec2 st) {
           return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
@@ -135,11 +138,19 @@ export default function BinaryWall({
           
           // Final color with enhanced brightness and glow
           vec3 finalColor = texColor.rgb * glowColor * intensity * glow * pulse * 1.5;
-          
+
+          // CRT scanline overlay
+          float scan = sin(vUv.y * 700.0 - time * 4.0) * 0.06;
+          finalColor += scan * glowColor;
+
+          // Depth-based fade so the wall dissolves into the fog/void with distance
+          float camDist = distance(cameraPosition, vWorldPosition);
+          float depthFade = 1.0 - smoothstep(9.0, 24.0, camDist);
+
           // Critical: Alpha becomes 0 when disappeared - LEAVES NO TRACE
           // This creates the eerie sense of complete absence
-          float alpha = texColor.a * visibility;
-          
+          float alpha = texColor.a * visibility * depthFade;
+
           gl_FragColor = vec4(finalColor, alpha);
         }
       `,
