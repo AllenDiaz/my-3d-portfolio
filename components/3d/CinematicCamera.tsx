@@ -20,47 +20,37 @@ export default function CinematicCamera() {
     if (!cameraRef.current || hasAnimated.current) return;
     hasAnimated.current = true;
 
+    const cam = cameraRef.current;
+
     // Reduced motion: snap straight to the resting position, no GSAP fly-in.
     if (prefersReducedMotion) {
-      cameraRef.current.position.set(0, 1.5, 5);
-      cameraRef.current.lookAt(0, 1, 0);
+      cam.position.set(0, 1.45, 3.6);
+      cam.lookAt(0, 1.05, -1.9);
       return;
     }
 
-    // Cinematic intro animation
-    const timeline = gsap.timeline({
-      defaults: { duration: 2.5, ease: 'power2.inOut' }
-    });
+    // 3-beat cinematic reveal with a parallax arc (left establish -> arc right -> settle)
+    const timeline = gsap.timeline();
 
-    // Start from far away and high up
-    cameraRef.current.position.set(0, 8, 15);
-    cameraRef.current.lookAt(0, 2, 0);
+    cam.position.set(-4, 4.5, 9);
+    cam.lookAt(0, 1.2, -1);
 
     timeline
-      // Zoom in and lower
-      .to(cameraRef.current.position, {
-        x: 0,
-        y: 3,
-        z: 8,
-        duration: 3,
-        ease: 'power3.inOut'
-      })
-      // Final position with slight rotation
-      .to(cameraRef.current.position, {
-        x: 0,
-        y: 1.5,
-        z: 5,
-        duration: 2,
-        ease: 'power2.out'
-      })
-      // Add a slight camera shake at the end for impact
-      .to(cameraRef.current.position, {
-        x: '+=0.05',
-        y: '+=0.05',
-        duration: 0.1,
+      // Beat 1 - establish
+      .to(cam.position, { x: -2.5, y: 2.2, z: 6, duration: 1.8, ease: 'power2.out' })
+      // Beat 2 - approach, arcing across to the right
+      .to(cam.position, { x: 1.5, y: 1.7, z: 4.4, duration: 2.0, ease: 'power3.inOut' })
+      // Beat 3 - settle on the workstation
+      .to(cam.position, { x: 0, y: 1.45, z: 3.6, duration: 1.2, ease: 'power2.out' })
+      // Subtle FOV "punch" on settle instead of a positional shake
+      .to(cam, {
+        fov: 48,
+        duration: 0.5,
+        ease: 'power2.inOut',
         yoyo: true,
-        repeat: 3
-      });
+        repeat: 1,
+        onUpdate: () => cam.updateProjectionMatrix(),
+      }, '-=0.2');
 
   }, [prefersReducedMotion]);
 

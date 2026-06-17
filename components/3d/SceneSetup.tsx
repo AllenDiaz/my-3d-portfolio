@@ -20,7 +20,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
   useEffect(() => {
     // Set initial camera position if not using cinematic intro
     if (!enableCinematicIntro) {
-      camera.position.set(0, 1.5, 5);
+      camera.position.set(0, 1.45, 3.6);
     }
   }, [camera, enableCinematicIntro]);
 
@@ -50,7 +50,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         maxDistance={15}
         minPolarAngle={0}
         maxPolarAngle={Math.PI / 2}
-        target={[0, 1, 0]}
+        target={[0, 1.05, -1.9]}
         dampingFactor={0.05}
         rotateSpeed={0.5}
         zoomSpeed={0.8}
