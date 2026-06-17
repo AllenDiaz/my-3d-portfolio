@@ -2,7 +2,8 @@
 
 import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import CinematicCamera from './CinematicCamera';
@@ -16,6 +17,17 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
   const lightsOn = useStore((state) => state.lightsOn);
   const qualityTier = useStore((state) => state.qualityTier);
   const preset = QUALITY_PRESETS[qualityTier];
+
+  // Desk-lamp spotlight needs an explicit target object placed on the desk
+  const lampSpotRef = useRef<THREE.SpotLight>(null);
+  const lampTargetRef = useRef<THREE.Object3D>(null);
+
+  useEffect(() => {
+    if (lampSpotRef.current && lampTargetRef.current) {
+      lampSpotRef.current.target = lampTargetRef.current;
+      lampSpotRef.current.target.updateMatrixWorld();
+    }
+  }, []);
 
   useEffect(() => {
     // Set initial camera position if not using cinematic intro
@@ -91,6 +103,19 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         distance={4}
         color="#ffb066"
         castShadow
+      />
+
+      {/* Desk-lamp pool - a defined warm cone landing on the desk surface */}
+      <object3D ref={lampTargetRef} position={[0, 0.75, -2]} />
+      <spotLight
+        ref={lampSpotRef}
+        position={[0.6, 3.2, -0.6]}
+        angle={0.5}
+        penumbra={0.9}
+        intensity={lightsOn ? 1.6 : 0.12}
+        distance={7}
+        decay={1.5}
+        color="#ffb066"
       />
 
       {/* Neon spill from the binary walls (teal/green, on-palette) */}
