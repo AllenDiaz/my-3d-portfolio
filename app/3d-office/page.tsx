@@ -14,6 +14,7 @@ import ExperienceModal from '@/components/ui/ExperienceModal';
 import CertificateModal from '@/components/ui/CertificateModal';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 import AllProjectsModal from '@/components/ui/AllProjectsModal';
+import ContactModal from '@/components/ui/ContactModal';
 import SceneLoader from '@/components/ui/SceneLoader';
 import { useStore } from '@/store/useStore';
 
@@ -45,6 +46,8 @@ export default function ThreeDOfficePage() {
   const restrictedLinkType = useStore((state) => state.restrictedLinkType);
   const showAllProjectsModal = useStore((state) => state.showAllProjectsModal);
   const setShowAllProjectsModal = useStore((state) => state.setShowAllProjectsModal);
+  const showContactModal = useStore((state) => state.showContactModal);
+  const setShowContactModal = useStore((state) => state.setShowContactModal);
 
   const [legendOpen, setLegendOpen] = useState(true);
 
@@ -174,6 +177,12 @@ export default function ThreeDOfficePage() {
       <AllProjectsModal
         isOpen={showAllProjectsModal}
         onClose={() => setShowAllProjectsModal(false)}
+      />
+
+      {/* Contact Modal */}
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
       />
     </main>
   );

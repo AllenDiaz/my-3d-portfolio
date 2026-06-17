@@ -53,6 +53,10 @@ interface StoreState {
   // CV Modal state
   showCVModal: boolean;
   setShowCVModal: (show: boolean) => void;
+
+  // Contact Modal state
+  showContactModal: boolean;
+  setShowContactModal: (show: boolean) => void;
   
   // All Projects Modal state
   showAllProjectsModal: boolean;
@@ -116,6 +120,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   showCVModal: false,
   setShowCVModal: (show) => set({ showCVModal: show }),
+
+  showContactModal: false,
+  setShowContactModal: (show) => set({ showContactModal: show }),
   
   showAllProjectsModal: false,
   setShowAllProjectsModal: (show) => set({ showAllProjectsModal: show }),
