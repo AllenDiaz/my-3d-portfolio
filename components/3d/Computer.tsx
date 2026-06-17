@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Mesh, CanvasTexture } from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
+import { useHoverFeedback } from './useHoverFeedback';
 
 interface ComputerProps {
   position: [number, number, number];
@@ -38,7 +39,7 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
 export default function Computer({ position, projectId, rotation = [0, 0, 0] }: ComputerProps) {
   const monitorRef = useRef<Mesh>(null);
   const screenRef = useRef<Mesh>(null);
-  const [hovered, setHovered] = useState(false);
+  const { hovered, hoverProps } = useHoverFeedback();
   const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier } = useStore();
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
   
@@ -172,20 +173,18 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
         position={[0, 0.3, 0]}
         castShadow
         onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+        {...hoverProps}
       >
         <boxGeometry args={[0.7, 0.45, 0.05]} />
         <ChromeMaterial physical={physical} color={hovered ? "#1a1a1a" : "#0a0a0a"} />
       </mesh>
 
       {/* Monitor Screen */}
-      <mesh 
+      <mesh
         ref={screenRef}
         position={[0, 0.3, 0.026]}
         onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+        {...hoverProps}
       >
         <planeGeometry args={[0.62, 0.37]} />
         <meshStandardMaterial 

@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Mesh } from 'three';
-import { useStore } from '@/store/useStore';
+import { useHoverFeedback } from './useHoverFeedback';
 
 interface DeskItemProps {
   position: [number, number, number];
@@ -15,7 +15,7 @@ interface DeskItemProps {
 
 export default function DeskItem({ position, itemType, onClick, label }: DeskItemProps) {
   const itemRef = useRef<Mesh>(null);
-  const [hovered, setHovered] = useState(false);
+  const { hovered, hoverProps } = useHoverFeedback();
 
   useFrame((state) => {
     if (itemRef.current && hovered) {
@@ -260,12 +260,11 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
   };
 
   return (
-    <group 
+    <group
       ref={itemRef}
       position={position}
       onClick={handleClick}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      {...hoverProps}
     >
       {renderItem()}
       
