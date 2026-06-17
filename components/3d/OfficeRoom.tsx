@@ -108,6 +108,17 @@ export default function OfficeRoom() {
         <mesh position={[1.3, 0.375, 0.6]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
         </mesh>
+
+        {/* L-return — perpendicular desk section extending toward the viewer */}
+        <RoundedBox args={[0.8, 0.1, 1.5]} radius={0.02} smoothness={4} position={[1.4, 0.75, 1.05]} castShadow receiveShadow>
+          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.6} />
+        </RoundedBox>
+        <mesh position={[1.1, 0.375, 1.7]} castShadow material={MATERIALS.darkMetal}>
+          <boxGeometry args={[0.1, 0.75, 0.1]} />
+        </mesh>
+        <mesh position={[1.7, 0.375, 1.7]} castShadow material={MATERIALS.darkMetal}>
+          <boxGeometry args={[0.1, 0.75, 0.1]} />
+        </mesh>
       </group>
 
       {/* Chair */}
