@@ -58,11 +58,12 @@ export default function PostProcessing() {
         color="black"
       />
 
-      {/* Depth of Field - focal plane on the desk, softer aperture */}
+      {/* Depth of Field - focus locked to the desk/monitors via a world target so
+          it stays correct as the user orbits (not a fixed focusDistance) */}
       <DepthOfField
-        focusDistance={0.035}
-        focalLength={0.08}
-        bokehScale={lightsOn ? 2 : 3}
+        target={[0, 1.05, -1.9]}
+        focalLength={0.025}
+        bokehScale={lightsOn ? 2.5 : 3}
         height={480}
       />
 

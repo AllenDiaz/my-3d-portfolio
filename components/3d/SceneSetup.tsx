@@ -13,7 +13,7 @@ interface SceneSetupProps {
 }
 
 export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupProps) {
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
   const lightsOn = useStore((state) => state.lightsOn);
   const qualityTier = useStore((state) => state.qualityTier);
   const preset = QUALITY_PRESETS[qualityTier];
@@ -28,6 +28,11 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       lampSpotRef.current.target.updateMatrixWorld();
     }
   }, []);
+
+  // Mood: dim the overall exposure when the lights are toggled off
+  useEffect(() => {
+    gl.toneMappingExposure = lightsOn ? 1.1 : 0.65;
+  }, [gl, lightsOn]);
 
   useEffect(() => {
     // Set initial camera position if not using cinematic intro
