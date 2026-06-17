@@ -4,6 +4,7 @@ import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import CinematicCamera from './CinematicCamera';
@@ -22,7 +23,15 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
   const lampSpotRef = useRef<THREE.SpotLight>(null);
   const lampTargetRef = useRef<THREE.Object3D>(null);
 
+  // Faux-window area light (cool city spill from camera-left)
+  const windowLightRef = useRef<THREE.RectAreaLight>(null);
+
   useEffect(() => {
+    // RectAreaLight requires its LTC uniform tables initialised once
+    RectAreaLightUniformsLib.init();
+    if (windowLightRef.current) {
+      windowLightRef.current.lookAt(0, 1, -2);
+    }
     if (lampSpotRef.current && lampTargetRef.current) {
       lampSpotRef.current.target = lampTargetRef.current;
       lampSpotRef.current.target.updateMatrixWorld();
@@ -92,6 +101,16 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
+      />
+
+      {/* Faux-window key - soft cool area light wash from camera-left */}
+      <rectAreaLight
+        ref={windowLightRef}
+        position={[-5.5, 2.8, -3]}
+        width={4}
+        height={2.5}
+        intensity={lightsOn ? 3 : 0.4}
+        color="#9db8ff"
       />
 
       {/* Fill Light (cool, soft) */}
