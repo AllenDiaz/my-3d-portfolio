@@ -1,11 +1,45 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
 import { Mesh } from 'three';
+import * as THREE from 'three';
 import { useHoverFeedback } from './useHoverFeedback';
+
+/** Keyboard key caps rendered as a single InstancedMesh (one draw call). */
+function KeyboardKeys() {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const COLS = 12;
+  const ROWS = 5;
+  const count = COLS * ROWS;
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const dummy = new THREE.Object3D();
+    const startX = -0.209;
+    const startZ = -0.07;
+    const gapX = 0.038;
+    const gapZ = 0.035;
+    let i = 0;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        dummy.position.set(startX + c * gapX, 0.02, startZ + r * gapZ);
+        dummy.updateMatrix();
+        ref.current.setMatrixAt(i++, dummy.matrix);
+      }
+    }
+    ref.current.instanceMatrix.needsUpdate = true;
+  }, [count]);
+
+  return (
+    <instancedMesh ref={ref} args={[undefined, undefined, count]} castShadow>
+      <boxGeometry args={[0.03, 0.012, 0.028]} />
+      <meshStandardMaterial color="#0a0a0a" metalness={0.1} roughness={0.85} />
+    </instancedMesh>
+  );
+}
 
 interface DeskItemProps {
   position: [number, number, number];
@@ -43,25 +77,8 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
                 roughness={0.7}
               />
             </mesh>
-            {/* Keys */}
-            {Array.from({ length: 15 }).map((_, i) => (
-              <mesh 
-                key={i} 
-                position={[
-                  -0.18 + (i % 5) * 0.09,
-                  0.02,
-                  -0.06 + Math.floor(i / 5) * 0.06
-                ]}
-                castShadow
-              >
-                <boxGeometry args={[0.07, 0.01, 0.05]} />
-                <meshStandardMaterial 
-                  color="#0a0a0a"
-                  metalness={0.1}
-                  roughness={0.9}
-                />
-              </mesh>
-            ))}
+            {/* Keys - instanced for a dense, detailed keyboard in one draw call */}
+            <KeyboardKeys />
           </group>
         );
 
