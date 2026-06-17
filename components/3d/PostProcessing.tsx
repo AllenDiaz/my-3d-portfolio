@@ -1,6 +1,6 @@
 'use client';
 
-import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration, N8AO } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration, N8AO, Noise } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
@@ -39,10 +39,10 @@ export default function PostProcessing() {
   // Full tier: all effects.
   return (
     <EffectComposer multisampling={preset.multisampling}>
-      {/* Bloom for glowing monitors and lights */}
+      {/* Bloom for glowing monitors and neon - deliberate emissive glow */}
       <Bloom
-        intensity={lightsOn ? 0.5 : 0.3}
-        luminanceThreshold={0.25}
+        intensity={lightsOn ? 0.6 : 0.35}
+        luminanceThreshold={0.22}
         luminanceSmoothing={0.9}
         mipmapBlur
       />
@@ -66,16 +66,19 @@ export default function PostProcessing() {
         height={480}
       />
 
-      {/* Vignette for atmospheric depth */}
+      {/* Vignette to frame the stage */}
       <Vignette
-        offset={0.3}
-        darkness={lightsOn ? 0.5 : 0.7}
+        offset={0.35}
+        darkness={lightsOn ? 0.55 : 0.7}
       />
 
       {/* Chromatic aberration - subtle but now actually perceptible */}
       <ChromaticAberration
         offset={[0.0012, 0.0012] as [number, number]}
       />
+
+      {/* Film grain - cinematic late-night finish (high tier only) */}
+      <Noise premultiply opacity={0.025} />
     </EffectComposer>
   );
 }
