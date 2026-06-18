@@ -12,6 +12,7 @@ import PostProcessing from './PostProcessing';
 import FloatingParticles from './FloatingParticles';
 import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
+import CityscapeBackdrop from './CityscapeBackdrop';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -55,6 +56,9 @@ export default function MainScene() {
       {/* Front Wall - Flickering binary */}
       <BinaryWall position={[0, 3, 10]} rotation={[0, Math.PI, 0]} width={20} height={6} />
 
+      {/* Night-city skyline visible through the back-wall window */}
+      <CityscapeBackdrop />
+
       {/* Office Environment */}
       <OfficeRoom />
 
@@ -62,7 +66,8 @@ export default function MainScene() {
       <FloatingParticles count={preset.particleCount} />
 
       {/* Holographic Display */}
-      <HolographicDisplay position={[0, 2, -4.5]} />
+      {/* Moved off-centre so it doesn't float inside the window opening */}
+      <HolographicDisplay position={[3.4, 1.5, -4.6]} />
 
       {/* Interactive Computers/Monitors - unified triple array on the desk plane,
           hero project centred, flanking monitors angled inward toward the viewer */}

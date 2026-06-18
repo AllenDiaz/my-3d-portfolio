@@ -30,7 +30,8 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     // RectAreaLight requires its LTC uniform tables initialised once
     RectAreaLightUniformsLib.init();
     if (windowLightRef.current) {
-      windowLightRef.current.lookAt(0, 1, -2);
+      // Aim the window light from the back-wall window into the room
+      windowLightRef.current.lookAt(0, 1.2, 2);
     }
     if (lampSpotRef.current && lampTargetRef.current) {
       lampSpotRef.current.target = lampTargetRef.current;
@@ -103,13 +104,13 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         shadow-camera-bottom={-10}
       />
 
-      {/* Faux-window key - soft cool area light wash from camera-left */}
+      {/* Window key - cool city light spilling in from the back-wall window */}
       <rectAreaLight
         ref={windowLightRef}
-        position={[-5.5, 2.8, -3]}
-        width={4}
-        height={2.5}
-        intensity={lightsOn ? 3 : 0.4}
+        position={[0, 3, -4.8]}
+        width={6}
+        height={2.8}
+        intensity={lightsOn ? 3.2 : 0.5}
         color="#9db8ff"
       />
 
