@@ -4,7 +4,7 @@ import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
-import { Mesh, CanvasTexture } from 'three';
+import { Mesh, CanvasTexture, Group } from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { useHoverFeedback } from './useHoverFeedback';
@@ -38,7 +38,7 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
 }
 
 export default function Computer({ position, projectId, rotation = [0, 0, 0] }: ComputerProps) {
-  const monitorRef = useRef<Mesh>(null);
+  const groupRef = useRef<Group>(null);
   const screenRef = useRef<Mesh>(null);
   const { hovered, hoverProps } = useHoverFeedback();
   const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier } = useStore();
@@ -132,10 +132,12 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
     return texture;
   }, [projectId, project]);
 
-  // Subtle floating animation
+  // Subtle floating animation - move the whole monitor together so its parts
+  // stay aligned (previously only the frame mesh moved, detaching it on hover)
   useFrame((state) => {
-    if (monitorRef.current && hovered) {
-      monitorRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 2) * 0.02;
+    if (groupRef.current) {
+      groupRef.current.position.y =
+        position[1] + (hovered ? Math.sin(state.clock.elapsedTime * 2) * 0.02 : 0);
     }
     
     // Animate screen texture
@@ -156,7 +158,7 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
 
   return (
     <Select enabled={hovered}>
-    <group position={position} rotation={rotation}>
+    <group ref={groupRef} position={position} rotation={rotation}>
       {/* Monitor Base */}
       <mesh position={[0, -0.05, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.18, 0.02, 48]} />
@@ -171,7 +173,6 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
 
       {/* Monitor Frame */}
       <mesh
-        ref={monitorRef}
         position={[0, 0.3, 0]}
         castShadow
         onClick={handleClick}
