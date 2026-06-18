@@ -26,6 +26,10 @@ export interface QualityPreset {
   reflectionResolution: number;
   /** Whether hero objects may use the costlier meshPhysicalMaterial (clearcoat). */
   physicalMaterials: boolean;
+  /** Whether to render nearer parallax buildings + window-light twinkle outside the window. */
+  cityParallax: boolean;
+  /** Resolution of the procedural cityscape backdrop texture. */
+  sceneryTextureSize: number;
 }
 
 export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
@@ -38,6 +42,8 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     contactShadowResolution: 1024,
     reflectionResolution: 1024,
     physicalMaterials: true,
+    cityParallax: true,
+    sceneryTextureSize: 2048,
   },
   medium: {
     particleCount: 90,
@@ -48,6 +54,8 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     contactShadowResolution: 512,
     reflectionResolution: 512,
     physicalMaterials: true,
+    cityParallax: false,
+    sceneryTextureSize: 2048,
   },
   low: {
     particleCount: 60,
@@ -58,6 +66,8 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     contactShadowResolution: 0,
     reflectionResolution: 0,
     physicalMaterials: false,
+    cityParallax: false,
+    sceneryTextureSize: 1024,
   },
 };
 

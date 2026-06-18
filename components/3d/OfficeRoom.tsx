@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Mesh, BoxGeometry } from 'three';
+import { Mesh } from 'three';
 import { MeshReflectorMaterial, ContactShadows, RoundedBox } from '@react-three/drei';
 import { useStore } from '@/store/useStore';
 import { ThreeEvent } from '@react-three/fiber';
@@ -64,10 +64,71 @@ export default function OfficeRoom() {
         />
       )}
 
-      {/* Back Wall */}
-      <mesh position={[0, 3, -5]} receiveShadow material={MATERIALS.matteWall}>
-        <planeGeometry args={[20, 6]} />
+      {/* Back Wall - built as four panels framing a window opening (x:[-3,3], y:[1.6,4.4]) */}
+      {/* Sill panel (below the window) */}
+      <mesh position={[0, 0.8, -5]} receiveShadow material={MATERIALS.matteWall}>
+        <planeGeometry args={[20, 1.6]} />
       </mesh>
+      {/* Header panel (above the window) */}
+      <mesh position={[0, 5.2, -5]} receiveShadow material={MATERIALS.matteWall}>
+        <planeGeometry args={[20, 1.6]} />
+      </mesh>
+      {/* Left jamb */}
+      <mesh position={[-6.5, 3, -5]} receiveShadow material={MATERIALS.matteWall}>
+        <planeGeometry args={[7, 2.8]} />
+      </mesh>
+      {/* Right jamb */}
+      <mesh position={[6.5, 3, -5]} receiveShadow material={MATERIALS.matteWall}>
+        <planeGeometry args={[7, 2.8]} />
+      </mesh>
+
+      {/* Window assembly in the opening */}
+      <group position={[0, 3, -4.96]}>
+        {/* Glass pane - clear with a faint cool tint (clearcoat reflection on capable tiers) */}
+        <mesh position={[0, 0, -0.02]}>
+          <planeGeometry args={[6, 2.8]} />
+          {preset.physicalMaterials ? (
+            <meshPhysicalMaterial
+              color="#bfe9e0"
+              transparent
+              opacity={0.08}
+              roughness={0.05}
+              metalness={0}
+              clearcoat={1}
+              clearcoatRoughness={0.1}
+            />
+          ) : (
+            <meshStandardMaterial color="#bfe9e0" transparent opacity={0.06} roughness={0.1} />
+          )}
+        </mesh>
+
+        {/* Outer frame bars (dark metal) */}
+        <mesh position={[0, 1.49, 0]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[6.4, 0.18, 0.12]} />
+        </mesh>
+        <mesh position={[0, -1.49, 0]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[6.4, 0.18, 0.12]} />
+        </mesh>
+        <mesh position={[-3.11, 0, 0]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[0.18, 3.16, 0.12]} />
+        </mesh>
+        <mesh position={[3.11, 0, 0]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[0.18, 3.16, 0.12]} />
+        </mesh>
+
+        {/* Mullions - split into four panes */}
+        <mesh position={[0, 0, 0.01]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[0.08, 2.8, 0.1]} />
+        </mesh>
+        <mesh position={[0, 0, 0.01]} material={MATERIALS.darkMetal}>
+          <boxGeometry args={[6, 0.08, 0.1]} />
+        </mesh>
+
+        {/* Interior sill ledge */}
+        <mesh position={[0, -1.5, 0.18]} castShadow material={MATERIALS.darkMetal}>
+          <boxGeometry args={[6.5, 0.1, 0.4]} />
+        </mesh>
+      </group>
 
       {/* Left Wall */}
       <mesh position={[-10, 3, 5]} rotation={[0, Math.PI / 2, 0]} receiveShadow material={MATERIALS.matteWall}>
@@ -238,25 +299,6 @@ export default function OfficeRoom() {
         </mesh>
       </group>
 
-      {/* Window Frame (illusion) */}
-      <group position={[-8, 2.5, -4.9]}>
-        <mesh castShadow>
-          <boxGeometry args={[2, 2.5, 0.05]} />
-          <meshStandardMaterial 
-            color="#87ceeb"
-            emissive="#4a90a4"
-            emissiveIntensity={0.2}
-            roughness={0.3}
-            metalness={0.1}
-          />
-        </mesh>
-        
-        {/* Window Frame Border */}
-        <lineSegments>
-          <edgesGeometry args={[new BoxGeometry(2, 2.5, 0.05)]} />
-          <lineBasicMaterial color="#0a0a0a" linewidth={2} />
-        </lineSegments>
-      </group>
     </group>
   );
 }
