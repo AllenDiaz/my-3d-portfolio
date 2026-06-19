@@ -57,7 +57,11 @@ interface StoreState {
   // Contact Modal state
   showContactModal: boolean;
   setShowContactModal: (show: boolean) => void;
-  
+
+  // Avatar ("About Allen") Modal state
+  showAvatarModal: boolean;
+  setShowAvatarModal: (show: boolean) => void;
+
   // All Projects Modal state
   showAllProjectsModal: boolean;
   setShowAllProjectsModal: (show: boolean) => void;
@@ -119,7 +123,10 @@ export const useStore = create<StoreState>((set, get) => ({
 
   showContactModal: false,
   setShowContactModal: (show) => set({ showContactModal: show }),
-  
+
+  showAvatarModal: false,
+  setShowAvatarModal: (show) => set({ showAvatarModal: show }),
+
   showAllProjectsModal: false,
   setShowAllProjectsModal: (show) => set({ showAllProjectsModal: show }),
   

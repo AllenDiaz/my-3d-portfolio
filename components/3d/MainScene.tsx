@@ -137,7 +137,7 @@ export default function MainScene() {
       {/* Procedural seated avatar of the owner (Phase 1: static mesh).
           Placement faces the centered monitors; see Open Question #1 about
           reconciling with the existing chair at x = -2.5. */}
-      <Avatar position={[-0.15, 0, -0.7]} rotationY={0} />
+      <Avatar position={[-0.15, 0, -0.95]} rotationY={0} />
 
       {/* Non-interactive desk decor (sticky notes, USB hub) */}
       <DeskClutter />

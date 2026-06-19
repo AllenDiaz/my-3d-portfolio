@@ -1,5 +1,7 @@
 'use client';
 
+import type * as THREE from 'three';
+
 /**
  * Presentational sub-meshes for the procedural seated avatar (Allen Diaz).
  *
@@ -11,6 +13,8 @@
  * Palette: warm medium-brown skin, midnight-navy shirt, near-black pants/hair —
  * native to the "late-night dev studio" indigo/amber/teal direction (no bright
  * cartoon colors).
+ *
+ * Phase 2 adds the back-of-shirt jersey CanvasTexture (passed into Torso).
  *
  * Local-space convention: the avatar faces -z (toward the monitors). "Forward"
  * is -z, "up" is +y. Coordinates are tuned for an in-browser eyeball pass
@@ -71,7 +75,12 @@ export function Legs() {
  * forward-leaned) upper-body group in Avatar.tsx, so local y is measured from
  * the base of the spine.
  */
-export function Torso() {
+export interface TorsoProps {
+  /** Back-of-shirt jersey CanvasTexture; when present, rendered on the +z (back) face. */
+  backTexture?: THREE.Texture | null;
+}
+
+export function Torso({ backTexture = null }: TorsoProps) {
   return (
     <group>
       {/* Abdomen */}
@@ -97,6 +106,23 @@ export function Torso() {
         <cylinderGeometry args={[0.07, 0.075, 0.12, 20]} />
         <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
       </mesh>
+
+      {/* Back-of-shirt jersey panel — on the +z face (Allen's back, toward the
+          orbiting camera). The plane's default normal is +z, so it faces out. */}
+      {backTexture && (
+        <mesh position={[0, 0.42, 0.131]} castShadow>
+          <planeGeometry args={[0.34, 0.4]} />
+          <meshStandardMaterial
+            map={backTexture}
+            emissive="#22d3ee"
+            emissiveMap={backTexture}
+            emissiveIntensity={0.35}
+            roughness={0.85}
+            metalness={0.05}
+            toneMapped={false}
+          />
+        </mesh>
+      )}
     </group>
   );
 }
@@ -107,30 +133,36 @@ export function Torso() {
  * the spine.
  */
 export function Arms() {
+  // Built as a connected joint chain per side (shoulder → upper arm → elbow →
+  // forearm → hand) using nested groups, so segments stay attached however the
+  // angles are tuned. Angles are chosen so the hands rest flat on the desktop
+  // over the keyboard; see 3D_CHARACTERS_FEATURE_GUIDE.md Open Question #2.
   return (
     <group>
-      {/* Upper arms — angled so the elbows come forward */}
-      {[-0.27, 0.27].map((x) => (
-        <mesh key={`upper-${x}`} position={[x, 0.42, -0.02]} rotation={[0.35, 0, 0]} castShadow>
-          <boxGeometry args={[0.12, 0.3, 0.12]} />
-          <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
-        </mesh>
-      ))}
+      {[-1, 1].map((side) => (
+        <group key={side} position={[0.27 * side, 0.56, 0]} rotation={[0.45, 0, 0]}>
+          {/* Upper arm (short-sleeve shirt) — extends down/forward from shoulder */}
+          <mesh position={[0, -0.14, 0]} castShadow>
+            <boxGeometry args={[0.11, 0.28, 0.11]} />
+            <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
+          </mesh>
 
-      {/* Forearms — near-horizontal, reaching toward the desk (skin, short sleeves) */}
-      {[-0.24, 0.24].map((x) => (
-        <mesh key={`fore-${x}`} position={[x, 0.24, -0.22]} rotation={[1.0, 0, 0]} castShadow>
-          <boxGeometry args={[0.1, 0.3, 0.1]} />
-          <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
-        </mesh>
-      ))}
+          {/* Elbow → forearm (skin) — bends forward toward the desk */}
+          <group position={[0, -0.28, 0]} rotation={[1.0, 0, 0]}>
+            <mesh position={[0, -0.15, 0]} castShadow>
+              <boxGeometry args={[0.09, 0.3, 0.09]} />
+              <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
+            </mesh>
 
-      {/* Hands — flat, resting near the keyboard */}
-      {[-0.22, 0.22].map((x) => (
-        <mesh key={`hand-${x}`} position={[x, 0.16, -0.42]} castShadow>
-          <boxGeometry args={[0.1, 0.05, 0.13]} />
-          <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
-        </mesh>
+            {/* Hand — counter-rotated so it lies flat on the desktop */}
+            <group position={[0, -0.32, 0]} rotation={[-1.45, 0, 0]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.1, 0.05, 0.14]} />
+                <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
+              </mesh>
+            </group>
+          </group>
+        </group>
       ))}
     </group>
   );
