@@ -1,5 +1,6 @@
 'use client';
 
+import type { RefObject } from 'react';
 import type * as THREE from 'three';
 
 /**
@@ -132,7 +133,12 @@ export function Torso({ backTexture = null }: TorsoProps) {
  * Rendered inside the upper-body group alongside Torso so the arms lean with
  * the spine.
  */
-export function Arms() {
+export interface ArmsProps {
+  /** Optional ref on the right hand group, so Avatar can drive a typing motion. */
+  typingHandRef?: RefObject<THREE.Group | null>;
+}
+
+export function Arms({ typingHandRef }: ArmsProps = {}) {
   // Built as a connected joint chain per side (shoulder → upper arm → elbow →
   // forearm → hand) using nested groups, so segments stay attached however the
   // angles are tuned. Angles are chosen so the hands rest flat on the desktop
@@ -154,8 +160,13 @@ export function Arms() {
               <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
             </mesh>
 
-            {/* Hand — counter-rotated so it lies flat on the desktop */}
-            <group position={[0, -0.32, 0]} rotation={[-1.45, 0, 0]}>
+            {/* Hand — counter-rotated so it lies flat on the desktop.
+                The right hand (side === 1) carries the typing-animation ref. */}
+            <group
+              ref={side === 1 ? typingHandRef : undefined}
+              position={[0, -0.32, 0]}
+              rotation={[-1.45, 0, 0]}
+            >
               <mesh castShadow>
                 <boxGeometry args={[0.1, 0.05, 0.14]} />
                 <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
