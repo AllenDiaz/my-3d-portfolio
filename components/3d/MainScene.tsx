@@ -14,6 +14,7 @@ import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
 import CityscapeBackdrop from './CityscapeBackdrop';
 import Avatar from './Avatar/Avatar';
+import RobotFleet from './Robots/RobotFleet';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -138,6 +139,9 @@ export default function MainScene() {
           Placement faces the centered monitors; see Open Question #1 about
           reconciling with the existing chair at x = -2.5. */}
       <Avatar position={[-0.15, 0, -0.95]} rotationY={0} />
+
+      {/* Ambient service robots (Phase 3: static props around the floor) */}
+      <RobotFleet />
 
       {/* Non-interactive desk decor (sticky notes, USB hub) */}
       <DeskClutter />

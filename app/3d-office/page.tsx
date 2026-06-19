@@ -16,6 +16,7 @@ import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 import AllProjectsModal from '@/components/ui/AllProjectsModal';
 import ContactModal from '@/components/ui/ContactModal';
 import AvatarModal from '@/components/ui/AvatarModal';
+import RobotModal from '@/components/ui/RobotModal';
 import SceneLoader from '@/components/ui/SceneLoader';
 import { useStore } from '@/store/useStore';
 
@@ -51,6 +52,9 @@ export default function ThreeDOfficePage() {
   const setShowContactModal = useStore((state) => state.setShowContactModal);
   const showAvatarModal = useStore((state) => state.showAvatarModal);
   const setShowAvatarModal = useStore((state) => state.setShowAvatarModal);
+  const showRobotModal = useStore((state) => state.showRobotModal);
+  const setShowRobotModal = useStore((state) => state.setShowRobotModal);
+  const selectedRobot = useStore((state) => state.selectedRobot);
 
   const [legendOpen, setLegendOpen] = useState(true);
 
@@ -192,6 +196,13 @@ export default function ThreeDOfficePage() {
       <AvatarModal
         isOpen={showAvatarModal}
         onClose={() => setShowAvatarModal(false)}
+      />
+
+      {/* Service Robot flavor Modal */}
+      <RobotModal
+        isOpen={showRobotModal}
+        onClose={() => setShowRobotModal(false)}
+        robot={selectedRobot}
       />
     </main>
   );
