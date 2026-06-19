@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { Select } from '@react-three/postprocessing';
 import type { Group } from 'three';
-import { Arms, Glasses, Hair, Head, Legs, Torso } from './avatarParts';
+import { Arms, Glasses, Hair, Head, Legs, Torso, type AvatarPose } from './avatarParts';
 import { useShirtTexture } from './useShirtTexture';
 import { useHoverFeedback } from '../useHoverFeedback';
 import { useStore } from '@/store/useStore';
@@ -21,6 +21,8 @@ export interface AvatarProps {
   position?: Vec3;
   /** Y-rotation (radians). 0 = facing -z toward the monitors. */
   rotationY?: number;
+  /** Seated at the desk, or standing (e.g. by the chair). Default 'standing'. */
+  pose?: AvatarPose;
   /** Name on the back of the shirt (rendered uppercase). */
   jerseyName?: string;
   /** Jersey number on the back of the shirt. */
@@ -40,6 +42,7 @@ export interface AvatarProps {
 export default function Avatar({
   position = [-0.15, 0, -0.95],
   rotationY = 0,
+  pose = 'standing',
   jerseyName = 'Allen Diaz',
   jerseyNumber = '02',
 }: AvatarProps) {
@@ -51,6 +54,13 @@ export default function Avatar({
   const characterAnimation = QUALITY_PRESETS[qualityTier].characterAnimation;
   const backTexture = useShirtTexture({ name: jerseyName, number: jerseyNumber });
 
+  // Standing: hips higher, near-upright with a slight head tilt (contemplative).
+  // Seated: hips lower, more forward lean (hunched toward the monitors).
+  const seated = pose === 'seated';
+  const upperBodyY = seated ? 0.62 : 0.92;
+  const lean = seated ? -0.14 : -0.05;
+  const headRotation: [number, number, number] = seated ? [0, 0, 0] : [0.06, 0.18, 0.05];
+
   useFrame((state) => {
     const t = state.clock.elapsedTime;
 
@@ -61,8 +71,8 @@ export default function Avatar({
         characterAnimation !== 'none' || hovered ? 1 + Math.sin(t * 1.2) * 0.012 : 1;
     }
 
-    // Typing motion — subtle ~2 Hz bob on the right hand, high tier only.
-    if (characterAnimation === 'full' && typingHandRef.current) {
+    // Typing motion — subtle ~2 Hz bob on the right hand, seated + high tier only.
+    if (seated && characterAnimation === 'full' && typingHandRef.current) {
       typingHandRef.current.position.y = -0.32 + Math.abs(Math.sin(t * 12)) * 0.012;
     }
   });
@@ -76,15 +86,15 @@ export default function Avatar({
     <Select enabled={hovered}>
       <group position={position} rotation={[0, rotationY, 0]} onClick={handleClick} {...hoverProps}>
         {/* Lower body sits in the avatar root space (feet at the floor) */}
-        <Legs />
+        <Legs pose={pose} />
 
         {/* Upper body pivots at the top of the hips with a slight forward lean */}
-        <group ref={upperBodyRef} position={[0, 0.62, 0]} rotation={[-0.14, 0, 0]}>
+        <group ref={upperBodyRef} position={[0, upperBodyY, 0]} rotation={[lean, 0, 0]}>
           <Torso backTexture={backTexture} />
-          <Arms typingHandRef={typingHandRef} />
+          <Arms pose={pose} typingHandRef={typingHandRef} />
 
           {/* Head assembly — head + hair + glasses share this group's origin */}
-          <group position={[0, 0.86, 0.02]}>
+          <group position={[0, 0.86, 0.02]} rotation={headRotation}>
             <Head />
             <Hair />
             <Glasses />

@@ -30,12 +30,52 @@ const HAIR = '#0b0b0d';
 const FRAME = '#161616';
 const LENS_TINT = '#173a3f';
 
+/** Seated at the desk, or standing (e.g. by the chair, thinking). */
+export type AvatarPose = 'seated' | 'standing';
+
 /**
  * Lower body in a seated pose: pelvis, thighs running forward (-z) under the
  * desk, shins dropping to the floor, and feet. Rendered in the avatar root
  * space (y = 0 is the floor), so the figure rests its feet at ground level.
  */
-export function Legs() {
+export function Legs({ pose }: { pose: AvatarPose }) {
+  if (pose === 'standing') {
+    return (
+      <group>
+        {/* Pelvis / hips */}
+        <mesh position={[0, 0.9, 0]} castShadow>
+          <boxGeometry args={[0.36, 0.22, 0.26]} />
+          <meshStandardMaterial color={PANTS} roughness={0.85} metalness={0.05} />
+        </mesh>
+
+        {/* Thighs — straight down */}
+        {[-0.1, 0.1].map((x) => (
+          <mesh key={`th-${x}`} position={[x, 0.66, 0]} castShadow>
+            <boxGeometry args={[0.17, 0.44, 0.18]} />
+            <meshStandardMaterial color={PANTS} roughness={0.85} metalness={0.05} />
+          </mesh>
+        ))}
+
+        {/* Shins */}
+        {[-0.1, 0.1].map((x) => (
+          <mesh key={`sh-${x}`} position={[x, 0.24, 0.01]} castShadow>
+            <boxGeometry args={[0.14, 0.42, 0.15]} />
+            <meshStandardMaterial color={PANTS} roughness={0.85} metalness={0.05} />
+          </mesh>
+        ))}
+
+        {/* Feet */}
+        {[-0.1, 0.1].map((x) => (
+          <mesh key={`ft-${x}`} position={[x, 0.04, 0.06]} castShadow>
+            <boxGeometry args={[0.16, 0.08, 0.28]} />
+            <meshStandardMaterial color="#070708" roughness={0.7} metalness={0.1} />
+          </mesh>
+        ))}
+      </group>
+    );
+  }
+
+  // Seated: thighs run forward under the desk, shins drop to the floor.
   return (
     <group>
       {/* Pelvis / hips */}
@@ -134,15 +174,43 @@ export function Torso({ backTexture = null }: TorsoProps) {
  * the spine.
  */
 export interface ArmsProps {
-  /** Optional ref on the right hand group, so Avatar can drive a typing motion. */
+  pose: AvatarPose;
+  /** Optional ref on the right hand group (seated only), for the typing motion. */
   typingHandRef?: RefObject<THREE.Group | null>;
 }
 
-export function Arms({ typingHandRef }: ArmsProps = {}) {
-  // Built as a connected joint chain per side (shoulder → upper arm → elbow →
-  // forearm → hand) using nested groups, so segments stay attached however the
-  // angles are tuned. Angles are chosen so the hands rest flat on the desktop
-  // over the keyboard; see 3D_CHARACTERS_FEATURE_GUIDE.md Open Question #2.
+export function Arms({ pose, typingHandRef }: ArmsProps) {
+  // Both poses build a connected joint chain per side (shoulder → upper arm →
+  // elbow → forearm → hand) with nested groups, so segments stay attached
+  // however the angles are tuned. See 3D_CHARACTERS_FEATURE_GUIDE.md §10.
+  if (pose === 'standing') {
+    // Relaxed at the sides with a slight outward tilt and a soft elbow bend.
+    return (
+      <group>
+        {[-1, 1].map((side) => (
+          <group key={side} position={[0.26 * side, 0.56, 0]} rotation={[0.08, 0, 0.07 * side]}>
+            <mesh position={[0, -0.15, 0]} castShadow>
+              <boxGeometry args={[0.11, 0.3, 0.11]} />
+              <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
+            </mesh>
+            <group position={[0, -0.3, 0]} rotation={[0.16, 0, 0]}>
+              <mesh position={[0, -0.15, 0]} castShadow>
+                <boxGeometry args={[0.09, 0.3, 0.09]} />
+                <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
+              </mesh>
+              {/* Hand at the side */}
+              <mesh position={[0, -0.34, 0]} castShadow>
+                <boxGeometry args={[0.1, 0.13, 0.06]} />
+                <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
+              </mesh>
+            </group>
+          </group>
+        ))}
+      </group>
+    );
+  }
+
+  // Seated: hands rest flat on the desktop over the keyboard.
   return (
     <group>
       {[-1, 1].map((side) => (

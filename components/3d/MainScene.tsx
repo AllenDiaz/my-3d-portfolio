@@ -141,10 +141,9 @@ export default function MainScene() {
         onClick={() => setShowCertificateModal(true)}
       />
 
-      {/* Procedural seated avatar of the owner (Phase 1: static mesh).
-          Placement faces the centered monitors; see Open Question #1 about
-          reconciling with the existing chair at x = -2.5. */}
-      <Avatar position={[-0.15, 0, -0.95]} rotationY={0} />
+      {/* Procedural avatar of the owner — standing by the chair, contemplating
+          his next agent (see ThoughtBubble below). Chair is at x = -2.5. */}
+      <Avatar pose="standing" position={[-2.55, 0, -0.55]} rotationY={0.4} />
 
       {/* Holographic ID badge floating above the desk */}
       <NameTagBillboard position={[0, 2.2, -2.4]} />
