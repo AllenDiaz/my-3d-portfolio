@@ -13,6 +13,7 @@ import FloatingParticles from './FloatingParticles';
 import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
 import CityscapeBackdrop from './CityscapeBackdrop';
+import Avatar from './Avatar/Avatar';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -132,6 +133,11 @@ export default function MainScene() {
         label="Certifications"
         onClick={() => setShowCertificateModal(true)}
       />
+
+      {/* Procedural seated avatar of the owner (Phase 1: static mesh).
+          Placement faces the centered monitors; see Open Question #1 about
+          reconciling with the existing chair at x = -2.5. */}
+      <Avatar position={[-0.15, 0, -0.7]} rotationY={0} />
 
       {/* Non-interactive desk decor (sticky notes, USB hub) */}
       <DeskClutter />
