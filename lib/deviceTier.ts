@@ -28,6 +28,12 @@ export interface QualityPreset {
   physicalMaterials: boolean;
   /** Whether service robots run the patrol/serve state machine (false = static props at home). */
   robotBehavior: boolean;
+  /** Avatar motion budget: 'full' = breathing + typing-hand, 'breath' = breathing only, 'none' = static. */
+  characterAnimation: 'full' | 'breath' | 'none';
+  /** How many robots from ROBOT_CONFIGS to render. */
+  robotCount: number;
+  /** Number of coffee-steam sprites above the mug (0 disables the steam system). */
+  steamParticles: number;
   /** Whether to render nearer parallax buildings + window-light twinkle outside the window. */
   cityParallax: boolean;
   /** Resolution of the procedural cityscape backdrop texture. */
@@ -45,6 +51,9 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     reflectionResolution: 1024,
     physicalMaterials: true,
     robotBehavior: true,
+    characterAnimation: 'full',
+    robotCount: 3,
+    steamParticles: 6,
     cityParallax: true,
     sceneryTextureSize: 2048,
   },
@@ -58,6 +67,9 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     reflectionResolution: 512,
     physicalMaterials: true,
     robotBehavior: true,
+    characterAnimation: 'breath',
+    robotCount: 2,
+    steamParticles: 4,
     cityParallax: false,
     sceneryTextureSize: 2048,
   },
@@ -71,6 +83,9 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     reflectionResolution: 0,
     physicalMaterials: false,
     robotBehavior: false,
+    characterAnimation: 'none',
+    robotCount: 2,
+    steamParticles: 0,
     cityParallax: false,
     sceneryTextureSize: 1024,
   },

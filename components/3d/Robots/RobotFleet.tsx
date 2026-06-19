@@ -11,20 +11,20 @@ export interface RobotFleetProps {
 }
 
 /**
- * Renders the ambient service robots, tier-gating their motion: on high/medium
- * each robot patrols/serves; on low (`robotBehavior === false`) they stay
- * static props at their home positions.
- *
- * Phase 5 will additionally slice `configs` to `preset.robotCount`.
+ * Renders the ambient service robots, tier-gating both count and motion: the
+ * fleet is sliced to `preset.robotCount`, and on high/medium each robot
+ * patrols/serves while on low (`robotBehavior === false`) they stay static
+ * props at their home positions.
  */
 export default function RobotFleet({ configs = ROBOT_CONFIGS }: RobotFleetProps) {
   const qualityTier = useStore((s) => s.qualityTier);
-  const animated = QUALITY_PRESETS[qualityTier].robotBehavior;
+  const preset = QUALITY_PRESETS[qualityTier];
+  const visible = configs.slice(0, preset.robotCount);
 
   return (
     <group>
-      {configs.map((config) => (
-        <Robot key={config.id} config={config} animated={animated} />
+      {visible.map((config) => (
+        <Robot key={config.id} config={config} animated={preset.robotBehavior} />
       ))}
     </group>
   );
