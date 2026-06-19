@@ -17,6 +17,7 @@ import Avatar from './Avatar/Avatar';
 import NameTagBillboard from './Avatar/NameTagBillboard';
 import CoffeeSteam from './Avatar/CoffeeSteam';
 import RobotFleet from './Robots/RobotFleet';
+import PatrolDebugOverlay from './Robots/PatrolDebugOverlay';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -150,6 +151,9 @@ export default function MainScene() {
 
       {/* Ambient service robots */}
       <RobotFleet />
+
+      {/* Dev-only patrol-path overlay (renders only with ?debug=robots) */}
+      <PatrolDebugOverlay />
 
       {/* Non-interactive desk decor (sticky notes, USB hub) */}
       <DeskClutter />
