@@ -15,6 +15,7 @@ import HolographicDisplay from './HolographicDisplay';
 import CityscapeBackdrop from './CityscapeBackdrop';
 import Avatar from './Avatar/Avatar';
 import NameTagBillboard from './Avatar/NameTagBillboard';
+import ThoughtBubble from './Avatar/ThoughtBubble';
 import CoffeeSteam from './Avatar/CoffeeSteam';
 import RobotFleet from './Robots/RobotFleet';
 import PatrolDebugOverlay from './Robots/PatrolDebugOverlay';
@@ -144,6 +145,9 @@ export default function MainScene() {
       {/* Procedural avatar of the owner — standing by the chair, contemplating
           his next agent (see ThoughtBubble below). Chair is at x = -2.5. */}
       <Avatar pose="standing" position={[-2.55, 0, -0.55]} rotationY={0.4} />
+
+      {/* Allen's thought bubble — what agent to build next + how to improve it */}
+      <ThoughtBubble position={[-1.95, 2.55, -0.5]} />
 
       {/* Holographic ID badge floating above the desk */}
       <NameTagBillboard position={[0, 2.2, -2.4]} />
