@@ -1,39 +1,36 @@
 'use client';
 
-import { useRef } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
-import type { Mesh, MeshStandardMaterial } from 'three';
-import { Claws, Head, Legs, StatusLight, Torso, type RobotStatus } from './robotParts';
+import { Claws, Head, Legs, StatusLight, Torso } from './robotParts';
 import type { RobotConfig } from './robotConfig';
+import { useRobotBehavior } from './useRobotBehavior';
 import { useHoverFeedback } from '../useHoverFeedback';
 import { useStore } from '@/store/useStore';
 
 export interface RobotProps {
   config: RobotConfig;
+  /** When false (low tier) the robot is a static prop at home — no useFrame loop. */
+  animated: boolean;
 }
 
 /**
  * A single ambient service robot.
  *
- * Phase 3: static chassis at `config.home`, with a pulsing status light
- * (cheap useFrame sine on emissiveIntensity), hover outline + floating
- * designation label, and click → RobotModal. Patrol/serve motion arrives in
- * Phase 4 (the `status` stays 'idle' / green for now).
+ * Phase 4: when `animated`, the patrol/serve state machine (useRobotBehavior)
+ * drives the group transform and status light each frame. When not animated
+ * (low tier), the robot is a static prop at `config.home` with a steady green
+ * status light. Hover shows an outline + designation label; click opens the
+ * RobotModal.
  */
-export default function Robot({ config }: RobotProps) {
+export default function Robot({ config, animated }: RobotProps) {
   const { hovered, hoverProps } = useHoverFeedback();
   const setShowRobotModal = useStore((s) => s.setShowRobotModal);
-  const statusRef = useRef<Mesh>(null);
+  const { groupRef, statusRef, advance } = useRobotBehavior(config, animated);
 
-  // Phase 3: robots are idle. Phase 4 will derive this from the state machine.
-  const status: RobotStatus = 'idle';
-
-  // Pulse the status light's emissive intensity — one material write per frame.
-  useFrame((state) => {
-    const mat = statusRef.current?.material as MeshStandardMaterial | undefined;
-    if (mat) mat.emissiveIntensity = 0.6 + Math.sin(state.clock.elapsedTime * 3) * 0.4;
+  useFrame((state, delta) => {
+    if (animated) advance(delta, state.clock.elapsedTime);
   });
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
@@ -41,14 +38,19 @@ export default function Robot({ config }: RobotProps) {
     setShowRobotModal(true, config);
   };
 
+  // Static placement when not animated; the hook drives the transform otherwise.
+  const placement = animated
+    ? {}
+    : { position: config.home, rotation: [0, config.homeYaw, 0] as [number, number, number] };
+
   return (
     <Select enabled={hovered}>
-      <group position={config.home} rotation={[0, config.homeYaw, 0]} onClick={handleClick} {...hoverProps}>
+      <group ref={groupRef} {...placement} onClick={handleClick} {...hoverProps}>
         <Legs />
         <Torso hovered={hovered} accent={config.accent} />
         <Claws />
         <Head hovered={hovered} accent={config.accent} />
-        <StatusLight ref={statusRef} status={status} />
+        <StatusLight ref={statusRef} status="idle" />
 
         {hovered && (
           <Html position={[0, 0.78, 0]} center distanceFactor={3} style={{ pointerEvents: 'none', userSelect: 'none' }}>
