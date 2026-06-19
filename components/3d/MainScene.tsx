@@ -15,6 +15,7 @@ import HolographicDisplay from './HolographicDisplay';
 import CityscapeBackdrop from './CityscapeBackdrop';
 import Avatar from './Avatar/Avatar';
 import NameTagBillboard from './Avatar/NameTagBillboard';
+import CoffeeSteam from './Avatar/CoffeeSteam';
 import RobotFleet from './Robots/RobotFleet';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
@@ -108,12 +109,15 @@ export default function MainScene() {
         onClick={() => setShowCVModal(true)}
       />
       
-      <DeskItem 
-        position={[1.1, 0.82, -1.8]} 
-        itemType="coffee" 
+      <DeskItem
+        position={[1.1, 0.82, -1.8]}
+        itemType="coffee"
         label="Coffee break!"
         onClick={() => setShowCoffeeNotification(true)}
       />
+
+      {/* Rising steam above the coffee mug — tier-gated by steamParticles */}
+      <CoffeeSteam position={[1.1, 0.95, -1.8]} count={preset.steamParticles} enabled={preset.steamParticles > 0} />
       
       <DeskItem
         position={[-1.1, 0.82, -1.7]}
