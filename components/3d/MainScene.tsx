@@ -14,6 +14,7 @@ import AmbientSound from './AmbientSound';
 import HolographicDisplay from './HolographicDisplay';
 import CityscapeBackdrop from './CityscapeBackdrop';
 import Avatar from './Avatar/Avatar';
+import NameTagBillboard from './Avatar/NameTagBillboard';
 import RobotFleet from './Robots/RobotFleet';
 import { Selection } from '@react-three/postprocessing';
 import { useStore } from '@/store/useStore';
@@ -140,7 +141,10 @@ export default function MainScene() {
           reconciling with the existing chair at x = -2.5. */}
       <Avatar position={[-0.15, 0, -0.95]} rotationY={0} />
 
-      {/* Ambient service robots (Phase 3: static props around the floor) */}
+      {/* Holographic ID badge floating above the desk */}
+      <NameTagBillboard position={[0, 2.2, -2.4]} />
+
+      {/* Ambient service robots */}
       <RobotFleet />
 
       {/* Non-interactive desk decor (sticky notes, USB hub) */}
