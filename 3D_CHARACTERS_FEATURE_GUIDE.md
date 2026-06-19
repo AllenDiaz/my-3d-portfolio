@@ -1,6 +1,6 @@
 # 3D Characters Feature Guide — Procedural Avatar & Service Robots
 
-> **Status:** Plan / implementation guide. No code written yet.
+> **Status:** Implemented — Phases 1–5 complete (avatar, robots, all 5 enhancements, full tier gating). Remaining work is in-browser tuning of the values flagged in §10 (Open Questions).
 > **Scope:** Add a procedural seated avatar of the portfolio owner (Allen Diaz) and 2–3 ambient service robots to the existing react-three-fiber office, plus five tie-in enhancements.
 > **Hard rule (from `CLAUDE.md`):** every piece of geometry is built from Three.js primitives, `BufferGeometry`, custom shaders, or `CanvasTexture`. **Zero `.glb`/`.gltf`/`.fbx`.** Every expensive behavior is gated through `QUALITY_PRESETS` in `lib/deviceTier.ts`.
 
