@@ -97,11 +97,15 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
       }
 
       case 'returning': {
-        const wp = wps[wpIndex.current];
-        temps.target.set(wp[0], 0, wp[2]);
+        // A docking robot heads back to its dock (home) to "charge"; others
+        // resume at the next waypoint.
+        const dest = config.usesDock ? config.home : wps[wpIndex.current];
+        temps.target.set(dest[0], 0, dest[2]);
         if (stepToward(temps.target, stepLen)) {
           phase.current = 'idle';
-          dwell.current = 0.5 + Math.random() * 1.5;
+          // Longer idle while "charging" in the dock.
+          dwell.current = config.usesDock ? 3 + Math.random() * 2 : 0.5 + Math.random() * 1.5;
+          if (config.usesDock) wpIndex.current = 0; // home is waypoint[0]
           nextServeAt.current = elapsed + 12 + Math.random() * 12;
         }
         break;

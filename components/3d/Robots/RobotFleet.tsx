@@ -1,6 +1,7 @@
 'use client';
 
 import Robot from './Robot';
+import ChargingDock from './ChargingDock';
 import { ROBOT_CONFIGS, type RobotConfig } from './robotConfig';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
@@ -26,6 +27,18 @@ export default function RobotFleet({ configs = ROBOT_CONFIGS }: RobotFleetProps)
       {visible.map((config) => (
         <Robot key={config.id} config={config} animated={preset.robotBehavior} />
       ))}
+
+      {/* Charging docks for robots that use one, at their home position */}
+      {visible
+        .filter((config) => config.usesDock)
+        .map((config) => (
+          <ChargingDock
+            key={`dock-${config.id}`}
+            position={config.home}
+            rotationY={config.homeYaw}
+            accent={config.accent}
+          />
+        ))}
     </group>
   );
 }

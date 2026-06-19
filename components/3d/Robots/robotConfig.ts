@@ -32,6 +32,8 @@ export interface RobotConfig {
   serveTarget: Vec3;
   /** Phase 4: travel speed in units/sec along the path. */
   speed: number;
+  /** Phase 5: this robot has a charging dock at its home and returns there to "charge" after serving. */
+  usesDock?: boolean;
 }
 
 export const ROBOT_CONFIGS: readonly RobotConfig[] = [
@@ -51,6 +53,7 @@ export const ROBOT_CONFIGS: readonly RobotConfig[] = [
     ],
     serveTarget: [-1.4, 0, 0.4],
     speed: 0.65,
+    usesDock: true,
   },
   {
     id: 'agent-02',
