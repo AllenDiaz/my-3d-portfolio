@@ -67,10 +67,6 @@ interface StoreState {
   restrictedLinkType: 'code' | 'live' | null;
   setShowRestrictedLinkModal: (show: boolean, linkType?: 'code' | 'live') => void;
   
-  // Character visibility state
-  showCharacter: boolean;
-  setShowCharacter: (show: boolean) => void;
-  
   // Projects data
   allProjects: Project[];
   projects: Project[];
@@ -133,9 +129,6 @@ export const useStore = create<StoreState>((set, get) => ({
     showRestrictedLinkModal: show, 
     restrictedLinkType: linkType || null 
   }),
-  
-  showCharacter: false,
-  setShowCharacter: (show) => set({ showCharacter: show }),
   
   // All projects from data file
   allProjects: projectsData,
