@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { projectsData, type Project } from '@/data/projects';
 import type { QualityTier } from '@/lib/deviceTier';
+import type { RobotConfig } from '@/components/3d/Robots/robotConfig';
 
 // Re-export Project type for convenience
 export type { Project };
@@ -61,6 +62,12 @@ interface StoreState {
   // Avatar ("About Allen") Modal state
   showAvatarModal: boolean;
   setShowAvatarModal: (show: boolean) => void;
+
+  // Robot flavor Modal state + which robot was clicked
+  showRobotModal: boolean;
+  selectedRobot: RobotConfig | null;
+  /** Pass the robot to open its card; pass false to close (clears selection). */
+  setShowRobotModal: (show: boolean, robot?: RobotConfig | null) => void;
 
   // All Projects Modal state
   showAllProjectsModal: boolean;
@@ -126,6 +133,11 @@ export const useStore = create<StoreState>((set, get) => ({
 
   showAvatarModal: false,
   setShowAvatarModal: (show) => set({ showAvatarModal: show }),
+
+  showRobotModal: false,
+  selectedRobot: null,
+  setShowRobotModal: (show, robot) =>
+    set({ showRobotModal: show, selectedRobot: show ? robot ?? null : null }),
 
   showAllProjectsModal: false,
   setShowAllProjectsModal: (show) => set({ showAllProjectsModal: show }),
