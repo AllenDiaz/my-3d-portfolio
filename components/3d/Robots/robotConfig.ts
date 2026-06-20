@@ -36,6 +36,16 @@ export interface RobotConfig {
   usesDock?: boolean;
 }
 
+/**
+ * Where agents come to be tuned up by Allen. Derived from his standing spot
+ * ([-3.55, 0, -1.5], facing the desk at rotationY -1.4) — a point ~0.7 units in
+ * front of him. SERVICE_LIFT is how high the agent floats (≈ his hands).
+ * Keep in sync with the <Avatar> placement in MainScene.
+ */
+export const SERVICE_SPOT: Vec3 = [-2.86, 0, -1.62];
+export const SERVICE_LIFT = 1.05;
+export const SERVICE_DURATION = 4.5; // seconds Allen works on each agent
+
 export const ROBOT_CONFIGS: readonly RobotConfig[] = [
   {
     id: 'agent-01',

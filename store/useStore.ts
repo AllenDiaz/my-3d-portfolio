@@ -63,6 +63,11 @@ interface StoreState {
   showAvatarModal: boolean;
   setShowAvatarModal: (show: boolean) => void;
 
+  // Which robot Allen is currently tuning up (one-at-a-time lock); drives both
+  // the robot's "being serviced" phase and Allen's fixing animation.
+  servicingRobotId: string | null;
+  setServicingRobotId: (id: string | null) => void;
+
   // Robot flavor Modal state + which robot was clicked
   showRobotModal: boolean;
   selectedRobot: RobotConfig | null;
@@ -133,6 +138,9 @@ export const useStore = create<StoreState>((set, get) => ({
 
   showAvatarModal: false,
   setShowAvatarModal: (show) => set({ showAvatarModal: show }),
+
+  servicingRobotId: null,
+  setServicingRobotId: (id) => set({ servicingRobotId: id }),
 
   showRobotModal: false,
   selectedRobot: null,
