@@ -1,26 +1,29 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import type { RobotConfig } from './robotConfig';
+import { SERVICE_DURATION, SERVICE_LIFT, SERVICE_SPOT, type RobotConfig } from './robotConfig';
+import { useStore } from '@/store/useStore';
 
 /**
- * Per-robot patrol/serve state machine.
+ * Per-robot patrol + tune-up state machine.
  *
- *   idle ─dwell→ walking ─(serve timer)→ serving ─(bob done)→ returning ─→ idle
+ *   idle ─dwell→ walking ─(tune-up timer & lock free)→ toService
+ *        toService ─arrive→ beingServiced ─(Allen finishes)→ returning ─→ idle
  *
  * - walking: linear-interpolates along the closed `waypoints` loop.
- * - serving: walks to `serveTarget` (near Allen's chair), pauses and bobs.
- * - returning: heads back to the current waypoint, then idles briefly.
+ * - toService: the agent walks to SERVICE_SPOT in front of Allen.
+ * - beingServiced: it floats up to Allen's hands, spins and glows while he
+ *   "fixes/upgrades" it (gated by the shared servicingRobotId lock so only one
+ *   agent is serviced at a time), then leaves a little better (upgrades++).
  *
  * All machine state lives in refs, so the loop never triggers a React
  * re-render. The owning component calls `advance(delta, elapsed)` from its
  * useFrame; the hook mutates the group transform and the status-light material
- * imperatively (green = idle, amber = busy). On the low tier the component
- * passes `animated = false` and simply never calls `advance`.
+ * imperatively.
  */
 
-export type RobotPhase = 'idle' | 'walking' | 'serving' | 'returning';
+export type RobotPhase = 'idle' | 'walking' | 'toService' | 'beingServiced' | 'returning';
 
 export function useRobotBehavior(config: RobotConfig, animated: boolean) {
   const groupRef = useRef<THREE.Group>(null);
@@ -31,8 +34,10 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
   const yaw = useRef(config.homeYaw);
   const wpIndex = useRef(0);
   const dwell = useRef(1);
-  const bobT = useRef(0);
-  const nextServeAt = useRef(-1); // lazily seeded on the first advance() call
+  const lift = useRef(0); // eased vertical lift while being serviced
+  const serviceT = useRef(0);
+  const upgrades = useRef(0); // how many tune-ups this agent has received
+  const nextServiceAt = useRef(-1); // lazily seeded on the first advance() call
 
   const temps = useMemo(
     () => ({ dir: new THREE.Vector3(), target: new THREE.Vector3() }),
@@ -48,6 +53,17 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
     groupRef.current.position.copy(pos.current);
     groupRef.current.rotation.y = yaw.current;
   }, [animated, pos, yaw]);
+
+  // Release the service lock if this robot unmounts mid-tune-up (e.g. tier change),
+  // so Allen doesn't get stuck working on nothing.
+  useEffect(
+    () => () => {
+      if (useStore.getState().servicingRobotId === config.id) {
+        useStore.getState().setServicingRobotId(null);
+      }
+    },
+    [config.id],
+  );
 
   /** Move `pos` toward `dest` by at most `stepLen`; set facing. Returns arrived. */
   function stepToward(dest: THREE.Vector3, stepLen: number): boolean {
@@ -65,16 +81,18 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
     const g = groupRef.current;
     if (!g) return;
 
-    if (nextServeAt.current < 0) nextServeAt.current = elapsed + 10 + Math.random() * 10;
+    if (nextServiceAt.current < 0) {
+      nextServiceAt.current = elapsed + 8 + Math.random() * 12;
+    }
 
+    const store = useStore.getState();
     const stepLen = config.speed * delta;
     const wps = config.waypoints;
 
     switch (phase.current) {
       case 'idle':
         dwell.current -= delta;
-        // Slowly rotate in place — the robot "scans" the room while waiting.
-        yaw.current += delta * 0.7;
+        yaw.current += delta * 0.7; // slow in-place scan while waiting
         if (dwell.current <= 0) phase.current = 'walking';
         break;
 
@@ -84,60 +102,84 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
         if (stepToward(temps.target, stepLen)) {
           wpIndex.current = (wpIndex.current + 1) % wps.length;
         }
-        if (elapsed >= nextServeAt.current) {
-          phase.current = 'serving';
-          bobT.current = 0;
-          nextServeAt.current = Number.POSITIVE_INFINITY;
+        // Time for a tune-up? Only if no other agent currently holds the lock.
+        if (elapsed >= nextServiceAt.current) {
+          if (store.servicingRobotId === null) {
+            store.setServicingRobotId(config.id); // claim Allen
+            phase.current = 'toService';
+          } else {
+            nextServiceAt.current = elapsed + 4 + Math.random() * 5; // retry later
+          }
         }
         break;
       }
 
-      case 'serving': {
-        temps.target.set(config.serveTarget[0], 0, config.serveTarget[2]);
+      case 'toService': {
+        temps.target.set(SERVICE_SPOT[0], 0, SERVICE_SPOT[2]);
         if (stepToward(temps.target, stepLen)) {
-          bobT.current += delta; // arrived — pause and bob
-          if (bobT.current > 2.5) phase.current = 'returning';
+          phase.current = 'beingServiced';
+          serviceT.current = 0;
+        }
+        break;
+      }
+
+      case 'beingServiced': {
+        // Hold position in front of Allen, spin slowly while he works.
+        yaw.current += delta * 2.2;
+        serviceT.current += delta;
+        if (serviceT.current >= SERVICE_DURATION) {
+          upgrades.current += 1; // leaves a little better
+          if (store.servicingRobotId === config.id) store.setServicingRobotId(null);
+          phase.current = 'returning';
         }
         break;
       }
 
       case 'returning': {
-        // A docking robot heads back to its dock (home) to "charge"; others
-        // resume at the next waypoint.
         const dest = config.usesDock ? config.home : wps[wpIndex.current];
         temps.target.set(dest[0], 0, dest[2]);
         if (stepToward(temps.target, stepLen)) {
           phase.current = 'idle';
-          // Longer idle while "charging" in the dock.
           dwell.current = config.usesDock ? 3 + Math.random() * 2 : 0.5 + Math.random() * 1.5;
-          if (config.usesDock) wpIndex.current = 0; // home is waypoint[0]
-          nextServeAt.current = elapsed + 12 + Math.random() * 12;
+          if (config.usesDock) wpIndex.current = 0;
+          nextServiceAt.current = elapsed + 12 + Math.random() * 12;
         }
         break;
       }
     }
 
-    // Constant gentle hover so the robot always feels alive (anti-grav float),
-    // plus an extra bob once it has reached the serve point.
-    const hover = Math.sin(elapsed * 2 + seed) * 0.02;
-    const bob = phase.current === 'serving' && bobT.current > 0
-      ? Math.abs(Math.sin(bobT.current * 5)) * 0.05
-      : 0;
-    g.position.set(pos.current.x, pos.current.y + hover + bob, pos.current.z);
+    // Ease the vertical lift (rises to SERVICE_LIFT only while being serviced).
+    const liftTarget = phase.current === 'beingServiced' ? SERVICE_LIFT : 0;
+    lift.current += (liftTarget - lift.current) * Math.min(1, delta * 3);
+
+    // Constant gentle hover (slightly stronger the more tuned-up it is).
+    const hover = Math.sin(elapsed * 2 + seed) * (0.02 + upgrades.current * 0.004);
+    g.position.set(pos.current.x, pos.current.y + lift.current + hover, pos.current.z);
+
+    // A subtle "polish" scale pulse while being worked on.
+    const scale = phase.current === 'beingServiced' ? 1 + Math.sin(elapsed * 8) * 0.04 : 1;
+    g.scale.setScalar(scale);
 
     // Smoothly rotate toward the target facing (shortest angle).
     let dy = yaw.current - g.rotation.y;
     dy = Math.atan2(Math.sin(dy), Math.cos(dy));
     g.rotation.y += dy * Math.min(1, delta * 6);
 
-    // Status light: amber + faster pulse while busy, green + slower while idle.
-    const busy = phase.current === 'serving' || phase.current === 'returning';
+    // Status light: bright cyan upgrade pulse while serviced, amber while busy,
+    // green while idle/patrolling.
     const mat = statusRef.current?.material as THREE.MeshStandardMaterial | undefined;
     if (mat) {
-      const color = busy ? '#fbbf24' : '#34d399';
-      mat.color.set(color);
-      mat.emissive.set(color);
-      mat.emissiveIntensity = 0.6 + Math.sin(elapsed * (busy ? 6 : 3)) * 0.4;
+      if (phase.current === 'beingServiced') {
+        mat.color.set('#a5f3fc');
+        mat.emissive.set('#a5f3fc');
+        mat.emissiveIntensity = 1.3 + Math.sin(elapsed * 12) * 0.6;
+      } else {
+        const busy = phase.current === 'toService' || phase.current === 'returning';
+        const color = busy ? '#fbbf24' : '#34d399';
+        mat.color.set(color);
+        mat.emissive.set(color);
+        mat.emissiveIntensity = 0.6 + Math.sin(elapsed * (busy ? 6 : 3)) * 0.4;
+      }
     }
   }
 
