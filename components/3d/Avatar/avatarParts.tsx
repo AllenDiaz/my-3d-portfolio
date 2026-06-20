@@ -64,9 +64,9 @@ export function Legs({ pose }: { pose: AvatarPose }) {
           </mesh>
         ))}
 
-        {/* Feet */}
+        {/* Feet — toes point forward (-z, the way the avatar faces) */}
         {[-0.1, 0.1].map((x) => (
-          <mesh key={`ft-${x}`} position={[x, 0.04, 0.06]} castShadow>
+          <mesh key={`ft-${x}`} position={[x, 0.04, -0.06]} castShadow>
             <boxGeometry args={[0.16, 0.08, 0.28]} />
             <meshStandardMaterial color="#070708" roughness={0.7} metalness={0.1} />
           </mesh>

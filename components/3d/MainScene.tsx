@@ -148,8 +148,9 @@ export default function MainScene() {
           rotationY is negative so his front (-z) swings toward +x/-z (the desk). */}
       <Avatar pose="standing" position={[-3.55, 0, -1.5]} rotationY={-1.4} />
 
-      {/* Allen's thought bubble — what agent to build next + how to improve it */}
-      <ThoughtBubble position={[-3.05, 2.6, -1.05]} />
+      {/* Allen's thought bubble — placed so its trail bubbles descend onto his
+          head (head top ≈ [-3.55, 1.85, -1.5] at his standing position). */}
+      <ThoughtBubble position={[-3.1, 2.8, -1.4]} />
 
       {/* Holographic ID badge floating above the desk */}
       <NameTagBillboard position={[0, 2.2, -2.4]} />
