@@ -142,12 +142,13 @@ export default function MainScene() {
         onClick={() => setShowCertificateModal(true)}
       />
 
-      {/* Procedural avatar of the owner — standing by the chair, contemplating
-          his next agent (see ThoughtBubble below). Chair is at x = -2.5. */}
-      <Avatar pose="standing" position={[-2.55, 0, -0.55]} rotationY={0.4} />
+      {/* Procedural avatar of the owner — standing to the LEFT side of the chair
+          (chair is at x = -2.5, z = -1.5), turned to face the desk while he
+          contemplates his next agent (see ThoughtBubble below). */}
+      <Avatar pose="standing" position={[-3.55, 0, -1.5]} rotationY={1.3} />
 
       {/* Allen's thought bubble — what agent to build next + how to improve it */}
-      <ThoughtBubble position={[-1.95, 2.55, -0.5]} />
+      <ThoughtBubble position={[-3.05, 2.6, -1.05]} />
 
       {/* Holographic ID badge floating above the desk */}
       <NameTagBillboard position={[0, 2.2, -2.4]} />
