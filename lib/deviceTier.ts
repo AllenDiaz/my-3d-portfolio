@@ -26,7 +26,9 @@ export interface QualityPreset {
   reflectionResolution: number;
   /** Whether hero objects may use the costlier meshPhysicalMaterial (clearcoat). */
   physicalMaterials: boolean;
-  /** Whether service robots run the patrol/serve state machine (false = static props at home). */
+  /** Whether service robots run the patrol/serve state machine. Cheap (CPU-only
+   *  vector math), so it stays on across tiers; draw-call cost is gated by
+   *  robotCount instead. (false = static props at home). */
   robotBehavior: boolean;
   /** Avatar motion budget: 'full' = breathing + typing-hand, 'breath' = breathing only, 'none' = static. */
   characterAnimation: 'full' | 'breath' | 'none';
@@ -82,7 +84,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     contactShadowResolution: 0,
     reflectionResolution: 0,
     physicalMaterials: false,
-    robotBehavior: false,
+    robotBehavior: true,
     characterAnimation: 'none',
     robotCount: 3,
     steamParticles: 0,
