@@ -48,10 +48,15 @@ export default function Avatar({
 }: AvatarProps) {
   const upperBodyRef = useRef<Group>(null);
   const typingHandRef = useRef<Group>(null);
+  const leftElbowRef = useRef<Group>(null);
+  const rightElbowRef = useRef<Group>(null);
+  const headRef = useRef<Group>(null);
   const { hovered, hoverProps } = useHoverFeedback();
   const setShowAvatarModal = useStore((s) => s.setShowAvatarModal);
   const qualityTier = useStore((s) => s.qualityTier);
   const characterAnimation = QUALITY_PRESETS[qualityTier].characterAnimation;
+  // True whenever Allen is tuning up an agent — drives the "fixing" animation.
+  const servicing = useStore((s) => s.servicingRobotId !== null);
   const backTexture = useShirtTexture({ name: jerseyName, number: jerseyNumber });
 
   // Standing: hips higher, near-upright with a slight head tilt (contemplative).
@@ -61,7 +66,7 @@ export default function Avatar({
   const lean = seated ? -0.14 : -0.05;
   const headRotation: [number, number, number] = seated ? [0, 0, 0] : [0.06, 0.18, 0.05];
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
 
     // Breathing — a gentle Y-scale oscillation on the upper body. Runs as an
@@ -74,6 +79,22 @@ export default function Avatar({
     // Typing motion — subtle ~2 Hz bob on the right hand, seated + high tier only.
     if (seated && characterAnimation === 'full' && typingHandRef.current) {
       typingHandRef.current.position.y = -0.32 + Math.abs(Math.sin(t * 12)) * 0.012;
+    }
+
+    // Fixing motion — while standing and servicing an agent, raise both forearms
+    // toward the floating robot and tinker; tilt the head down to look at it.
+    // Eases back to the relaxed standing pose when idle.
+    if (!seated) {
+      const elbowTarget = servicing ? -1.15 + Math.sin(t * 7) * 0.18 : 0.16;
+      for (const ref of [leftElbowRef, rightElbowRef]) {
+        if (ref.current) {
+          ref.current.rotation.x += (elbowTarget - ref.current.rotation.x) * Math.min(1, delta * 8);
+        }
+      }
+      if (headRef.current) {
+        const headTarget = servicing ? 0.5 : headRotation[0];
+        headRef.current.rotation.x += (headTarget - headRef.current.rotation.x) * Math.min(1, delta * 6);
+      }
     }
   });
 
@@ -91,10 +112,15 @@ export default function Avatar({
         {/* Upper body pivots at the top of the hips with a slight forward lean */}
         <group ref={upperBodyRef} position={[0, upperBodyY, 0]} rotation={[lean, 0, 0]}>
           <Torso backTexture={backTexture} />
-          <Arms pose={pose} typingHandRef={typingHandRef} />
+          <Arms
+            pose={pose}
+            typingHandRef={typingHandRef}
+            leftElbowRef={leftElbowRef}
+            rightElbowRef={rightElbowRef}
+          />
 
           {/* Head assembly — head + hair + glasses share this group's origin */}
-          <group position={[0, 0.86, 0.02]} rotation={headRotation}>
+          <group ref={headRef} position={[0, 0.86, 0.02]} rotation={headRotation}>
             <Head />
             <Hair />
             <Glasses />

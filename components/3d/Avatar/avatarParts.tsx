@@ -177,9 +177,13 @@ export interface ArmsProps {
   pose: AvatarPose;
   /** Optional ref on the right hand group (seated only), for the typing motion. */
   typingHandRef?: RefObject<THREE.Group | null>;
+  /** Optional refs on the standing elbow groups, so Avatar can drive a
+   *  "fixing/working" motion while servicing an agent. */
+  leftElbowRef?: RefObject<THREE.Group | null>;
+  rightElbowRef?: RefObject<THREE.Group | null>;
 }
 
-export function Arms({ pose, typingHandRef }: ArmsProps) {
+export function Arms({ pose, typingHandRef, leftElbowRef, rightElbowRef }: ArmsProps) {
   // Both poses build a connected joint chain per side (shoulder → upper arm →
   // elbow → forearm → hand) with nested groups, so segments stay attached
   // however the angles are tuned. See 3D_CHARACTERS_FEATURE_GUIDE.md §10.
@@ -193,7 +197,11 @@ export function Arms({ pose, typingHandRef }: ArmsProps) {
               <boxGeometry args={[0.11, 0.3, 0.11]} />
               <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
             </mesh>
-            <group position={[0, -0.3, 0]} rotation={[0.16, 0, 0]}>
+            <group
+              ref={side === -1 ? leftElbowRef : rightElbowRef}
+              position={[0, -0.3, 0]}
+              rotation={[0.16, 0, 0]}
+            >
               <mesh position={[0, -0.15, 0]} castShadow>
                 <boxGeometry args={[0.09, 0.3, 0.09]} />
                 <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />
