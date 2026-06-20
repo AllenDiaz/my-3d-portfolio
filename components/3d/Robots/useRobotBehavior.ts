@@ -39,6 +39,9 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
     [],
   );
 
+  // Per-robot phase offset so hover/scan don't move in lockstep across the fleet.
+  const seed = useMemo(() => config.home[0] * 1.7 + config.home[2] * 0.9, [config]);
+
   // Seat the robot at its home transform before first paint (no origin flash).
   useLayoutEffect(() => {
     if (!animated || !groupRef.current) return;
@@ -70,6 +73,8 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
     switch (phase.current) {
       case 'idle':
         dwell.current -= delta;
+        // Slowly rotate in place — the robot "scans" the room while waiting.
+        yaw.current += delta * 0.7;
         if (dwell.current <= 0) phase.current = 'walking';
         break;
 
@@ -112,11 +117,13 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
       }
     }
 
-    // Gentle bob only once the robot has reached the serve point.
+    // Constant gentle hover so the robot always feels alive (anti-grav float),
+    // plus an extra bob once it has reached the serve point.
+    const hover = Math.sin(elapsed * 2 + seed) * 0.02;
     const bob = phase.current === 'serving' && bobT.current > 0
       ? Math.abs(Math.sin(bobT.current * 5)) * 0.05
       : 0;
-    g.position.set(pos.current.x, pos.current.y + bob, pos.current.z);
+    g.position.set(pos.current.x, pos.current.y + hover + bob, pos.current.z);
 
     // Smoothly rotate toward the target facing (shortest angle).
     let dy = yaw.current - g.rotation.y;
