@@ -143,9 +143,10 @@ export default function MainScene() {
       />
 
       {/* Procedural avatar of the owner — standing to the LEFT side of the chair
-          (chair is at x = -2.5, z = -1.5), turned to face the desk while he
-          contemplates his next agent (see ThoughtBubble below). */}
-      <Avatar pose="standing" position={[-3.55, 0, -1.5]} rotationY={1.3} />
+          (chair is at x = -2.5, z = -1.5), turned to face the desk/monitors while
+          he contemplates his next agent (see ThoughtBubble below).
+          rotationY is negative so his front (-z) swings toward +x/-z (the desk). */}
+      <Avatar pose="standing" position={[-3.55, 0, -1.5]} rotationY={-1.4} />
 
       {/* Allen's thought bubble — what agent to build next + how to improve it */}
       <ThoughtBubble position={[-3.05, 2.6, -1.05]} />
