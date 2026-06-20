@@ -85,7 +85,9 @@ export default function Avatar({
     // toward the floating robot and tinker; tilt the head down to look at it.
     // Eases back to the relaxed standing pose when idle.
     if (!seated) {
-      const elbowTarget = servicing ? -1.15 + Math.sin(t * 7) * 0.18 : 0.16;
+      // Positive elbow rotation swings the forearm FORWARD (toward the agent);
+      // a small ~7 Hz wobble reads as tinkering. Eases back to rest (0.16).
+      const elbowTarget = servicing ? 1.5 + Math.sin(t * 7) * 0.12 : 0.16;
       for (const ref of [leftElbowRef, rightElbowRef]) {
         if (ref.current) {
           ref.current.rotation.x += (elbowTarget - ref.current.rotation.x) * Math.min(1, delta * 8);

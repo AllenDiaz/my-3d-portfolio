@@ -142,15 +142,14 @@ export default function MainScene() {
         onClick={() => setShowCertificateModal(true)}
       />
 
-      {/* Procedural avatar of the owner — standing to the LEFT side of the chair
-          (chair is at x = -2.5, z = -1.5), turned to face the desk/monitors while
-          he contemplates his next agent (see ThoughtBubble below).
-          rotationY is negative so his front (-z) swings toward +x/-z (the desk). */}
-      <Avatar pose="standing" position={[-3.55, 0, -1.5]} rotationY={-1.4} />
+      {/* Procedural avatar of the owner — standing beside the chair, in clear
+          view of the camera's resting position ([0, 1.45, 3.6] looking -z) and
+          turned to face the camera/open floor (rotationY = π) so we see his face
+          and the agents approach him from the front to be tuned up. */}
+      <Avatar pose="standing" position={[-1.9, 0, -0.6]} rotationY={Math.PI} />
 
-      {/* Allen's thought bubble — placed so its trail bubbles descend onto his
-          head (head top ≈ [-3.55, 1.85, -1.5] at his standing position). */}
-      <ThoughtBubble position={[-3.1, 2.8, -1.4]} />
+      {/* Allen's thought bubble — above and beside his head (head ≈ [-1.9, 1.8, -0.6]) */}
+      <ThoughtBubble position={[-1.45, 2.8, -0.55]} />
 
       {/* Holographic ID badge floating above the desk */}
       <NameTagBillboard position={[0, 2.2, -2.4]} />
