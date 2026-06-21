@@ -149,19 +149,34 @@ export interface ArmsProps {
   pose: AvatarPose;
   /** Optional ref on the right hand group (seated only), for the typing motion. */
   typingHandRef?: RefObject<THREE.Group | null>;
-  /** Optional refs on the standing elbow groups, for Allen's "fixing" motion. */
+  /** Optional refs on the standing shoulder + elbow groups, for Allen's
+   *  "fixing" motion (the whole arm lifts forward, not just the forearm). */
+  leftShoulderRef?: RefObject<THREE.Group | null>;
+  rightShoulderRef?: RefObject<THREE.Group | null>;
   leftElbowRef?: RefObject<THREE.Group | null>;
   rightElbowRef?: RefObject<THREE.Group | null>;
 }
 
-export function Arms({ pose, typingHandRef, leftElbowRef, rightElbowRef }: ArmsProps) {
+export function Arms({
+  pose,
+  typingHandRef,
+  leftShoulderRef,
+  rightShoulderRef,
+  leftElbowRef,
+  rightElbowRef,
+}: ArmsProps) {
   // Connected joint chain per side (shoulder → upper arm → elbow → forearm →
   // hand) via nested groups, so segments stay attached as angles are tuned.
   if (pose === 'standing') {
     return (
       <group>
         {[-1, 1].map((side) => (
-          <group key={side} position={[0.26 * side, 0.56, 0]} rotation={[0.08, 0, 0.07 * side]}>
+          <group
+            key={side}
+            ref={side === -1 ? leftShoulderRef : rightShoulderRef}
+            position={[0.26 * side, 0.56, 0]}
+            rotation={[0.08, 0, 0.07 * side]}
+          >
             <RoundedBox args={[0.11, 0.3, 0.11]} radius={0.045} smoothness={3} position={[0, -0.15, 0]} castShadow>
               <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
             </RoundedBox>

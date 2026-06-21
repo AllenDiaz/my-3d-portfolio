@@ -49,6 +49,8 @@ export default function Avatar({
 }: AvatarProps) {
   const upperBodyRef = useRef<Group>(null);
   const typingHandRef = useRef<Group>(null);
+  const leftShoulderRef = useRef<Group>(null);
+  const rightShoulderRef = useRef<Group>(null);
   const leftElbowRef = useRef<Group>(null);
   const rightElbowRef = useRef<Group>(null);
   const headRef = useRef<Group>(null);
@@ -82,17 +84,30 @@ export default function Avatar({
       typingHandRef.current.position.y = -0.32 + Math.abs(Math.sin(t * 12)) * 0.012;
     }
 
-    // Fixing motion — while standing and servicing an agent, raise both forearms
-    // toward the floating robot and tinker; tilt the head down to look at it.
-    // Eases back to the relaxed standing pose when idle.
+    // Fixing motion — while standing and servicing an agent, lift the WHOLE arms
+    // forward and inward so both hands cradle the floating robot at center, with
+    // a small ~7 Hz elbow wobble for tinkering; tilt the head down to look at it.
+    // Everything eases back to the relaxed standing pose when idle.
     if (!seated) {
-      // Positive elbow rotation swings the forearm FORWARD (toward the agent);
-      // a small ~7 Hz wobble reads as tinkering. Eases back to rest (0.16).
-      const elbowTarget = servicing ? 1.5 + Math.sin(t * 7) * 0.12 : 0.16;
-      for (const ref of [leftElbowRef, rightElbowRef]) {
-        if (ref.current) {
-          ref.current.rotation.x += (elbowTarget - ref.current.rotation.x) * Math.min(1, delta * 8);
-        }
+      const k = Math.min(1, delta * 8);
+      const shoulderX = servicing ? 1.0 : 0.08; // swing upper arms forward
+      const elbowX = servicing ? 0.55 + Math.sin(t * 7) * 0.1 : 0.16;
+
+      if (leftShoulderRef.current) {
+        leftShoulderRef.current.rotation.x += (shoulderX - leftShoulderRef.current.rotation.x) * k;
+        const lz = servicing ? 0.35 : -0.07; // bring left arm inward toward center
+        leftShoulderRef.current.rotation.z += (lz - leftShoulderRef.current.rotation.z) * k;
+      }
+      if (rightShoulderRef.current) {
+        rightShoulderRef.current.rotation.x += (shoulderX - rightShoulderRef.current.rotation.x) * k;
+        const rz = servicing ? -0.35 : 0.07; // bring right arm inward toward center
+        rightShoulderRef.current.rotation.z += (rz - rightShoulderRef.current.rotation.z) * k;
+      }
+      if (leftElbowRef.current) {
+        leftElbowRef.current.rotation.x += (elbowX - leftElbowRef.current.rotation.x) * k;
+      }
+      if (rightElbowRef.current) {
+        rightElbowRef.current.rotation.x += (elbowX - rightElbowRef.current.rotation.x) * k;
       }
       if (headRef.current) {
         const headTarget = servicing ? 0.5 : headRotation[0];
@@ -118,6 +133,8 @@ export default function Avatar({
           <Arms
             pose={pose}
             typingHandRef={typingHandRef}
+            leftShoulderRef={leftShoulderRef}
+            rightShoulderRef={rightShoulderRef}
             leftElbowRef={leftElbowRef}
             rightElbowRef={rightElbowRef}
           />
