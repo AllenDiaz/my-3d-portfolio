@@ -27,6 +27,8 @@ export interface RobotProps {
 export default function Robot({ config, animated }: RobotProps) {
   const { hovered, hoverProps } = useHoverFeedback();
   const setShowRobotModal = useStore((s) => s.setShowRobotModal);
+  // True while Allen is tuning THIS agent — show its "thank you" box.
+  const beingServiced = useStore((s) => s.servicingRobotId === config.id);
   const { groupRef, statusRef, advance } = useRobotBehavior(config, animated);
 
   useFrame((state, delta) => {
@@ -56,6 +58,16 @@ export default function Robot({ config, animated }: RobotProps) {
           <Html position={[0, 0.78, 0]} center distanceFactor={3} style={{ pointerEvents: 'none', userSelect: 'none' }}>
             <div className="whitespace-nowrap rounded border border-teal-500/40 bg-black/90 px-2 py-1 font-mono text-xs text-teal-200 backdrop-blur-sm">
               {config.designation}
+            </div>
+          </Html>
+        )}
+
+        {/* Agent's thinking box while Allen tunes it */}
+        {beingServiced && (
+          <Html position={[0, 1.05, 0]} center distanceFactor={3.5} style={{ pointerEvents: 'none', userSelect: 'none' }}>
+            <div className="flex flex-col items-center gap-0.5 whitespace-nowrap rounded-lg border border-emerald-400/50 bg-black/85 px-2.5 py-1.5 font-mono text-emerald-200 shadow-lg backdrop-blur-sm">
+              <span className="text-[10px] text-emerald-400/90">▣ being tuned…</span>
+              <span className="text-xs">thank you, master 🙏</span>
             </div>
           </Html>
         )}
