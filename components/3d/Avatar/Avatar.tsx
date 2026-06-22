@@ -149,7 +149,7 @@ export default function Avatar({
 
         {/* Context box Allen hands to the agent while tuning it (front, above his hands) */}
         {servicing && (
-          <Html position={[0, 1.4, -0.42]} center distanceFactor={3.5} style={{ pointerEvents: 'none', userSelect: 'none' }}>
+          <Html position={[0, 1.4, -0.42]} center distanceFactor={3.5} zIndexRange={[40, 0]} style={{ pointerEvents: 'none', userSelect: 'none' }}>
             <div className="flex flex-col items-center gap-0.5 whitespace-nowrap rounded-lg border border-cyan-400/50 bg-black/85 px-2.5 py-1.5 font-mono text-cyan-200 shadow-lg backdrop-blur-sm">
               <span className="text-[10px] text-cyan-400/90">ctx ▸ uploading…</span>
               <span className="text-xs">“I am tuning you” ⚙</span>

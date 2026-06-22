@@ -290,6 +290,7 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
       {hovered && label && (
         <Html
           position={[0, 0.15, 0]}
+          zIndexRange={[40, 0]}
           center
           distanceFactor={2}
           style={{

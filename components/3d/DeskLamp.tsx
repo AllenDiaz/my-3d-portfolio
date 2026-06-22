@@ -153,6 +153,7 @@ export default function DeskLamp({ position = [1.2, 0.82, -1.5] }: DeskLampProps
       {hovered && (
         <Html
           position={[0, 0.5, 0]}
+          zIndexRange={[40, 0]}
           center
           distanceFactor={2}
           style={{

@@ -193,6 +193,7 @@ export default function DeskTablet({ position }: DeskTabletProps) {
       {hovered && (
         <Html
           position={[0, 0.25, 0]}
+          zIndexRange={[40, 0]}
           center
           distanceFactor={1.5}
           style={{

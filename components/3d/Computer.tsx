@@ -238,6 +238,7 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
       {hovered && project && (
         <Html
           position={[0, 0.6, 0]}
+          zIndexRange={[40, 0]}
           center
           distanceFactor={1.5}
           style={{
