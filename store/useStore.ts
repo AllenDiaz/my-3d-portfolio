@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Object3D } from 'three';
 import { projectsData, type Project } from '@/data/projects';
 import type { QualityTier } from '@/lib/deviceTier';
 import type { RobotConfig } from '@/components/3d/Robots/robotConfig';
@@ -67,6 +68,11 @@ interface StoreState {
   // the robot's "being serviced" phase and Allen's fixing animation.
   servicingRobotId: string | null;
   setServicingRobotId: (id: string | null) => void;
+
+  // Live world anchor at Allen's hands (set by the Avatar); a serviced agent
+  // floats to this so it always sits in his hands. Non-reactive ref holder.
+  serviceAnchor: Object3D | null;
+  setServiceAnchor: (obj: Object3D | null) => void;
 
   // Robot flavor Modal state + which robot was clicked
   showRobotModal: boolean;
@@ -141,6 +147,9 @@ export const useStore = create<StoreState>((set, get) => ({
 
   servicingRobotId: null,
   setServicingRobotId: (id) => set({ servicingRobotId: id }),
+
+  serviceAnchor: null,
+  setServiceAnchor: (obj) => set({ serviceAnchor: obj }),
 
   showRobotModal: false,
   selectedRobot: null,

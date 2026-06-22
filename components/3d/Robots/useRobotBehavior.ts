@@ -40,7 +40,7 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
   const nextServiceAt = useRef(-1); // lazily seeded on the first advance() call
 
   const temps = useMemo(
-    () => ({ dir: new THREE.Vector3(), target: new THREE.Vector3() }),
+    () => ({ dir: new THREE.Vector3(), target: new THREE.Vector3(), anchor: new THREE.Vector3() }),
     [],
   );
 
@@ -89,6 +89,18 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
     const stepLen = config.speed * delta;
     const wps = config.waypoints;
 
+    // Live tune-up target = Allen's hand anchor (so the agent floats into his
+    // hands regardless of his pose), falling back to the static constants.
+    let ax = SERVICE_SPOT[0];
+    let ay = SERVICE_LIFT;
+    let az = SERVICE_SPOT[2];
+    if (store.serviceAnchor) {
+      store.serviceAnchor.getWorldPosition(temps.anchor);
+      ax = temps.anchor.x;
+      ay = temps.anchor.y;
+      az = temps.anchor.z;
+    }
+
     switch (phase.current) {
       case 'idle':
         dwell.current -= delta;
@@ -115,7 +127,8 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
       }
 
       case 'toService': {
-        temps.target.set(SERVICE_SPOT[0], 0, SERVICE_SPOT[2]);
+        // Walk to the floor point under Allen's hands.
+        temps.target.set(ax, 0, az);
         if (stepToward(temps.target, stepLen)) {
           phase.current = 'beingServiced';
           serviceT.current = 0;
@@ -124,7 +137,10 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
       }
 
       case 'beingServiced': {
-        // Hold position in front of Allen, spin slowly while he works.
+        // Lock horizontally to the hand anchor and spin slowly while he works.
+        const lk = Math.min(1, delta * 4);
+        pos.current.x += (ax - pos.current.x) * lk;
+        pos.current.z += (az - pos.current.z) * lk;
         yaw.current += delta * 2.2;
         serviceT.current += delta;
         if (serviceT.current >= SERVICE_DURATION) {
@@ -148,8 +164,8 @@ export function useRobotBehavior(config: RobotConfig, animated: boolean) {
       }
     }
 
-    // Ease the vertical lift (rises to SERVICE_LIFT only while being serviced).
-    const liftTarget = phase.current === 'beingServiced' ? SERVICE_LIFT : 0;
+    // Ease the vertical lift (rises to the hand anchor's height while serviced).
+    const liftTarget = phase.current === 'beingServiced' ? ay : 0;
     lift.current += (liftTarget - lift.current) * Math.min(1, delta * 3);
 
     // Constant gentle hover (slightly stronger the more tuned-up it is).

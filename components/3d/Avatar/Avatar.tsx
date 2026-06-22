@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
@@ -54,8 +54,10 @@ export default function Avatar({
   const leftElbowRef = useRef<Group>(null);
   const rightElbowRef = useRef<Group>(null);
   const headRef = useRef<Group>(null);
+  const serviceAnchorRef = useRef<Group>(null);
   const { hovered, hoverProps } = useHoverFeedback();
   const setShowAvatarModal = useStore((s) => s.setShowAvatarModal);
+  const setServiceAnchor = useStore((s) => s.setServiceAnchor);
   const qualityTier = useStore((s) => s.qualityTier);
   const characterAnimation = QUALITY_PRESETS[qualityTier].characterAnimation;
   // True whenever Allen is tuning up an agent — drives the "fixing" animation.
@@ -73,6 +75,12 @@ export default function Avatar({
     () => (seated ? [0, 0, 0] : [0.06, 0.18, 0.05]),
     [seated],
   );
+
+  // Publish the hand anchor so a serviced agent can float to Allen's hands.
+  useEffect(() => {
+    setServiceAnchor(serviceAnchorRef.current);
+    return () => setServiceAnchor(null);
+  }, [setServiceAnchor]);
 
   // Seed the standing arms' rest rotations once (the groups carry no rotation
   // prop, so useFrame fully owns them without prop/imperative fighting).
@@ -160,6 +168,11 @@ export default function Avatar({
             <Hair />
             <Glasses />
           </group>
+
+          {/* Invisible hand-cradle anchor — a serviced agent floats to its world
+              position. Lives under upperBody so it tracks lean + breathing.
+              Nudge this local offset to line the held agent up with the hands. */}
+          <group ref={serviceAnchorRef} position={[0, 0.12, -0.5]} />
         </group>
 
         {/* Context box Allen hands to the agent while tuning it (front, above his hands) */}
