@@ -175,15 +175,16 @@ export function Arms({
             key={side}
             ref={side === -1 ? leftShoulderRef : rightShoulderRef}
             position={[0.26 * side, 0.56, 0]}
-            rotation={[0.08, 0, 0.07 * side]}
           >
             <RoundedBox args={[0.11, 0.3, 0.11]} radius={0.045} smoothness={3} position={[0, -0.15, 0]} castShadow>
               <meshStandardMaterial color={SHIRT} roughness={0.85} metalness={0.05} />
             </RoundedBox>
+            {/* Rotation is driven entirely by Avatar's useFrame (rest + fixing),
+                seeded once in a layout effect — no static rotation prop here, so
+                re-renders don't fight the imperative easing. */}
             <group
               ref={side === -1 ? leftElbowRef : rightElbowRef}
               position={[0, -0.3, 0]}
-              rotation={[0.16, 0, 0]}
             >
               <RoundedBox args={[0.09, 0.3, 0.09]} radius={0.035} smoothness={3} position={[0, -0.15, 0]} castShadow>
                 <meshStandardMaterial color={SKIN} roughness={0.7} metalness={0} />

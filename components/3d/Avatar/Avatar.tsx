@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
@@ -67,7 +67,22 @@ export default function Avatar({
   const seated = pose === 'seated';
   const upperBodyY = seated ? 0.62 : 0.92;
   const lean = seated ? -0.14 : -0.05;
-  const headRotation: [number, number, number] = seated ? [0, 0, 0] : [0.06, 0.18, 0.05];
+  // Memoized so the prop reference is stable across re-renders → r3f applies it
+  // once and never re-applies it, so useFrame's eased rotation.x isn't reset.
+  const headRotation = useMemo<[number, number, number]>(
+    () => (seated ? [0, 0, 0] : [0.06, 0.18, 0.05]),
+    [seated],
+  );
+
+  // Seed the standing arms' rest rotations once (the groups carry no rotation
+  // prop, so useFrame fully owns them without prop/imperative fighting).
+  useLayoutEffect(() => {
+    if (seated) return;
+    leftShoulderRef.current?.rotation.set(0.08, 0, -0.07);
+    rightShoulderRef.current?.rotation.set(0.08, 0, 0.07);
+    leftElbowRef.current?.rotation.set(0.16, 0, 0);
+    rightElbowRef.current?.rotation.set(0.16, 0, 0);
+  }, [seated]);
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
