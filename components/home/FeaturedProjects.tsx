@@ -17,7 +17,10 @@ export default function FeaturedProjects() {
   if (!spotlight) return null;
 
   return (
-    <section className="relative py-20 px-8 bg-black transition-colors">
+    <section
+      id="featured-work"
+      className="relative py-20 px-8 bg-black transition-colors scroll-mt-20"
+    >
       <div className="container mx-auto max-w-7xl">
         {/* Section header */}
         <motion.div

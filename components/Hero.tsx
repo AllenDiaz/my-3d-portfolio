@@ -1,13 +1,30 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Mail, Download, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+const ROLES = [
+  'Senior Full-Stack Engineer',
+  'AI Engineer',
+  'IEEE-Published Researcher',
+  '3D Web Developer',
+];
+
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const interval = setInterval(() => {
+      setRoleIndex((index) => (index + 1) % ROLES.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,8 +74,19 @@ const Hero = () => {
                 Allen Diaz
               </span>
             </h1>
-            <h2 className="text-2xl lg:text-3xl text-gray-300 font-light">
-              Senior Full-Stack Engineer | Software Engineer | AI Enthusiast
+            <h2 className="text-2xl lg:text-3xl text-gray-300 font-light h-9 lg:h-10">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={ROLES[roleIndex]}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.35 }}
+                  className="inline-block bg-gradient-to-r from-gray-100 to-gray-400 bg-clip-text text-transparent"
+                >
+                  {ROLES[roleIndex]}
+                </motion.span>
+              </AnimatePresence>
             </h2>
           </motion.div>
 
@@ -207,7 +235,16 @@ const Hero = () => {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto"
       >
-        <div className="flex flex-col items-center gap-2 text-gray-400 cursor-pointer hover:text-white transition-colors group">
+        <button
+          type="button"
+          aria-label="Scroll to featured work"
+          onClick={() =>
+            document
+              .getElementById('featured-work')
+              ?.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+          }
+          className="flex flex-col items-center gap-2 text-gray-400 cursor-pointer hover:text-white transition-colors group"
+        >
           <span className="text-sm font-medium">Explore More</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -220,7 +257,7 @@ const Hero = () => {
               className="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white"
             />
           </motion.div>
-        </div>
+        </button>
       </motion.div>
     </div>
   );
