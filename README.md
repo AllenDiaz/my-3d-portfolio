@@ -90,8 +90,9 @@ You can force a tier for testing with `?tier=low` (or `medium` / `high`).
 ## Documentation
 
 - `CLAUDE.md` — architecture guide for the codebase.
-- `IMPROVEMENTS_ROADMAP.md` — performance/mobile + SEO work and backlog.
-- `3D_VISUAL_POLISH_GUIDE.md` — step-by-step guide for improving the 3D look and UI.
+- `docs/IMPROVEMENTS_ROADMAP.md` — performance/mobile + SEO work and backlog.
+- `docs/3D_VISUAL_POLISH_GUIDE.md` — step-by-step guide for improving the 3D look and UI.
+- `docs/archive/` — historical design/implementation notes that lag the current code; kept for reference only.
 
 ## Deployment
 

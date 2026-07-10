@@ -91,7 +91,7 @@ Project data lives in `data/projects.ts` (`Project` interface + `projectsData`).
 Set `NEXT_PUBLIC_SITE_URL` to the production origin so canonical URLs, Open Graph, sitemap, and robots resolve correctly (falls back to `http://localhost:3000` in dev).
 
 ## Notes
-- Root-level docs: `IMPROVEMENTS_ROADMAP.md` (perf/SEO work), `3D_VISUAL_POLISH_GUIDE.md` (visual upgrade guide), `3D_OFFICE_OVERHAUL_DESIGN.md` (the design doc whose first sprint + matrix are implemented). The older `*_SUMMARY.md` / `IMPLEMENTATION*.md` / `ARCHITECTURE.md` files are historical and lag the code — trust the source.
+- Docs live under `docs/`: `IMPROVEMENTS_ROADMAP.md` (perf/SEO work), `3D_VISUAL_POLISH_GUIDE.md` (visual upgrade guide), `3D_OFFICE_OVERHAUL_DESIGN.md` (the design doc whose first sprint + matrix are implemented), plus `3D_CHARACTERS_FEATURE_GUIDE.md`, `QUICK_REFERENCE.md`, `THEME_AND_BINARY_WALL.md`, `WINDOW_SCENERY_GUIDE.md`. The historical `docs/archive/` files (`*_SUMMARY.md`, `IMPLEMENTATION*.md`, `ARCHITECTURE.md`) lag the code — trust the source, not those.
 - Still deferred from the overhaul (need in-browser tuning, perf consideration): true `MeshTransmissionMaterial` monitor glass (currently a cheap clearcoat sheen). The RectAreaLight window, hover outline, and instanced keyboard are done.
 - `reference/` contains the owner's personal career documents — not application code.
 - `nodemailer` is still in `package.json` but there's no contact API route; the phone "Contact Me" object opens an info `ContactModal` (email/GitHub/LinkedIn), not a form.
