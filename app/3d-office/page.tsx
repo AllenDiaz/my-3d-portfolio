@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, RotateCcw, SkipForward, Volume2, VolumeX } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle, RotateCcw, SkipForward, Volume2, VolumeX, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
@@ -29,6 +29,39 @@ const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), {
 const MainScene = dynamic(() => import('@/components/3d/MainScene'), {
   ssr: false,
 });
+
+// Every clickable object in the scene and what it opens — keep in sync with
+// the interactive components mounted in MainScene.tsx.
+const GUIDE_ITEMS = [
+  { icon: '💻', object: 'Monitors', action: 'Featured projects' },
+  { icon: '📱', object: 'Tablet', action: 'Browse all projects' },
+  { icon: '⌨️', object: 'Keyboard', action: 'Skills & technologies' },
+  { icon: '🖱️', object: 'Mouse', action: 'Reset the camera view' },
+  { icon: '📓', object: 'Notebook', action: 'Resume & bio' },
+  { icon: '🪪', object: 'ID card', action: 'Work experience' },
+  { icon: '🏆', object: 'Certificate', action: 'Certifications' },
+  { icon: '📞', object: 'Phone', action: 'Contact me' },
+  { icon: '💡', object: 'Desk lamp', action: 'Toggle the room lights' },
+  { icon: '🧍', object: 'Allen', action: 'About me' },
+  { icon: '🤖', object: 'Robots', action: 'Meet the AI agents' },
+  { icon: '☕', object: 'Coffee', action: 'A note for you' },
+  { icon: '🪑', object: 'Chair', action: 'A little surprise' },
+] as const;
+
+function GuideList() {
+  return (
+    <ul className="space-y-1.5 text-xs font-mono text-gray-400">
+      {GUIDE_ITEMS.map((item) => (
+        <li key={item.object} className="flex items-baseline gap-2">
+          <span aria-hidden="true">{item.icon}</span>
+          <span className="text-gray-300">{item.object}</span>
+          <span className="text-gray-500">→</span>
+          <span>{item.action}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function ThreeDOfficePage() {
   const showChairNotification = useStore((state) => state.showChairNotification);
@@ -62,6 +95,7 @@ export default function ThreeDOfficePage() {
   const requestCameraReset = useStore((state) => state.requestCameraReset);
 
   const [legendOpen, setLegendOpen] = useState(true);
+  const [mobileGuideOpen, setMobileGuideOpen] = useState(false);
 
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
@@ -83,7 +117,7 @@ export default function ThreeDOfficePage() {
               aria-expanded={legendOpen}
               className="flex w-full items-center justify-between gap-4 px-3 sm:px-4 py-2.5 text-left transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 cursor-pointer"
             >
-              <span className="text-sm font-semibold font-mono text-gray-300">Object IDs</span>
+              <span className="text-sm font-semibold font-mono text-gray-300">Interaction Guide</span>
               {legendOpen ? (
                 <ChevronUp className="h-4 w-4 text-gray-400" />
               ) : (
@@ -92,23 +126,15 @@ export default function ThreeDOfficePage() {
             </button>
             <AnimatePresence initial={false}>
               {legendOpen && (
-                <motion.ul
+                <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.25, ease: 'easeInOut' }}
-                  className="space-y-1 px-3 sm:px-4 pb-3 text-xs font-mono text-gray-400"
+                  className="px-3 sm:px-4 pb-3"
                 >
-                  <li>📱 Tablet → All projects</li>
-                  <li>🪪 ID Card → All Work Experience</li>
-                  <li>📱 iPad → All projects</li>
-                  <li>🏆 Certificate → Professional Certifications</li>
-                  <li>💻 Computer → Featured Projects</li>
-                  <li>☕ Coffee → Message for Employer/Client</li>
-                  <li>🪑 Chair → System Notification</li>
-                  <li>⌨️ Keyboard → Skills and Technologies</li>
-                  <li>📄 Paper → Resume</li>
-                </motion.ul>
+                  <GuideList />
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
@@ -150,8 +176,43 @@ export default function ThreeDOfficePage() {
           )}
         </AnimatePresence>
 
+        {/* Mobile interaction guide sheet */}
+        <AnimatePresence>
+          {mobileGuideOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.25 }}
+              className="absolute bottom-24 left-4 right-4 z-30 md:hidden pointer-events-auto"
+            >
+              <div className="bg-black/85 backdrop-blur-md border border-gray-700/50 rounded-xl p-4 text-white max-h-[50vh] overflow-y-auto">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold font-mono text-gray-300">Interaction Guide</span>
+                  <button
+                    onClick={() => setMobileGuideOpen(false)}
+                    aria-label="Close interaction guide"
+                    className="p-1 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <GuideList />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Scene controls (bottom-right) */}
         <div className="absolute bottom-8 right-4 sm:right-6 z-30 flex flex-col gap-2 pointer-events-auto">
+          <button
+            onClick={() => setMobileGuideOpen((v) => !v)}
+            aria-label="Toggle interaction guide"
+            title="Interaction guide"
+            className="p-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-sm border border-gray-700/50 rounded-lg text-gray-300 hover:text-white transition-colors cursor-pointer md:hidden"
+          >
+            <HelpCircle className="w-5 h-5" />
+          </button>
           <button
             onClick={() => setSoundMuted(!soundMuted)}
             aria-label={soundMuted ? 'Unmute ambient sound' : 'Mute ambient sound'}
