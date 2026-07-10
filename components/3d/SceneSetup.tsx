@@ -4,8 +4,10 @@ import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
-import { useStore } from '@/store/useStore';
+import gsap from 'gsap';
+import { useStore, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import CinematicCamera from './CinematicCamera';
 
@@ -25,6 +27,9 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
   // Faux-window area light (cool city spill from camera-left)
   const windowLightRef = useRef<THREE.RectAreaLight>(null);
+
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const cameraResetToken = useStore((state) => state.cameraResetToken);
 
   useEffect(() => {
     // RectAreaLight requires its LTC uniform tables initialised once
@@ -47,9 +52,40 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
   useEffect(() => {
     // Set initial camera position if not using cinematic intro
     if (!enableCinematicIntro) {
-      camera.position.set(0, 1.45, 3.6);
+      camera.position.set(...REST_CAMERA_POSITION);
     }
   }, [camera, enableCinematicIntro]);
+
+  // Reset view: glide camera + orbit target back to the default framing when
+  // the store token bumps (desk mouse / overlay button). No-op during the
+  // intro fly-in — the timeline owns the camera then.
+  useEffect(() => {
+    if (cameraResetToken === 0) return;
+    const controls = controlsRef.current;
+    if (!controls || useStore.getState().introPlaying) return;
+
+    const prefersReducedMotion =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    if (prefersReducedMotion) {
+      camera.position.set(...REST_CAMERA_POSITION);
+      controls.target.set(...REST_CAMERA_TARGET);
+      controls.update();
+      return;
+    }
+
+    const [px, py, pz] = REST_CAMERA_POSITION;
+    const [tx, ty, tz] = REST_CAMERA_TARGET;
+    gsap.to(camera.position, { x: px, y: py, z: pz, duration: 1.1, ease: 'power3.inOut' });
+    gsap.to(controls.target, {
+      x: tx,
+      y: ty,
+      z: tz,
+      duration: 1.1,
+      ease: 'power3.inOut',
+      onUpdate: () => controls.update(),
+    });
+  }, [camera, cameraResetToken]);
 
   return (
     <>
@@ -70,6 +106,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
       {/* Camera Controls */}
       <OrbitControls
+        ref={controlsRef}
         enablePan={true}
         enableZoom={true}
         enableRotate={true}

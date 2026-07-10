@@ -5,11 +5,15 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import gsap from 'gsap';
 import * as THREE from 'three';
+import { useStore, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
 
 export default function CinematicCamera() {
   const { camera } = useThree();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const hasAnimated = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const introPlaying = useStore((state) => state.introPlaying);
+  const setIntroPlaying = useStore((state) => state.setIntroPlaying);
 
   // Respect users who prefer reduced motion: skip the fly-in entirely.
   const prefersReducedMotion =
@@ -24,13 +28,17 @@ export default function CinematicCamera() {
 
     // Reduced motion: snap straight to the resting position, no GSAP fly-in.
     if (prefersReducedMotion) {
-      cam.position.set(0, 1.45, 3.6);
-      cam.lookAt(0, 1.05, -1.9);
+      cam.position.set(...REST_CAMERA_POSITION);
+      cam.lookAt(...REST_CAMERA_TARGET);
       return;
     }
 
     // 3-beat cinematic reveal with a parallax arc (left establish -> arc right -> settle)
-    const timeline = gsap.timeline();
+    setIntroPlaying(true);
+    const timeline = gsap.timeline({
+      onComplete: () => setIntroPlaying(false),
+    });
+    timelineRef.current = timeline;
 
     cam.position.set(-4, 4.5, 9);
     cam.lookAt(0, 1.2, -1);
@@ -52,7 +60,28 @@ export default function CinematicCamera() {
         onUpdate: () => cam.updateProjectionMatrix(),
       }, '-=0.2');
 
-  }, [prefersReducedMotion]);
+    return () => {
+      timeline.kill();
+      timelineRef.current = null;
+      hasAnimated.current = false;
+      setIntroPlaying(false);
+    };
+  }, [prefersReducedMotion, setIntroPlaying]);
+
+  // "Skip intro": when the flag is cleared while the timeline is still
+  // flying, kill it and snap to the resting shot.
+  useEffect(() => {
+    const cam = cameraRef.current;
+    const timeline = timelineRef.current;
+    if (introPlaying || !cam || !timeline?.isActive()) return;
+
+    timeline.kill();
+    timelineRef.current = null;
+    cam.position.set(...REST_CAMERA_POSITION);
+    cam.lookAt(...REST_CAMERA_TARGET);
+    cam.fov = 50;
+    cam.updateProjectionMatrix();
+  }, [introPlaying]);
 
   // Subtle camera breathing effect (disabled under reduced motion)
   useFrame((state) => {

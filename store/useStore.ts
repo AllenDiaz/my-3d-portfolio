@@ -7,6 +7,11 @@ import type { RobotConfig } from '@/components/3d/Robots/robotConfig';
 // Re-export Project type for convenience
 export type { Project };
 
+// Default camera framing shared by the cinematic intro, the skip-intro snap,
+// and the reset-view glide (SceneSetup's OrbitControls target matches).
+export const REST_CAMERA_POSITION: [number, number, number] = [0, 1.45, 3.6];
+export const REST_CAMERA_TARGET: [number, number, number] = [0, 1.05, -1.9];
+
 interface StoreState {
   // Selected interactive object
   selectedObject: string | null;
@@ -20,9 +25,16 @@ interface StoreState {
   showProjectPanel: boolean;
   setShowProjectPanel: (show: boolean) => void;
   
-  // Camera animation state
-  isAnimatingCamera: boolean;
-  setIsAnimatingCamera: (isAnimating: boolean) => void;
+  // Cinematic intro state: true while the fly-in timeline runs. Setting it
+  // false mid-flight (the "Skip intro" button) makes CinematicCamera kill the
+  // timeline and snap to the resting shot.
+  introPlaying: boolean;
+  setIntroPlaying: (playing: boolean) => void;
+
+  // Bumping this token asks SceneSetup to glide the camera back to the
+  // default framing (wired to the desk mouse and the overlay reset button).
+  cameraResetToken: number;
+  requestCameraReset: () => void;
   
   // Light mode state
   lightsOn: boolean;
@@ -115,8 +127,11 @@ export const useStore = create<StoreState>((set, get) => ({
   showProjectPanel: false,
   setShowProjectPanel: (show) => set({ showProjectPanel: show }),
   
-  isAnimatingCamera: false,
-  setIsAnimatingCamera: (isAnimating) => set({ isAnimatingCamera: isAnimating }),
+  introPlaying: false,
+  setIntroPlaying: (playing) => set({ introPlaying: playing }),
+
+  cameraResetToken: 0,
+  requestCameraReset: () => set({ cameraResetToken: get().cameraResetToken + 1 }),
   
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),

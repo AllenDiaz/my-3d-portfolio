@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Volume2, VolumeX } from 'lucide-react';
+import { ChevronDown, ChevronUp, RotateCcw, SkipForward, Volume2, VolumeX } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
@@ -57,6 +57,9 @@ export default function ThreeDOfficePage() {
   const selectedRobot = useStore((state) => state.selectedRobot);
   const soundMuted = useStore((state) => state.soundMuted);
   const setSoundMuted = useStore((state) => state.setSoundMuted);
+  const introPlaying = useStore((state) => state.introPlaying);
+  const setIntroPlaying = useStore((state) => state.setIntroPlaying);
+  const requestCameraReset = useStore((state) => state.requestCameraReset);
 
   const [legendOpen, setLegendOpen] = useState(true);
 
@@ -130,6 +133,23 @@ export default function ThreeDOfficePage() {
           </div>
         </div>
 
+        {/* Skip intro — visible only while the fly-in runs */}
+        <AnimatePresence>
+          {introPlaying && (
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3, delay: 0.6 }}
+              onClick={() => setIntroPlaying(false)}
+              className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 bg-black/70 hover:bg-black/90 backdrop-blur-sm border border-gray-600 rounded-full text-sm font-mono text-gray-300 hover:text-white transition-colors pointer-events-auto cursor-pointer"
+            >
+              <SkipForward className="w-4 h-4" />
+              Skip intro
+            </motion.button>
+          )}
+        </AnimatePresence>
+
         {/* Scene controls (bottom-right) */}
         <div className="absolute bottom-8 right-4 sm:right-6 z-30 flex flex-col gap-2 pointer-events-auto">
           <button
@@ -139,6 +159,14 @@ export default function ThreeDOfficePage() {
             className="p-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-sm border border-gray-700/50 rounded-lg text-gray-300 hover:text-white transition-colors cursor-pointer"
           >
             {soundMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={requestCameraReset}
+            aria-label="Reset camera view"
+            title="Reset camera view"
+            className="p-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-sm border border-gray-700/50 rounded-lg text-gray-300 hover:text-white transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-5 h-5" />
           </button>
         </div>
 

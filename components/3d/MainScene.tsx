@@ -36,6 +36,7 @@ export default function MainScene() {
   const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
   const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const setShowContactModal = useStore((state) => state.setShowContactModal);
+  const requestCameraReset = useStore((state) => state.requestCameraReset);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -96,10 +97,11 @@ export default function MainScene() {
         onClick={() => setShowSkillsModal(true)}
       />
       
-      <DeskItem 
-        position={[-0.3, 0.82, -1.5]} 
-        itemType="mouse" 
-        label="Navigate"
+      <DeskItem
+        position={[-0.3, 0.82, -1.5]}
+        itemType="mouse"
+        label="Reset camera view"
+        onClick={requestCameraReset}
       />
       
       {/* Interactive Desk Tablet - Navigate to Projects Page */}
