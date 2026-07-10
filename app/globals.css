@@ -21,11 +21,50 @@
   --nav-bg: rgba(0, 0, 0, 0.8);
 }
 
+html {
+  /* Smooth in-page anchor navigation (e.g. /about#contact); the
+     prefers-reduced-motion block below reverts this to auto. */
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Branded text selection */
+::selection {
+  background: rgba(96, 165, 250, 0.35);
+  color: #ffffff;
+}
+
+/* Slim scrollbar that matches the dark theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+  background-clip: content-box;
 }
 
 /* Utility classes for theme-aware styling */
