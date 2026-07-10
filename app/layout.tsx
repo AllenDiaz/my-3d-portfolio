@@ -27,19 +27,19 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Share images come from the file convention: app/opengraph-image.tsx
+  // (file-based metadata overrides config-based images).
   openGraph: {
     type: "website",
     siteName: SITE.name,
     title: SITE.title,
     description: SITE.description,
     url: SITE_URL,
-    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: SITE.author }],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE.title,
     description: SITE.description,
-    images: [SITE.ogImage],
   },
   robots: {
     index: true,
@@ -61,8 +61,27 @@ const jsonLd = {
       "@type": "Person",
       name: SITE.author,
       url: SITE_URL,
-      jobTitle: "Full-Stack Developer",
+      jobTitle: "Senior Full-Stack Engineer",
       image: `${SITE_URL}${SITE.ogImage}`,
+      email: "mailto:allendiaz.developer@gmail.com",
+      sameAs: [
+        "https://github.com/AllenDiaz",
+        "https://www.linkedin.com/in/allen-diaz-525071258/",
+      ],
+      worksFor: {
+        "@type": "Organization",
+        name: "Albertsons Companies",
+      },
+      knowsAbout: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Three.js",
+        "Python",
+        "FastAPI",
+        "Google Cloud Platform",
+        "Artificial Intelligence",
+      ],
     },
     {
       "@type": "WebSite",
