@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import OfficeRoom from './OfficeRoom';
 import Computer from './Computer';
 import DeskItem from './DeskItem';
+import DeskLamp from './DeskLamp';
 import DeskTablet from './DeskTablet';
 import DeskClutter from './DeskClutter';
 import SceneSetup from './SceneSetup';
@@ -135,12 +136,17 @@ export default function MainScene() {
         onClick={() => setShowExperienceModal(true)}
       />
       
-      <DeskItem 
-        position={[-1.3, 0.82, -1.3]} 
-        itemType="certificate" 
+      <DeskItem
+        position={[-1.3, 0.82, -1.3]}
+        itemType="certificate"
         label="Certifications"
         onClick={() => setShowCertificateModal(true)}
       />
+
+      {/* Clickable desk lamp — the room's light switch (toggles lightsOn +
+          tone-mapping exposure). Rear-left corner of the desk top, head angled
+          toward the desk centre. */}
+      <DeskLamp position={[-1.35, 0.8, -2.15]} />
 
       {/* Procedural avatar of the owner — standing beside the chair, in clear
           view of the camera's resting position ([0, 1.45, 3.6] looking -z) and

@@ -1,171 +1,152 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Mesh } from 'three';
+import { Select } from '@react-three/postprocessing';
+import * as THREE from 'three';
 import { useStore } from '@/store/useStore';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
+import { useHoverFeedback } from './useHoverFeedback';
 
 interface DeskLampProps {
   position?: [number, number, number];
 }
 
-export default function DeskLamp({ position = [1.2, 0.82, -1.5] }: DeskLampProps) {
-  const lampRef = useRef<Mesh>(null);
-  const [hovered, setHovered] = useState(false);
+/**
+ * Clickable desk lamp — the light switch for the whole room. Toggling it
+ * drives the `lightsOn` store flag, which every scene light and the
+ * tone-mapping exposure react to (lights-off = moody late-night mode).
+ * The head is angled toward the desk centre; its beam target is aimed there
+ * explicitly (a bare `target-position` never updates its matrix).
+ */
+export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const spotRef = useRef<THREE.SpotLight>(null);
+  const targetRef = useRef<THREE.Object3D>(null);
+  const { hovered, hoverProps } = useHoverFeedback();
   const { lightsOn, setLightsOn } = useStore();
+  const qualityTier = useStore((state) => state.qualityTier);
+  const lampShadow = QUALITY_PRESETS[qualityTier].lampShadow;
 
-  // Subtle animation when hovered
+  useEffect(() => {
+    if (spotRef.current && targetRef.current) {
+      spotRef.current.target = targetRef.current;
+      spotRef.current.target.updateMatrixWorld();
+    }
+  }, [lightsOn]);
+
+  // Subtle wobble when hovered
   useFrame((state) => {
-    if (lampRef.current && hovered) {
-      lampRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 3) * 0.05;
+    if (groupRef.current && hovered) {
+      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 3) * 0.05;
     }
   });
 
-  const handleClick = () => {
-    setLightsOn(!lightsOn);
-  };
-
   return (
-    <group position={position}>
-      {/* Base */}
-      <mesh 
-        position={[0, 0, 0]} 
-        castShadow
-        onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+    <Select enabled={hovered}>
+      <group
+        ref={groupRef}
+        position={position}
+        onClick={(e) => {
+          e.stopPropagation();
+          setLightsOn(!lightsOn);
+        }}
+        {...hoverProps}
       >
-        <cylinderGeometry args={[0.08, 0.1, 0.02]} />
-        <meshStandardMaterial 
-          color={hovered ? "#2a2a2a" : "#1a1a1a"}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
-
-      {/* Arm Base */}
-      <mesh 
-        ref={lampRef}
-        position={[0, 0.12, 0]} 
-        castShadow
-        onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <cylinderGeometry args={[0.015, 0.015, 0.25]} />
-        <meshStandardMaterial 
-          color="#1a1a1a"
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Arm Joint */}
-      <mesh 
-        position={[0, 0.24, 0]} 
-        castShadow
-        onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <sphereGeometry args={[0.02]} />
-        <meshStandardMaterial 
-          color="#0a0a0a"
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Upper Arm */}
-      <mesh 
-        position={[0.08, 0.32, 0]} 
-        rotation={[0, 0, -Math.PI / 6]}
-        castShadow
-        onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <cylinderGeometry args={[0.012, 0.012, 0.18]} />
-        <meshStandardMaterial 
-          color="#1a1a1a"
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Lamp Head */}
-      <mesh 
-        position={[0.15, 0.38, 0]} 
-        rotation={[0, 0, Math.PI / 3]}
-        castShadow
-        onClick={handleClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <coneGeometry args={[0.06, 0.12, 16]} />
-        <meshStandardMaterial 
-          color={lightsOn ? "#ffd700" : "#1a1a1a"}
-          metalness={0.7}
-          roughness={0.3}
-          emissive={lightsOn ? "#ffa500" : "#000000"}
-          emissiveIntensity={lightsOn ? 0.3 : 0}
-        />
-      </mesh>
-
-      {/* Light Bulb Inside */}
-      {lightsOn && (
-        <mesh position={[0.15, 0.34, 0]}>
-          <sphereGeometry args={[0.015]} />
-          <meshStandardMaterial 
-            color="#ffffff"
-            emissive="#ffff00"
-            emissiveIntensity={2}
+        {/* Base */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.08, 0.1, 0.02]} />
+          <meshStandardMaterial
+            color={hovered ? '#2a2a2a' : '#1a1a1a'}
+            metalness={0.8}
+            roughness={0.2}
           />
         </mesh>
-      )}
 
-      {/* Spotlight from lamp */}
-      {lightsOn && (
-        <>
-          <spotLight
-            position={[0.15, 0.38, 0]}
-            angle={Math.PI / 4}
-            penumbra={0.5}
-            intensity={1.5}
-            distance={3}
-            color="#ffd89b"
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
-            target-position={[0.3, 0, 0]}
-          />
-          <pointLight
-            position={[0.15, 0.38, 0]}
-            intensity={0.5}
-            distance={1}
-            color="#ffa500"
-          />
-        </>
-      )}
+        {/* Lower arm */}
+        <mesh position={[0, 0.12, 0]} castShadow>
+          <cylinderGeometry args={[0.015, 0.015, 0.25]} />
+          <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.1} />
+        </mesh>
 
-      {/* Hover tooltip */}
-      {hovered && (
-        <Html
-          position={[0, 0.5, 0]}
-          zIndexRange={[40, 0]}
-          center
-          distanceFactor={2}
-          style={{
-            pointerEvents: 'none',
-            userSelect: 'none'
-          }}
-        >
-          <div className="bg-black/90 text-white px-2 py-1 rounded text-xs whitespace-nowrap backdrop-blur-sm border border-gray-700">
-            {lightsOn ? 'Turn off lights' : 'Turn on lights'}
-          </div>
-        </Html>
-      )}
-    </group>
+        {/* Arm joint */}
+        <mesh position={[0, 0.24, 0]} castShadow>
+          <sphereGeometry args={[0.02]} />
+          <meshStandardMaterial color="#0a0a0a" metalness={0.9} roughness={0.1} />
+        </mesh>
+
+        {/* Upper arm */}
+        <mesh position={[0.08, 0.32, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow>
+          <cylinderGeometry args={[0.012, 0.012, 0.18]} />
+          <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.1} />
+        </mesh>
+
+        {/* Head — warm amber shade when lit, matching the room's key light */}
+        <mesh position={[0.15, 0.38, 0]} rotation={[0, 0, Math.PI / 3]} castShadow>
+          <coneGeometry args={[0.06, 0.12, 16]} />
+          <meshStandardMaterial
+            color={lightsOn ? '#ffb066' : '#1a1a1a'}
+            metalness={0.7}
+            roughness={0.3}
+            emissive={lightsOn ? '#ffa500' : '#000000'}
+            emissiveIntensity={lightsOn ? 0.4 : 0}
+          />
+        </mesh>
+
+        {/* Bulb */}
+        {lightsOn && (
+          <mesh position={[0.15, 0.34, 0]}>
+            <sphereGeometry args={[0.015]} />
+            <meshStandardMaterial
+              color="#ffffff"
+              emissive="#ffdd88"
+              emissiveIntensity={2}
+            />
+          </mesh>
+        )}
+
+        {/* Beam aimed at the desk centre (world [0, 0.8, -2]) */}
+        <object3D ref={targetRef} position={[1.35, 0, 0.15]} />
+        {lightsOn && (
+          <>
+            <spotLight
+              ref={spotRef}
+              position={[0.15, 0.38, 0]}
+              angle={Math.PI / 4}
+              penumbra={0.6}
+              intensity={1.2}
+              distance={3}
+              decay={1.5}
+              color="#ffd89b"
+              castShadow={lampShadow}
+              shadow-mapSize-width={512}
+              shadow-mapSize-height={512}
+            />
+            <pointLight
+              position={[0.15, 0.38, 0]}
+              intensity={0.5}
+              distance={1}
+              color="#ffb066"
+            />
+          </>
+        )}
+
+        {/* Hover tooltip */}
+        {hovered && (
+          <Html
+            position={[0, 0.6, 0]}
+            zIndexRange={[40, 0]}
+            center
+            distanceFactor={2}
+            style={{ pointerEvents: 'none', userSelect: 'none' }}
+          >
+            <div className="bg-black/90 text-white px-2 py-1 rounded text-xs whitespace-nowrap backdrop-blur-sm border border-gray-700">
+              {lightsOn ? '💡 Turn off the lights' : '💡 Turn on the lights'}
+            </div>
+          </Html>
+        )}
+      </group>
+    </Select>
   );
 }

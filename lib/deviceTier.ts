@@ -36,6 +36,8 @@ export interface QualityPreset {
   robotCount: number;
   /** Number of coffee-steam sprites above the mug (0 disables the steam system). */
   steamParticles: number;
+  /** Whether the clickable desk lamp's spotlight casts its own shadow map. */
+  lampShadow: boolean;
   /** Whether to render nearer parallax buildings + window-light twinkle outside the window. */
   cityParallax: boolean;
   /** Resolution of the procedural cityscape backdrop texture. */
@@ -56,6 +58,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     characterAnimation: 'full',
     robotCount: 8,
     steamParticles: 6,
+    lampShadow: true,
     cityParallax: true,
     sceneryTextureSize: 2048,
   },
@@ -72,6 +75,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     characterAnimation: 'breath',
     robotCount: 8,
     steamParticles: 4,
+    lampShadow: false,
     cityParallax: false,
     sceneryTextureSize: 2048,
   },
@@ -88,6 +92,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     characterAnimation: 'none',
     robotCount: 8,
     steamParticles: 0,
+    lampShadow: false,
     cityParallax: false,
     sceneryTextureSize: 1024,
   },
