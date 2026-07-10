@@ -28,6 +28,10 @@ interface StoreState {
   lightsOn: boolean;
   setLightsOn: (lightsOn: boolean) => void;
 
+  // Ambient/interaction sound mute (session-scoped)
+  soundMuted: boolean;
+  setSoundMuted: (muted: boolean) => void;
+
   // Rendering quality tier (set once from device detection on mount)
   qualityTier: QualityTier;
   setQualityTier: (tier: QualityTier) => void;
@@ -116,6 +120,9 @@ export const useStore = create<StoreState>((set, get) => ({
   
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),
+
+  soundMuted: false,
+  setSoundMuted: (muted) => set({ soundMuted: muted }),
 
   // Default to 'high' for SSR; overwritten on mount via detectDeviceTier()
   qualityTier: 'high',

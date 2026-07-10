@@ -4,10 +4,12 @@ import { useState, useCallback } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 
 /**
- * Unified hover feedback for interactive 3D objects: tracks hover state and
- * manages the pointer cursor consistently (every clickable object should show a
- * pointer cursor and stop event propagation). Spread `hoverProps` onto the
- * object's root mesh/group; read `hovered` to drive emissive/scale visuals.
+ * Unified hover feedback for interactive 3D objects: tracks hover state,
+ * manages the pointer cursor consistently, and plays the synth blips exposed
+ * by AmbientSound (hover blip on pointer-over, click blip on pointer-down —
+ * both respect the store's mute flag inside AmbientSound). Spread `hoverProps`
+ * onto the object's root mesh/group; read `hovered` to drive emissive/scale
+ * visuals.
  */
 export function useHoverFeedback() {
   const [hovered, setHovered] = useState(false);
@@ -16,6 +18,7 @@ export function useHoverFeedback() {
     e.stopPropagation();
     setHovered(true);
     document.body.style.cursor = 'pointer';
+    window.playHoverSound?.();
   }, []);
 
   const onPointerOut = useCallback((e: ThreeEvent<PointerEvent>) => {
@@ -24,5 +27,9 @@ export function useHoverFeedback() {
     document.body.style.cursor = 'auto';
   }, []);
 
-  return { hovered, hoverProps: { onPointerOver, onPointerOut } };
+  const onPointerDown = useCallback(() => {
+    window.playClickSound?.();
+  }, []);
+
+  return { hovered, hoverProps: { onPointerOver, onPointerOut, onPointerDown } };
 }
