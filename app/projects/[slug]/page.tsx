@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink, Star, Calendar, User, FolderOpen, FileText } from 'lucide-react';
 import { useStore, type Project } from '@/store/useStore';
 import Image from 'next/image';
+import Link from 'next/link';
 import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 
 interface ProjectDetailPageProps {
@@ -19,11 +20,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { allProjects, showRestrictedLinkModal, restrictedLinkType, setShowRestrictedLinkModal } = useStore();
   const [project, setProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [slug, setSlug] = useState<string>('');
 
   useEffect(() => {
     params.then((p) => {
-      setSlug(p.slug);
       const foundProject = allProjects.find((proj) => proj.id === p.slug);
       setProject(foundProject || null);
     });
@@ -34,60 +33,6 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
       e.preventDefault();
       setShowRestrictedLinkModal(true, linkType);
     }
-  };
-
-  // Get project images
-  const getProjectImages = (projectId: string): string[] => {
-    if (projectId === 'dora-invoice-processor') {
-      return [
-        '/images/projects/dora/dora-1.png',
-        '/images/projects/dora/dora-2.png',
-        '/images/projects/dora/dora-3.png',
-        '/images/projects/dora/dora-4.png',
-      ];
-    }
-    if (projectId === 'friends-connection-ministry') {
-      return [
-        '/images/projects/fc/fc1.png',
-        '/images/projects/fc/fc2.png',
-        '/images/projects/fc/fc3.png',
-        '/images/projects/fc/fc4.png',
-        '/images/projects/fc/fc5.png',
-        '/images/projects/fc/fc6.png',
-      ];
-    }
-    if (projectId === 'phirecord-healthcare-system') {
-      return [
-        '/images/projects/pr/pr1.jpeg',
-        '/images/projects/pr/pr2.jpeg',
-        '/images/projects/pr/pr3.jpeg',
-        '/images/projects/pr/pr4.jpeg',
-        '/images/projects/pr/pr5.jpeg',
-        '/images/projects/pr/pr6.jpeg',
-        '/images/projects/pr/pr7.jpeg',
-        '/images/projects/pr/pr8.jpeg',
-      ];
-    }
-    if (projectId === '3d-interactive-portfolio') {
-      return [
-        '/images/projects/p/p1.png',
-        '/images/projects/p/p2.png',
-        '/images/projects/p/p3.png',
-        '/images/projects/p/p4.png',
-        '/images/projects/p/p5.png',
-        '/images/projects/p/p6.png',
-      ];
-    }
-    if (projectId === 'yelpcamp-fullstack') {
-      return [
-        '/images/projects/camp/camp1.png',
-        '/images/projects/camp/camp2.png',
-        '/images/projects/camp/camp3.png',
-        '/images/projects/camp/camp4.png',
-        '/images/projects/camp/camp5.png',
-      ];
-    }
-    return project?.thumbnailUrl ? [project.thumbnailUrl] : [];
   };
 
   if (!project) {
@@ -106,7 +51,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     );
   }
 
-  const projectImages = getProjectImages(project.id);
+  const projectImages =
+    project.images ?? (project.thumbnailUrl ? [project.thumbnailUrl] : []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 text-white">
@@ -116,7 +62,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         animate={{ y: 0, opacity: 1 }}
         className="sticky top-0 z-30 backdrop-blur-md bg-zinc-900/80 border-b border-zinc-800"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between gap-4">
           <button
             onClick={() => router.push('/projects')}
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
@@ -124,6 +70,18 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <ArrowLeft className="w-5 h-5" />
             Back to Projects
           </button>
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="hidden sm:flex items-center gap-2 text-sm text-gray-500 min-w-0">
+            <Link href="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <Link href="/projects" className="hover:text-white transition-colors">
+              Projects
+            </Link>
+            <span>/</span>
+            <span className="text-gray-300 truncate">{project.title}</span>
+          </nav>
         </div>
       </motion.header>
 
@@ -240,6 +198,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                     fill
                     className="object-contain"
                   />
+                  {projectImages.length > 1 && (
+                    <span className="absolute bottom-3 right-3 px-3 py-1 bg-black/70 backdrop-blur-sm rounded-full text-xs text-gray-300">
+                      {currentImageIndex + 1} / {projectImages.length}
+                    </span>
+                  )}
                 </div>
                 {projectImages.length > 1 && (
                   <div className="flex gap-2 overflow-x-auto pb-2">
@@ -270,27 +233,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             {project.longDescription && (
               <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-4">About This Project</h2>
-                <div className="prose prose-invert max-w-none space-y-4">
-                  {project.longDescription.split('\n').map((paragraph, idx) => {
-                    if (!paragraph.trim()) return null;
-                    
-                    // Parse markdown bold syntax **text** and convert to <strong>
-                    const parts = paragraph.split(/(\*\*.*?\*\*)/g);
-                    
-                    return (
-                      <p key={idx} className="text-gray-300 leading-relaxed">
-                        {parts.map((part, partIdx) => {
-                          // Check if this part is bold
-                          if (part.startsWith('**') && part.endsWith('**')) {
-                            const boldText = part.slice(2, -2); // Remove ** from both ends
-                            return <strong key={partIdx} className="font-bold text-white">{boldText}</strong>;
-                          }
-                          return <span key={partIdx}>{part}</span>;
-                        })}
-                      </p>
-                    );
-                  })}
-                </div>
+                <LongDescription text={project.longDescription} />
               </div>
             )}
           </motion.div>
@@ -364,4 +307,86 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
       />
     </div>
   );
+}
+
+/** Render inline **bold** markdown within a line of text. */
+function InlineBold({ text }: { text: string }) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return (
+    <>
+      {parts.map((part, idx) =>
+        part.startsWith('**') && part.endsWith('**') ? (
+          <strong key={idx} className="font-semibold text-white">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          <span key={idx}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
+/**
+ * Structured renderer for longDescription: full-bold lines become section
+ * headings, consecutive "•" lines become bullet lists, everything else is a
+ * paragraph — instead of dumping the whole thing as flat paragraphs.
+ */
+function LongDescription({ text }: { text: string }) {
+  const lines = text.split('\n');
+  const blocks: React.ReactNode[] = [];
+  let bullets: string[] = [];
+
+  const flushBullets = (key: string) => {
+    if (bullets.length === 0) return;
+    const items = bullets;
+    bullets = [];
+    blocks.push(
+      <ul key={key} className="space-y-2">
+        {items.map((item, idx) => (
+          <li key={idx} className="flex gap-3 text-gray-300 leading-relaxed">
+            <span className="text-blue-400 mt-0.5 flex-shrink-0">▹</span>
+            <span>
+              <InlineBold text={item} />
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  lines.forEach((rawLine, idx) => {
+    const line = rawLine.trim();
+    if (!line) return;
+
+    if (line.startsWith('•')) {
+      bullets.push(line.slice(1).trim());
+      return;
+    }
+
+    flushBullets(`ul-${idx}`);
+
+    const headingMatch = line.match(/^\*\*(.+?):?\*\*$/);
+    if (headingMatch) {
+      blocks.push(
+        <h3
+          key={`h-${idx}`}
+          className="text-lg font-bold text-white pt-2 first:pt-0"
+        >
+          {headingMatch[1].replace(/:$/, '')}
+        </h3>
+      );
+      return;
+    }
+
+    blocks.push(
+      <p key={`p-${idx}`} className="text-gray-300 leading-relaxed">
+        <InlineBold text={line} />
+      </p>
+    );
+  });
+
+  flushBullets('ul-final');
+
+  return <div className="space-y-4">{blocks}</div>;
 }

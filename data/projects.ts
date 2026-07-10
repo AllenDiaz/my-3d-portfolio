@@ -14,6 +14,8 @@ export interface Project {
   featured: boolean;
   imageUrl?: string;
   thumbnailUrl?: string;
+  /** Gallery screenshots shown on the project detail page. */
+  images?: string[];
   githubUrl?: string;
   liveUrl?: string;
   demoVideoUrl?: string;
@@ -78,6 +80,12 @@ Infrastructure: GCP, Docker, Cloud Run, Kubernetes (GKE), Helm, GitHub Actions`,
     featured: true,
     thumbnailUrl: '/images/projects/dora/dora-1.png',
     imageUrl: '/images/projects/dora/dora-1.png',
+    images: [
+      '/images/projects/dora/dora-1.png',
+      '/images/projects/dora/dora-2.png',
+      '/images/projects/dora/dora-3.png',
+      '/images/projects/dora/dora-4.png',
+    ],
     githubUrl: 'RESTRICTED',
     liveUrl: 'RESTRICTED',
     completedDate: '2025-12',
@@ -172,6 +180,14 @@ The event page features a sophisticated calendar system that allows users to:
     featured: true,
     thumbnailUrl: '/images/projects/fc/fc1.png',
     imageUrl: '/images/projects/fc/fc1.png',
+    images: [
+      '/images/projects/fc/fc1.png',
+      '/images/projects/fc/fc2.png',
+      '/images/projects/fc/fc3.png',
+      '/images/projects/fc/fc4.png',
+      '/images/projects/fc/fc5.png',
+      '/images/projects/fc/fc6.png',
+    ],
     githubUrl: 'https://github.com/AllenDiaz/Friends-Connection-Baptist-Church',
     liveUrl: 'https://www.friendsconnection.org/',
     completedDate: '2024-12',
@@ -298,7 +314,17 @@ IEEE Publication: https://ieeexplore.ieee.org/document/10668022
     categories: ['fullstack', 'data'],
     featured: true,
     thumbnailUrl: '/images/projects/pr/pr1.jpeg',
-    imageUrl: '/images/projects/pr/pr1.png',
+    imageUrl: '/images/projects/pr/pr1.jpeg',
+    images: [
+      '/images/projects/pr/pr1.jpeg',
+      '/images/projects/pr/pr2.jpeg',
+      '/images/projects/pr/pr3.jpeg',
+      '/images/projects/pr/pr4.jpeg',
+      '/images/projects/pr/pr5.jpeg',
+      '/images/projects/pr/pr6.jpeg',
+      '/images/projects/pr/pr7.jpeg',
+      '/images/projects/pr/pr8.jpeg',
+    ],
     githubUrl: 'https://github.com/AllenDiaz/Phirecord',
     liveUrl: 'RESTRICTED',
     publicationUrl: 'https://ieeexplore.ieee.org/document/10668022',
@@ -443,6 +469,14 @@ IEEE Publication: https://ieeexplore.ieee.org/document/10668022
     featured: true,
     thumbnailUrl: '/images/projects/p/p1.png',
     imageUrl: '/images/projects/p/p1.png',
+    images: [
+      '/images/projects/p/p1.png',
+      '/images/projects/p/p2.png',
+      '/images/projects/p/p3.png',
+      '/images/projects/p/p4.png',
+      '/images/projects/p/p5.png',
+      '/images/projects/p/p6.png',
+    ],
     githubUrl: 'https://github.com/AllenDiaz/my-3d-portfolio',
     liveUrl: 'https://allen-diaz-porfolio.vercel.app/',
     completedDate: '2026-02',
@@ -657,6 +691,13 @@ Successfully migrated from monolithic server-rendered architecture (Express + EJ
     featured: true,
     thumbnailUrl: '/images/projects/camp/camp1.png',
     imageUrl: '/images/projects/camp/camp1.png',
+    images: [
+      '/images/projects/camp/camp1.png',
+      '/images/projects/camp/camp2.png',
+      '/images/projects/camp/camp3.png',
+      '/images/projects/camp/camp4.png',
+      '/images/projects/camp/camp5.png',
+    ],
     githubUrl: 'https://github.com/AllenDiaz/YelpCamp-Replicate',
     liveUrl: 'RESTRICTED',
     completedDate: '2024-11',
