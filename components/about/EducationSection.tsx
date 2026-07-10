@@ -460,7 +460,7 @@ const EducationSection = () => {
       <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
         {[
           { label: 'Courses Completed', value: '50+', icon: '📚' },
-          { label: 'Certifications', value: '10+', icon: '🏆' },
+          { label: 'Certifications', value: `${certifications.length}+`, icon: '🏆' },
           { label: 'Learning Hours', value: '1000+', icon: '⏱️' },
           { label: 'Skills Mastered', value: '30+', icon: '💡' },
         ].map((stat) => (
