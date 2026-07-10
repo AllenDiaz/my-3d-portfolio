@@ -131,7 +131,7 @@ const AboutMe = () => {
 
             {/* Right: Quick Facts & Download */}
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-md border border-white/10 rounded-2xl p-8">
+              <div id="contact" className="scroll-mt-28 bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-md border border-white/10 rounded-2xl p-8">
                 <h3 className="text-2xl font-bold text-white mb-6">Quick Facts</h3>
                 <div className="space-y-4">
                   {[

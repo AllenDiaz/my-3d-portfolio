@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SITE, SITE_URL } from "@/lib/site";
 

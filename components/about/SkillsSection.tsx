@@ -167,7 +167,7 @@ const SkillsSection = () => {
           {[
             'React', 'Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL','Node.js', 'MongoDB', 
            'Tailwind CSS', 'Three.js', 'GraphQL', 
-            'Docker', 'GCP', 'AWS', 'Azuer', 'Git', 'Linux', 'Figma', 'Redux', 'Express.js',
+            'Docker', 'GCP', 'AWS', 'Azure', 'Git', 'Linux', 'Figma', 'Redux', 'Express.js',
             'Python', 'Javascript', 'Laravel', 'Firebase', 'Vercel', 'REST API', 'Webpack'
           ].map((tech) => (
             <motion.span

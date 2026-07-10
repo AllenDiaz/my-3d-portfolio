@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight, Code2, User, FolderOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -122,13 +123,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-8 px-8 bg-black dark:bg-black border-t border-white/10 dark:border-white/10 transition-colors">
-        <div className="container mx-auto max-w-7xl text-center">
-          <p className="text-gray-400 dark:text-gray-400">
-            © {new Date().getFullYear()} Allen Diaz. Built with Next.js, Three.js & Tailwind CSS.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

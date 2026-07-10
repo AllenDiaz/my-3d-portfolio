@@ -26,7 +26,7 @@ export default function Navbar() {
     { name: 'About', href: '/about', icon: User },
     { name: 'Projects', href: '/projects', icon: Briefcase },
     { name: '3D Office', href: '/3d-office', icon: FolderOpen },
-    { name: 'Contact', href: '#contact', icon: Mail },
+    { name: 'Contact', href: '/about#contact', icon: Mail },
   ];
 
   return (
