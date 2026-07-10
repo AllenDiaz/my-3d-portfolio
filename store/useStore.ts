@@ -13,10 +13,6 @@ export const REST_CAMERA_POSITION: [number, number, number] = [0, 1.45, 3.6];
 export const REST_CAMERA_TARGET: [number, number, number] = [0, 1.05, -1.9];
 
 interface StoreState {
-  // Selected interactive object
-  selectedObject: string | null;
-  setSelectedObject: (objectId: string | null) => void;
-  
   // Active project being displayed
   activeProject: Project | null;
   setActiveProject: (project: Project | null) => void;
@@ -118,9 +114,6 @@ interface StoreState {
 }
 
 export const useStore = create<StoreState>((set, get) => ({
-  selectedObject: null,
-  setSelectedObject: (objectId) => set({ selectedObject: objectId }),
-  
   activeProject: null,
   setActiveProject: (project) => set({ activeProject: project }),
   
