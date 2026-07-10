@@ -3,6 +3,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
+import FeaturedProjects from '@/components/home/FeaturedProjects';
 import Link from 'next/link';
 import { ArrowRight, Code2, User, FolderOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -63,6 +64,9 @@ export default function Home() {
           <Hero />
         </div>
       </section>
+
+      {/* Featured Work Section */}
+      <FeaturedProjects />
 
       {/* Quick Links Section */}
       <section className="relative py-20 px-8 bg-gradient-to-b from-black via-gray-900 to-black dark:from-black dark:via-gray-900 dark:to-black transition-colors">
