@@ -56,6 +56,29 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     }
   }, [camera, enableCinematicIntro]);
 
+  // Pose-authoring aid (?debug=camera): log the current camera position and
+  // orbit target while navigating, throttled to ~2Hz. Mirrors ?debug=robots.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('debug') !== 'camera') return;
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    let last = 0;
+    const fmt = (v: number) => Math.round(v * 100) / 100;
+    const onChange = () => {
+      const now = performance.now();
+      if (now - last < 500) return;
+      last = now;
+      const p = camera.position;
+      const t = controls.target;
+      console.info(
+        `[camera] position: [${fmt(p.x)}, ${fmt(p.y)}, ${fmt(p.z)}], target: [${fmt(t.x)}, ${fmt(t.y)}, ${fmt(t.z)}]`
+      );
+    };
+    controls.addEventListener('change', onChange);
+    return () => controls.removeEventListener('change', onChange);
+  }, [camera]);
+
   // Reset view: glide camera + orbit target back to the default framing when
   // the store token bumps (desk mouse / overlay button). No-op during the
   // intro fly-in — the timeline owns the camera then.
