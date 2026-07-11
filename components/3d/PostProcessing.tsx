@@ -1,6 +1,13 @@
 'use client';
 
+import { useRef, type ComponentRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, DepthOfField, Vignette, ChromaticAberration, N8AO, Noise, Outline } from '@react-three/postprocessing';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+
+// The underlying postprocessing DepthOfFieldEffect (the `postprocessing`
+// package itself isn't a direct dependency, so derive the ref type).
+type DepthOfFieldEffect = ComponentRef<typeof DepthOfField>;
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
@@ -8,6 +15,19 @@ export default function PostProcessing() {
   const lightsOn = useStore((state) => state.lightsOn);
   const qualityTier = useStore((state) => state.qualityTier);
   const preset = QUALITY_PRESETS[qualityTier];
+
+  // Rack focus: ease the DoF world target toward the OrbitControls target so
+  // the desk stays sharp while panning and focus flights pull focus with the
+  // camera. Hooks run unconditionally (before the tier early-returns); the
+  // frame callback no-ops on tiers without DoF.
+  const dofRef = useRef<DepthOfFieldEffect>(null);
+  const controls = useThree((state) => state.controls) as OrbitControlsImpl | null;
+  useFrame((_, delta) => {
+    const dof = dofRef.current;
+    if (dof?.target && controls?.target) {
+      dof.target.lerp(controls.target, 1 - Math.exp(-5 * delta));
+    }
+  });
 
   // Low-end devices skip post-processing entirely.
   if (preset.postProcessing === 'off') return null;
@@ -59,12 +79,13 @@ export default function PostProcessing() {
         color="black"
       />
 
-      {/* Depth of Field - focus locked to the desk/monitors via a world target so
-          it stays correct as the user orbits (not a fixed focusDistance) */}
+      {/* Depth of Field - the target prop seeds the world-space focus point;
+          the useFrame above then eases it toward the OrbitControls target */}
       <DepthOfField
+        ref={dofRef}
         target={[0, 1.05, -1.9]}
         focalLength={0.025}
-        bokehScale={lightsOn ? 2.5 : 3}
+        bokehScale={lightsOn ? 2.2 : 2.8}
         height={480}
       />
 

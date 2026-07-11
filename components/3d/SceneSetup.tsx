@@ -250,6 +250,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       {/* Camera Controls */}
       <OrbitControls
         ref={controlsRef}
+        makeDefault
         enablePan={true}
         enableZoom={true}
         enableRotate={true}
