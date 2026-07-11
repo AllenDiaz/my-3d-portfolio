@@ -37,6 +37,7 @@ export default function MainScene() {
   const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const setShowContactModal = useStore((state) => state.setShowContactModal);
   const requestCameraReset = useStore((state) => state.requestCameraReset);
+  const requestCameraFocus = useStore((state) => state.requestCameraFocus);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
   // Get first 3 featured projects for monitors
@@ -80,21 +81,21 @@ export default function MainScene() {
       {/* Interactive Computers/Monitors - unified triple array on the desk plane,
           hero project centred, flanking monitors angled inward toward the viewer */}
       {monitorProjects.length >= 1 && (
-        <Computer position={[0, 0.8, -2.0]} projectId={monitorProjects[0].id} />
+        <Computer position={[0, 0.8, -2.0]} projectId={monitorProjects[0].id} focusId="monitor-center" />
       )}
       {monitorProjects.length >= 2 && (
-        <Computer position={[-0.8, 0.8, -1.92]} rotation={[0, 0.18, 0]} projectId={monitorProjects[1].id} />
+        <Computer position={[-0.8, 0.8, -1.92]} rotation={[0, 0.18, 0]} projectId={monitorProjects[1].id} focusId="monitor-left" />
       )}
       {monitorProjects.length >= 3 && (
-        <Computer position={[0.8, 0.8, -1.92]} rotation={[0, -0.18, 0]} projectId={monitorProjects[2].id} />
+        <Computer position={[0.8, 0.8, -1.92]} rotation={[0, -0.18, 0]} projectId={monitorProjects[2].id} focusId="monitor-right" />
       )}
 
       {/* Desk Items */}
       <DeskItem 
         position={[-0.8, 0.82, -1.5]} 
-        itemType="keyboard" 
+        itemType="keyboard"
         label="Skills & Technologies"
-        onClick={() => setShowSkillsModal(true)}
+        onClick={() => requestCameraFocus('keyboard', () => setShowSkillsModal(true))}
       />
       
       <DeskItem
@@ -109,16 +110,16 @@ export default function MainScene() {
       
       <DeskItem 
         position={[0.9, 0.82, -1.3]} 
-        itemType="notebook" 
+        itemType="notebook"
         label="Resume & Bio"
-        onClick={() => setShowCVModal(true)}
+        onClick={() => requestCameraFocus('notebook', () => setShowCVModal(true))}
       />
       
       <DeskItem
         position={[1.1, 0.82, -1.8]}
         itemType="coffee"
         label="Coffee break!"
-        onClick={() => setShowCoffeeNotification(true)}
+        onClick={() => requestCameraFocus('coffee', () => setShowCoffeeNotification(true))}
       />
 
       {/* Rising steam above the coffee mug — tier-gated by steamParticles */}
@@ -128,21 +129,21 @@ export default function MainScene() {
         position={[-1.1, 0.82, -1.7]}
         itemType="phone"
         label="Contact Me"
-        onClick={() => setShowContactModal(true)}
+        onClick={() => requestCameraFocus('phone', () => setShowContactModal(true))}
       />
       
       <DeskItem 
         position={[1.3, 0.82, -1.7]} 
-        itemType="badge" 
+        itemType="badge"
         label="Work Experience"
-        onClick={() => setShowExperienceModal(true)}
+        onClick={() => requestCameraFocus('badge', () => setShowExperienceModal(true))}
       />
       
       <DeskItem
         position={[-1.3, 0.82, -1.3]}
         itemType="certificate"
         label="Certifications"
-        onClick={() => setShowCertificateModal(true)}
+        onClick={() => requestCameraFocus('certificate', () => setShowCertificateModal(true))}
       />
 
       {/* Clickable desk lamp — the room's light switch (toggles lightsOn +

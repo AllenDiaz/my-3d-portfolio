@@ -57,6 +57,7 @@ export default function Avatar({
   const serviceAnchorRef = useRef<Group>(null);
   const { hovered, hoverProps } = useHoverFeedback();
   const setShowAvatarModal = useStore((s) => s.setShowAvatarModal);
+  const requestCameraFocus = useStore((s) => s.requestCameraFocus);
   const setServiceAnchor = useStore((s) => s.setServiceAnchor);
   const qualityTier = useStore((s) => s.qualityTier);
   const characterAnimation = QUALITY_PRESETS[qualityTier].characterAnimation;
@@ -141,7 +142,7 @@ export default function Avatar({
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    setShowAvatarModal(true);
+    requestCameraFocus('avatar', () => setShowAvatarModal(true));
   };
 
   return (

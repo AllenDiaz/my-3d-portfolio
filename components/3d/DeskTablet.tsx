@@ -15,6 +15,7 @@ export default function DeskTablet({ position }: DeskTabletProps) {
   const screenRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
   const setShowAllProjectsModal = useStore((state) => state.setShowAllProjectsModal);
+  const requestCameraFocus = useStore((state) => state.requestCameraFocus);
 
   // Create tablet screen texture
   const screenTexture = useMemo(() => {
@@ -128,7 +129,7 @@ export default function DeskTablet({ position }: DeskTabletProps) {
   });
 
   const handleClick = () => {
-    setShowAllProjectsModal(true);
+    requestCameraFocus('tablet', () => setShowAllProjectsModal(true));
   };
 
   return (

@@ -149,8 +149,11 @@ export const useStore = create<StoreState>((set, get) => ({
   focusActive: false,
   setFocusActive: (active) => set({ focusActive: active }),
   requestCameraFocus: (id, onArrive) => {
-    // The intro timeline owns the camera; ignore focus clicks until it settles.
-    if (get().introPlaying) return;
+    // The intro timeline owns the camera; open the target UI without a flight.
+    if (get().introPlaying) {
+      onArrive?.();
+      return;
+    }
     const prev = get().focusRequest;
     set({ focusRequest: { id, onArrive, token: (prev?.token ?? 0) + 1 } });
   },

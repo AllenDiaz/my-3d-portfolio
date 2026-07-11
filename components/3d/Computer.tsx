@@ -8,11 +8,14 @@ import { Mesh, CanvasTexture, Group } from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { useHoverFeedback } from './useHoverFeedback';
+import type { FocusId } from './cameraPoses';
 
 interface ComputerProps {
   position: [number, number, number];
   projectId: string;
   rotation?: [number, number, number];
+  /** When set, clicking flies the camera to this pose before the panel opens. */
+  focusId?: FocusId;
 }
 
 /**
@@ -37,11 +40,11 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
   );
 }
 
-export default function Computer({ position, projectId, rotation = [0, 0, 0] }: ComputerProps) {
+export default function Computer({ position, projectId, rotation = [0, 0, 0], focusId }: ComputerProps) {
   const groupRef = useRef<Group>(null);
   const screenRef = useRef<Mesh>(null);
   const { hovered, hoverProps } = useHoverFeedback();
-  const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier } = useStore();
+  const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier, requestCameraFocus } = useStore();
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
   
   // Get the actual project data
@@ -150,9 +153,15 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0] }: 
   });
 
   const handleClick = () => {
-    if (project) {
+    if (!project) return;
+    const openPanel = () => {
       setActiveProject(project);
       setShowProjectPanel(true);
+    };
+    if (focusId) {
+      requestCameraFocus(focusId, openPanel);
+    } else {
+      openPanel();
     }
   };
 

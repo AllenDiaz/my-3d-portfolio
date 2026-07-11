@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, RotateCcw, SkipForward, Volume2, VolumeX, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -18,7 +18,7 @@ import ContactModal from '@/components/ui/ContactModal';
 import AvatarModal from '@/components/ui/AvatarModal';
 import RobotModal from '@/components/ui/RobotModal';
 import SceneLoader from '@/components/ui/SceneLoader';
-import { useStore } from '@/store/useStore';
+import { useStore, isAnyOverlayOpen } from '@/store/useStore';
 
 // Dynamically import 3D components to avoid SSR issues
 const Scene3D = dynamic(() => import('@/components/3d/Scene3D'), {
@@ -93,9 +93,32 @@ export default function ThreeDOfficePage() {
   const introPlaying = useStore((state) => state.introPlaying);
   const setIntroPlaying = useStore((state) => state.setIntroPlaying);
   const requestCameraReset = useStore((state) => state.requestCameraReset);
+  const clearCameraFocus = useStore((state) => state.clearCameraFocus);
+  const anyOverlayOpen = useStore(isAnyOverlayOpen);
 
   const [legendOpen, setLegendOpen] = useState(true);
   const [mobileGuideOpen, setMobileGuideOpen] = useState(false);
+
+  // When the last overlay closes (X, backdrop, Escape, or a notification
+  // auto-dismissing), glide the camera back out of its click-to-focus pose.
+  // Transition-guarded so a focus flight in progress (modal not open yet)
+  // isn't cancelled the moment it starts.
+  const wasOverlayOpen = useRef(false);
+  useEffect(() => {
+    if (wasOverlayOpen.current && !anyOverlayOpen) {
+      clearCameraFocus();
+    }
+    wasOverlayOpen.current = anyOverlayOpen;
+  }, [anyOverlayOpen, clearCameraFocus]);
+
+  // Escape also cancels a focus flight before its modal has opened.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') clearCameraFocus();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [clearCameraFocus]);
 
   return (
     <main className="relative bg-black dark:bg-black transition-colors">

@@ -13,12 +13,13 @@ export default function OfficeRoom() {
   const chairRef = useRef<Mesh>(null);
   const [chairHovered, setChairHovered] = useState(false);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
+  const requestCameraFocus = useStore((state) => state.requestCameraFocus);
   const qualityTier = useStore((state) => state.qualityTier);
   const preset = QUALITY_PRESETS[qualityTier];
-  
+
   const handleChairClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    setShowChairNotification(true);
+    requestCameraFocus('chair', () => setShowChairNotification(true));
   };
   
   return (
