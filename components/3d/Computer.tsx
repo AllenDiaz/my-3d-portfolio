@@ -46,7 +46,7 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
 export default function Computer({ position, projectId, rotation = [0, 0, 0], focusId, live = false }: ComputerProps) {
   const groupRef = useRef<Group>(null);
   const screenRef = useRef<Mesh>(null);
-  const { hovered, hoverProps } = useHoverFeedback();
+  const { hovered, pulseRef, hoverProps } = useHoverFeedback();
   const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier, requestCameraFocus } = useStore();
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
   const liveHz = QUALITY_PRESETS[qualityTier].screenAnimationHz;
@@ -202,6 +202,8 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
   return (
     <Select enabled={hovered}>
     <group ref={groupRef} position={position} rotation={rotation}>
+    {/* Inner group takes the click confirmation pulse (outer bobs on hover) */}
+    <group ref={pulseRef}>
       {/* Monitor Base */}
       <mesh position={[0, -0.05, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.18, 0.02, 48]} />
@@ -305,6 +307,7 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
           color="#4a90e2"
         />
       )}
+    </group>
     </group>
     </Select>
   );

@@ -25,7 +25,7 @@ export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampPro
   const groupRef = useRef<THREE.Group>(null);
   const spotRef = useRef<THREE.SpotLight>(null);
   const targetRef = useRef<THREE.Object3D>(null);
-  const { hovered, hoverProps } = useHoverFeedback();
+  const { hovered, pulseRef, hoverProps } = useHoverFeedback();
   const { lightsOn, setLightsOn } = useStore();
   const qualityTier = useStore((state) => state.qualityTier);
   const lampShadow = QUALITY_PRESETS[qualityTier].lampShadow;
@@ -73,6 +73,8 @@ export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampPro
         }}
         {...hoverProps}
       >
+        {/* Inner group takes the click confirmation pulse */}
+        <group ref={pulseRef}>
         {/* Base */}
         <mesh castShadow>
           <cylinderGeometry args={[0.08, 0.1, 0.02]} />
@@ -151,6 +153,7 @@ export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampPro
             />
           </>
         )}
+        </group>
 
         {/* Hover tooltip */}
         {hovered && (

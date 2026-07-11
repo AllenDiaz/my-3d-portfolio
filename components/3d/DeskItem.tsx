@@ -52,7 +52,7 @@ interface DeskItemProps {
 
 export default function DeskItem({ position, itemType, onClick, label }: DeskItemProps) {
   const itemRef = useRef<Mesh>(null);
-  const { hovered, hoverProps } = useHoverFeedback();
+  const { hovered, pulseRef, hoverProps } = useHoverFeedback();
   const qualityTier = useStore((state) => state.qualityTier);
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
 
@@ -311,8 +311,10 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
       onClick={handleClick}
       {...hoverProps}
     >
-      {renderItem()}
-      
+      {/* Inner group takes the click confirmation pulse (outer group already
+          animates position/rotation on hover) */}
+      <group ref={pulseRef}>{renderItem()}</group>
+
       {hovered && label && (
         <Html
           position={[0, 0.15, 0]}
