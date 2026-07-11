@@ -1,10 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Mesh } from 'three';
+import { Group, Mesh } from 'three';
 import { MeshReflectorMaterial, ContactShadows, RoundedBox } from '@react-three/drei';
 import { useStore } from '@/store/useStore';
-import { ThreeEvent } from '@react-three/fiber';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
+import gsap from 'gsap';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { MATERIALS, floorDistortionMap } from '@/lib/materials';
 import WindowRain from './WindowRain';
@@ -15,19 +16,48 @@ function deskTopMaterial(physical: boolean) {
   return physical ? MATERIALS.deskLacquer : MATERIALS.deskPlain;
 }
 
+const CHAIR_BASE_ROTATION = Math.PI / 4;
+
 export default function OfficeRoom() {
   const floorRef = useRef<Mesh>(null);
-  const chairRef = useRef<Mesh>(null);
+  const chairGroupRef = useRef<Group>(null);
+  const chairSpinningRef = useRef(false);
+  const plantRef = useRef<Mesh>(null);
   const [chairHovered, setChairHovered] = useState(false);
   const setShowChairNotification = useStore((state) => state.setShowChairNotification);
   const requestCameraFocus = useStore((state) => state.requestCameraFocus);
   const qualityTier = useStore((state) => state.qualityTier);
   const preset = QUALITY_PRESETS[qualityTier];
 
+  // Easter egg: the chair takes a two-turn victory spin (in parallel with the
+  // camera flying to it) and settles back to its resting angle.
   const handleChairClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     requestCameraFocus('chair', () => setShowChairNotification(true));
+
+    const chair = chairGroupRef.current;
+    if (!chair || chairSpinningRef.current) return;
+    chairSpinningRef.current = true;
+    gsap.to(chair.rotation, {
+      y: CHAIR_BASE_ROTATION + Math.PI * 4,
+      duration: 1.8,
+      ease: 'power2.out',
+      onComplete: () => {
+        chair.rotation.y = CHAIR_BASE_ROTATION;
+        chairSpinningRef.current = false;
+      },
+    });
   };
+
+  // Gentle organic sway on the plant foliage — two sin() evals per frame.
+  useFrame((state) => {
+    const plant = plantRef.current;
+    if (plant) {
+      const t = state.clock.elapsedTime;
+      plant.rotation.x = Math.sin(t * 0.8) * 0.015;
+      plant.rotation.z = Math.cos(t * 0.6) * 0.015;
+    }
+  });
   
   return (
     <group>
@@ -208,9 +238,10 @@ export default function OfficeRoom() {
       </group>
 
       {/* Chair */}
-      <group 
+      <group
+        ref={chairGroupRef}
         position={[-2.5, 0, -1.5]}
-        rotation={[0, Math.PI / 4, 0]}
+        rotation={[0, CHAIR_BASE_ROTATION, 0]}
         onClick={handleChairClick}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -315,7 +346,7 @@ export default function OfficeRoom() {
         </mesh>
 
         {/* Plant */}
-        <mesh position={[0, 0.85, 0]} castShadow>
+        <mesh ref={plantRef} position={[0, 0.85, 0]} castShadow>
           <sphereGeometry args={[0.15, 32, 32]} />
           <meshStandardMaterial
             color="#2d5016"
