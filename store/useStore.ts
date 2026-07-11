@@ -3,6 +3,7 @@ import type { Object3D } from 'three';
 import { projectsData, type Project } from '@/data/projects';
 import type { QualityTier } from '@/lib/deviceTier';
 import type { RobotConfig } from '@/components/3d/Robots/robotConfig';
+import type { FocusId } from '@/components/3d/cameraPoses';
 
 // Re-export Project type for convenience
 export type { Project };
@@ -11,6 +12,16 @@ export type { Project };
 // and the reset-view glide (SceneSetup's OrbitControls target matches).
 export const REST_CAMERA_POSITION: [number, number, number] = [0, 1.45, 3.6];
 export const REST_CAMERA_TARGET: [number, number, number] = [0, 1.05, -1.9];
+
+// A click-to-focus flight request. SceneSetup flies the camera to the pose for
+// `id` and fires `onArrive` (typically the object's modal opener) just before
+// the camera settles. Setting focusRequest back to null while focusActive asks
+// for the return flight to the pre-focus view.
+export interface FocusRequest {
+  id: FocusId;
+  onArrive?: () => void;
+  token: number;
+}
 
 interface StoreState {
   // Active project being displayed
@@ -31,7 +42,15 @@ interface StoreState {
   // default framing (wired to the desk mouse and the overlay reset button).
   cameraResetToken: number;
   requestCameraReset: () => void;
-  
+
+  // Click-to-focus camera flights. `focusActive` is owned by SceneSetup and
+  // stays true from flight start until the return flight completes.
+  focusRequest: FocusRequest | null;
+  focusActive: boolean;
+  setFocusActive: (active: boolean) => void;
+  requestCameraFocus: (id: FocusId, onArrive?: () => void) => void;
+  clearCameraFocus: () => void;
+
   // Light mode state
   lightsOn: boolean;
   setLightsOn: (lightsOn: boolean) => void;
@@ -125,7 +144,21 @@ export const useStore = create<StoreState>((set, get) => ({
 
   cameraResetToken: 0,
   requestCameraReset: () => set({ cameraResetToken: get().cameraResetToken + 1 }),
-  
+
+  focusRequest: null,
+  focusActive: false,
+  setFocusActive: (active) => set({ focusActive: active }),
+  requestCameraFocus: (id, onArrive) => {
+    // The intro timeline owns the camera; ignore focus clicks until it settles.
+    if (get().introPlaying) return;
+    const prev = get().focusRequest;
+    set({ focusRequest: { id, onArrive, token: (prev?.token ?? 0) + 1 } });
+  },
+  clearCameraFocus: () => {
+    if (!get().focusRequest && !get().focusActive) return;
+    set({ focusRequest: null });
+  },
+
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),
 
@@ -224,3 +257,22 @@ export const useStore = create<StoreState>((set, get) => ({
     return state.allProjects.find(project => project.id === id);
   },
 }));
+
+/** True while any modal or notification overlay is showing (used to hold off
+ *  ambient camera behaviors like the idle attract orbit). */
+export function isAnyOverlayOpen(state: StoreState): boolean {
+  return (
+    state.showProjectPanel ||
+    state.showSkillsModal ||
+    state.showExperienceModal ||
+    state.showCertificateModal ||
+    state.showCVModal ||
+    state.showContactModal ||
+    state.showAvatarModal ||
+    state.showRobotModal ||
+    state.showAllProjectsModal ||
+    state.showRestrictedLinkModal ||
+    state.showChairNotification ||
+    state.showCoffeeNotification
+  );
+}
