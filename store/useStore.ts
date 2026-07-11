@@ -51,6 +51,14 @@ interface StoreState {
   requestCameraFocus: (id: FocusId, onArrive?: () => void) => void;
   clearCameraFocus: () => void;
 
+  // Guided tour: while active the tour owns the camera (focus clicks are
+  // swallowed) and SceneSetup flies between TOUR_STOPS as tourStep changes.
+  tourActive: boolean;
+  tourStep: number;
+  startTour: () => void;
+  stopTour: () => void;
+  setTourStep: (step: number) => void;
+
   // Light mode state
   lightsOn: boolean;
   setLightsOn: (lightsOn: boolean) => void;
@@ -149,6 +157,8 @@ export const useStore = create<StoreState>((set, get) => ({
   focusActive: false,
   setFocusActive: (active) => set({ focusActive: active }),
   requestCameraFocus: (id, onArrive) => {
+    // The tour owns the camera; swallow object clicks entirely while it runs.
+    if (get().tourActive) return;
     // The intro timeline owns the camera; open the target UI without a flight.
     if (get().introPlaying) {
       onArrive?.();
@@ -161,6 +171,19 @@ export const useStore = create<StoreState>((set, get) => ({
     if (!get().focusRequest && !get().focusActive) return;
     set({ focusRequest: null });
   },
+
+  tourActive: false,
+  tourStep: 0,
+  startTour: () => {
+    if (get().introPlaying || get().tourActive) return;
+    // Cancel any focus outright (no return flight — the tour flies next).
+    set({ tourActive: true, tourStep: 0, focusRequest: null, focusActive: false });
+  },
+  stopTour: () => {
+    if (!get().tourActive) return;
+    set({ tourActive: false });
+  },
+  setTourStep: (step) => set({ tourStep: step }),
 
   lightsOn: true,
   setLightsOn: (lightsOn) => set({ lightsOn }),

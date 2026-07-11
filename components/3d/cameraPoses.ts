@@ -45,3 +45,45 @@ export const CAMERA_POSES: Record<FocusId, CameraPose> = {
   'binary-wall': { position: [-5.5, 2.2, 0], target: [-9.95, 2.6, 0] },
   window: { position: [0, 1.7, -0.5], target: [0, 2.4, -4.8] },
 };
+
+// Guided-tour stops, sequenced by TourOverlay + SceneSetup. Dwell is how long
+// the camera holds each framing after the flight lands.
+export interface TourStop {
+  pose: CameraPose;
+  title: string;
+  caption: string;
+  dwellMs: number;
+}
+
+export const TOUR_STOPS: TourStop[] = [
+  {
+    pose: CAMERA_POSES['monitor-center'],
+    title: 'Featured work',
+    caption: 'The three monitors run my featured projects — click any of them for the full story.',
+    dwellMs: 6000,
+  },
+  {
+    pose: { position: [0, 2.2, 0.6], target: [0, 0.85, -1.6] },
+    title: 'The workstation',
+    caption: 'Everything on the desk is clickable: skills, resume, experience, certifications, contact.',
+    dwellMs: 6000,
+  },
+  {
+    pose: CAMERA_POSES.avatar,
+    title: 'That’s me',
+    caption: 'AI/LLM engineer. The service robots roaming around are my agents — say hi.',
+    dwellMs: 6000,
+  },
+  {
+    pose: CAMERA_POSES['binary-wall'],
+    title: 'The binary walls',
+    caption: 'Procedural shaders all the way down — no 3D model files anywhere in this scene.',
+    dwellMs: 6000,
+  },
+  {
+    pose: CAMERA_POSES.window,
+    title: 'Late-night city',
+    caption: 'Rain on the glass, a procedural skyline, and a desk lamp that runs the room’s lighting.',
+    dwellMs: 6000,
+  },
+];

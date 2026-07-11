@@ -9,7 +9,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import gsap from 'gsap';
 import { useStore, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
-import { CAMERA_POSES, type CameraPose } from './cameraPoses';
+import { CAMERA_POSES, TOUR_STOPS, type CameraPose } from './cameraPoses';
 import CinematicCamera from './CinematicCamera';
 
 const REST_POSE: CameraPose = {
@@ -43,6 +43,8 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const cameraResetToken = useStore((state) => state.cameraResetToken);
   const focusRequest = useStore((state) => state.focusRequest);
+  const tourActive = useStore((state) => state.tourActive);
+  const tourStep = useStore((state) => state.tourStep);
 
   // View to glide back to when a focus ends (captured at focus start).
   const savedViewRef = useRef<{ position: THREE.Vector3; target: THREE.Vector3 } | null>(null);
@@ -60,11 +62,19 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         onArrive?: () => void;
         onComplete?: () => void;
         relaxMinDistance?: boolean;
+        /** Tour mode: don't hand the controls back after landing. */
+        keepControlsDisabled?: boolean;
       } = {}
     ) => {
       const controls = controlsRef.current;
       if (!controls) return;
-      const { duration = 1.4, onArrive, onComplete, relaxMinDistance = false } = opts;
+      const {
+        duration = 1.4,
+        onArrive,
+        onComplete,
+        relaxMinDistance = false,
+        keepControlsDisabled = false,
+      } = opts;
       const cam = camera as THREE.PerspectiveCamera;
       const targetFov = pose.fov ?? DEFAULT_FOV;
 
@@ -85,7 +95,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         cam.fov = targetFov;
         cam.updateProjectionMatrix();
         controls.update();
-        controls.enabled = true;
+        controls.enabled = !keepControlsDisabled;
         onArrive?.();
         onComplete?.();
         return;
@@ -102,7 +112,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         ease: 'power3.inOut',
         onUpdate: () => controls.update(),
         onComplete: () => {
-          controls.enabled = true;
+          controls.enabled = !keepControlsDisabled;
           onComplete?.();
         },
       });
@@ -219,6 +229,27 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     return () => controls.removeEventListener('change', onChange);
   }, [camera]);
 
+  // Guided tour: fly between stops while active (controls stay parked for the
+  // whole ride); on exit, glide back to the resting framing.
+  const wasTouringRef = useRef(false);
+  useEffect(() => {
+    if (!controlsRef.current) return;
+
+    if (tourActive) {
+      if (!wasTouringRef.current) {
+        wasTouringRef.current = true;
+        savedViewRef.current = null; // any focus context is void now
+      }
+      const stop = TOUR_STOPS[tourStep];
+      if (stop) {
+        flyTo(stop.pose, { relaxMinDistance: true, keepControlsDisabled: true });
+      }
+    } else if (wasTouringRef.current) {
+      wasTouringRef.current = false;
+      flyBack(REST_POSE);
+    }
+  }, [tourActive, tourStep, flyTo, flyBack]);
+
   // Reset view: glide camera + orbit target back to the default framing when
   // the store token bumps (desk mouse / overlay button). No-op during the
   // intro fly-in — the timeline owns the camera then. Reset always wins over
@@ -228,6 +259,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     if (!controlsRef.current || useStore.getState().introPlaying) return;
 
     savedViewRef.current = null;
+    useStore.getState().stopTour();
     useStore.getState().clearCameraFocus();
     flyBack(REST_POSE);
   }, [cameraResetToken, flyBack]);
