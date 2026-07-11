@@ -2,14 +2,26 @@
 
 import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import gsap from 'gsap';
 import { useStore, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
+import { CAMERA_POSES, type CameraPose } from './cameraPoses';
 import CinematicCamera from './CinematicCamera';
+
+const REST_POSE: CameraPose = {
+  position: REST_CAMERA_POSITION,
+  target: REST_CAMERA_TARGET,
+};
+
+// OrbitControls' resting zoom-in limit; focus close-ups sit well inside it, so
+// the limit is relaxed during a focus and restored on the return flight.
+const DEFAULT_MIN_DISTANCE = 2;
+const FOCUS_MIN_DISTANCE = 0.4;
+const DEFAULT_FOV = 50;
 
 interface SceneSetupProps {
   enableCinematicIntro?: boolean;
@@ -30,6 +42,132 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const cameraResetToken = useStore((state) => state.cameraResetToken);
+  const focusRequest = useStore((state) => state.focusRequest);
+
+  // View to glide back to when a focus ends (captured at focus start).
+  const savedViewRef = useRef<{ position: THREE.Vector3; target: THREE.Vector3 } | null>(null);
+  // Pending onArrive callback; killed when a newer flight supersedes it so a
+  // stale modal can't open after e.g. spam-clicking two objects.
+  const arriveCallRef = useRef<gsap.core.Tween | null>(null);
+
+  // Shared camera flight: kills in-flight tweens, disables controls for the
+  // duration (damping would fight GSAP), and snaps under reduced motion.
+  const flyTo = useCallback(
+    (
+      pose: CameraPose,
+      opts: {
+        duration?: number;
+        onArrive?: () => void;
+        onComplete?: () => void;
+        relaxMinDistance?: boolean;
+      } = {}
+    ) => {
+      const controls = controlsRef.current;
+      if (!controls) return;
+      const { duration = 1.4, onArrive, onComplete, relaxMinDistance = false } = opts;
+      const cam = camera as THREE.PerspectiveCamera;
+      const targetFov = pose.fov ?? DEFAULT_FOV;
+
+      gsap.killTweensOf(camera.position);
+      gsap.killTweensOf(controls.target);
+      gsap.killTweensOf(cam);
+      arriveCallRef.current?.kill();
+      arriveCallRef.current = null;
+
+      controls.enabled = false;
+      if (relaxMinDistance) controls.minDistance = FOCUS_MIN_DISTANCE;
+
+      const prefersReducedMotion =
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      if (prefersReducedMotion) {
+        camera.position.set(...pose.position);
+        controls.target.set(...pose.target);
+        cam.fov = targetFov;
+        cam.updateProjectionMatrix();
+        controls.update();
+        controls.enabled = true;
+        onArrive?.();
+        onComplete?.();
+        return;
+      }
+
+      const [px, py, pz] = pose.position;
+      const [tx, ty, tz] = pose.target;
+      gsap.to(camera.position, { x: px, y: py, z: pz, duration, ease: 'power3.inOut' });
+      gsap.to(controls.target, {
+        x: tx,
+        y: ty,
+        z: tz,
+        duration,
+        ease: 'power3.inOut',
+        onUpdate: () => controls.update(),
+        onComplete: () => {
+          controls.enabled = true;
+          onComplete?.();
+        },
+      });
+      if (Math.abs(cam.fov - targetFov) > 0.01) {
+        gsap.to(cam, {
+          fov: targetFov,
+          duration,
+          ease: 'power2.inOut',
+          onUpdate: () => cam.updateProjectionMatrix(),
+        });
+      }
+      if (onArrive) {
+        arriveCallRef.current = gsap.delayedCall(Math.max(0, duration - 0.25), onArrive);
+      }
+    },
+    [camera]
+  );
+
+  // Fly back out of a focus and hand the controls their resting config back.
+  const flyBack = useCallback(
+    (pose: CameraPose) => {
+      flyTo(pose, {
+        onComplete: () => {
+          const controls = controlsRef.current;
+          if (controls) controls.minDistance = DEFAULT_MIN_DISTANCE;
+          useStore.getState().setFocusActive(false);
+        },
+      });
+    },
+    [flyTo]
+  );
+
+  // Click-to-focus: fly to the requested pose; on clear, glide back to the
+  // view the user was at before focusing (rest framing as a fallback).
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const state = useStore.getState();
+    if (state.introPlaying) return;
+
+    if (focusRequest) {
+      if (!state.focusActive) {
+        savedViewRef.current = {
+          position: camera.position.clone(),
+          target: controls.target.clone(),
+        };
+        state.setFocusActive(true);
+      }
+      flyTo(CAMERA_POSES[focusRequest.id], {
+        onArrive: focusRequest.onArrive,
+        relaxMinDistance: true,
+      });
+    } else if (state.focusActive) {
+      const saved = savedViewRef.current;
+      savedViewRef.current = null;
+      flyBack(
+        saved
+          ? {
+              position: [saved.position.x, saved.position.y, saved.position.z],
+              target: [saved.target.x, saved.target.y, saved.target.z],
+            }
+          : REST_POSE
+      );
+    }
+  }, [focusRequest, camera, flyTo, flyBack]);
 
   useEffect(() => {
     // RectAreaLight requires its LTC uniform tables initialised once
@@ -81,34 +219,16 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
 
   // Reset view: glide camera + orbit target back to the default framing when
   // the store token bumps (desk mouse / overlay button). No-op during the
-  // intro fly-in — the timeline owns the camera then.
+  // intro fly-in — the timeline owns the camera then. Reset always wins over
+  // an active focus: the saved view is dropped so the return lands on REST.
   useEffect(() => {
     if (cameraResetToken === 0) return;
-    const controls = controlsRef.current;
-    if (!controls || useStore.getState().introPlaying) return;
+    if (!controlsRef.current || useStore.getState().introPlaying) return;
 
-    const prefersReducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-
-    if (prefersReducedMotion) {
-      camera.position.set(...REST_CAMERA_POSITION);
-      controls.target.set(...REST_CAMERA_TARGET);
-      controls.update();
-      return;
-    }
-
-    const [px, py, pz] = REST_CAMERA_POSITION;
-    const [tx, ty, tz] = REST_CAMERA_TARGET;
-    gsap.to(camera.position, { x: px, y: py, z: pz, duration: 1.1, ease: 'power3.inOut' });
-    gsap.to(controls.target, {
-      x: tx,
-      y: ty,
-      z: tz,
-      duration: 1.1,
-      ease: 'power3.inOut',
-      onUpdate: () => controls.update(),
-    });
-  }, [camera, cameraResetToken]);
+    savedViewRef.current = null;
+    useStore.getState().clearCameraFocus();
+    flyBack(REST_POSE);
+  }, [cameraResetToken, flyBack]);
 
   return (
     <>
