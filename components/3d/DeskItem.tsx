@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
@@ -10,33 +10,103 @@ import { useHoverFeedback } from './useHoverFeedback';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
-/** Keyboard key caps rendered as a single InstancedMesh (one draw call). */
-function KeyboardKeys() {
-  const ref = useRef<THREE.InstancedMesh>(null);
-  const COLS = 12;
-  const ROWS = 5;
-  const count = COLS * ROWS;
+const KEY_COLS = 12;
+const KEY_ROWS = 5;
+const KEY_COUNT = KEY_COLS * KEY_ROWS;
+const KEY_REST_Y = 0.02;
+const RIPPLE_DURATION = 0.5;
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const dummy = new THREE.Object3D();
+/**
+ * Keyboard key caps rendered as a single InstancedMesh (one draw call).
+ * While hovered, a deterministic "ghost typist" dips 2–3 keys per beat; a
+ * click sends a radial press-ripple across the deck. Both are pure CPU-side
+ * matrix writes (≤60/frame) and only run while hovered/rippling.
+ */
+function KeyboardKeys({ hovered, pressToken }: { hovered: boolean; pressToken: number }) {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const dipsRef = useRef(new Float32Array(KEY_COUNT));
+  const rippleStartRef = useRef(-Infinity);
+  const seenPressTokenRef = useRef(0);
+  const settledRef = useRef(false);
+
+  const layout = useMemo(() => {
     const startX = -0.209;
     const startZ = -0.07;
     const gapX = 0.038;
     const gapZ = 0.035;
-    let i = 0;
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        dummy.position.set(startX + c * gapX, 0.02, startZ + r * gapZ);
-        dummy.updateMatrix();
-        ref.current.setMatrixAt(i++, dummy.matrix);
+    const keys: { x: number; z: number; dist: number }[] = [];
+    for (let r = 0; r < KEY_ROWS; r++) {
+      for (let c = 0; c < KEY_COLS; c++) {
+        const x = startX + c * gapX;
+        const z = startZ + r * gapZ;
+        keys.push({ x, z, dist: Math.hypot(x, z) });
       }
     }
-    ref.current.instanceMatrix.needsUpdate = true;
-  }, [count]);
+    return keys;
+  }, []);
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  const writeMatrices = (mesh: THREE.InstancedMesh, dips: Float32Array) => {
+    for (let i = 0; i < KEY_COUNT; i++) {
+      dummy.position.set(layout[i].x, KEY_REST_Y - dips[i], layout[i].z);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+  };
+
+  useEffect(() => {
+    if (ref.current) writeMatrices(ref.current, dipsRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useFrame((state, delta) => {
+    const mesh = ref.current;
+    if (!mesh) return;
+    const t = state.clock.elapsedTime;
+
+    if (pressToken !== seenPressTokenRef.current) {
+      seenPressTokenRef.current = pressToken;
+      rippleStartRef.current = t;
+    }
+
+    const rippleElapsed = t - rippleStartRef.current;
+    const rippling = rippleElapsed >= 0 && rippleElapsed <= RIPPLE_DURATION;
+    if (!hovered && !rippling) {
+      // One final restore pass after activity ends, then skip entirely
+      if (!settledRef.current) {
+        dipsRef.current.fill(0);
+        writeMatrices(mesh, dipsRef.current);
+        settledRef.current = true;
+      }
+      return;
+    }
+    settledRef.current = false;
+
+    // Deterministic ghost typing: each 120ms beat picks a few pseudo-random keys
+    const beat = Math.floor(t / 0.12);
+    const dips = dipsRef.current;
+    const ease = Math.min(1, delta * 25);
+    for (let i = 0; i < KEY_COUNT; i++) {
+      let target = 0;
+      if (hovered) {
+        const pick = Math.abs(Math.sin(beat * 12.9898 + i * 78.233) * 43758.5453) % 1;
+        if (pick > 0.95) target = 0.006;
+      }
+      if (rippling) {
+        const wave = Math.sin(layout[i].dist * 30 - rippleElapsed * 20);
+        if (wave > 0) {
+          target = Math.max(target, wave * 0.008 * (1 - rippleElapsed / RIPPLE_DURATION));
+        }
+      }
+      dips[i] += (target - dips[i]) * ease;
+    }
+    writeMatrices(mesh, dips);
+  });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, count]} castShadow>
+    <instancedMesh ref={ref} args={[undefined, undefined, KEY_COUNT]} castShadow>
       <boxGeometry args={[0.03, 0.012, 0.028]} />
       <meshStandardMaterial color="#0a0a0a" metalness={0.1} roughness={0.85} />
     </instancedMesh>
@@ -55,6 +125,8 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
   const { hovered, pulseRef, hoverProps } = useHoverFeedback();
   const qualityTier = useStore((state) => state.qualityTier);
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
+  // Bumped on keyboard clicks to trigger the key-cap press ripple
+  const [keyPressToken, setKeyPressToken] = useState(0);
 
   useFrame((state) => {
     if (itemRef.current && hovered) {
@@ -64,6 +136,7 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
   });
 
   const handleClick = () => {
+    if (itemType === 'keyboard') setKeyPressToken((token) => token + 1);
     if (onClick) onClick();
   };
 
@@ -82,7 +155,7 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
               />
             </mesh>
             {/* Keys - instanced for a dense, detailed keyboard in one draw call */}
-            <KeyboardKeys />
+            <KeyboardKeys hovered={hovered} pressToken={keyPressToken} />
           </group>
         );
 
