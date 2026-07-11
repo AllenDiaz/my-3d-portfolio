@@ -96,7 +96,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       if (prefersReducedMotion) {
         camera.position.set(...pose.position);
         controls.target.set(...pose.target);
-        cam.fov = targetFov;
+        gsap.set(cam, { fov: targetFov });
         cam.updateProjectionMatrix();
         controls.update();
         controls.enabled = !keepControlsDisabled;

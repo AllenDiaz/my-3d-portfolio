@@ -175,7 +175,7 @@ export default function CityscapeBackdrop() {
       nearRef.current.opacity = 0.9 + Math.sin(state.clock.elapsedTime * 1.5) * 0.06;
     }
     if (cloudTex) {
-      cloudTex.offset.x = state.clock.elapsedTime * 0.004;
+      cloudTex.offset.setX(state.clock.elapsedTime * 0.004);
     }
   });
 

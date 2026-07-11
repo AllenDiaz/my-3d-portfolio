@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
@@ -71,6 +71,12 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
     texture.needsUpdate = true;
     return { texture, ctx, paint };
   }, [isLive, project]);
+  // Ref alias for the frame loop (mutating hook-returned values directly is
+  // disallowed by the react-hooks lint rules)
+  const liveScreenRef = useRef(liveScreen);
+  useEffect(() => {
+    liveScreenRef.current = liveScreen;
+  }, [liveScreen]);
   const repaintAccum = useRef(0);
 
   // Create dynamic screen texture with project info (static monitors)
@@ -175,13 +181,14 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
     }
 
     // Repaint the live terminal at the tier's Hz (not every frame)
-    if (liveScreen) {
+    const screen = liveScreenRef.current;
+    if (screen) {
       repaintAccum.current += delta;
       const interval = 1 / liveHz;
       if (repaintAccum.current >= interval) {
         repaintAccum.current %= interval;
-        liveScreen.paint(liveScreen.ctx, state.clock.elapsedTime);
-        liveScreen.texture.needsUpdate = true;
+        screen.paint(screen.ctx, state.clock.elapsedTime);
+        screen.texture.needsUpdate = true;
       }
     }
   });
