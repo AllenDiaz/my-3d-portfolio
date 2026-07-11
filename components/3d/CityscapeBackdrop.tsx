@@ -105,6 +105,35 @@ function makeSkyTexture(size: number): THREE.CanvasTexture {
   return tex;
 }
 
+/** Soft transparent cloud blobs that drift across the upper sky (high tier). */
+function makeCloudTexture(size: number): THREE.CanvasTexture {
+  const w = size;
+  const h = Math.round(size / 4);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+  ctx.clearRect(0, 0, w, h);
+
+  for (let i = 0; i < 10; i++) {
+    const cx = Math.random() * w;
+    const cy = h * (0.15 + Math.random() * 0.5);
+    const r = h * (0.25 + Math.random() * 0.35);
+    const blob = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    blob.addColorStop(0, 'rgba(180,195,230,0.16)');
+    blob.addColorStop(1, 'rgba(180,195,230,0)');
+    ctx.fillStyle = blob;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 function makeSilhouetteTexture(size: number, maxH: number, litChance: number, fill: string): THREE.CanvasTexture {
   const w = size;
   const h = Math.round(size / 2);
@@ -133,13 +162,20 @@ export default function CityscapeBackdrop() {
     () => (preset.cityParallax ? makeSilhouetteTexture(size, size * 0.16, 0.22, '#0a0f24') : null),
     [size, preset.cityParallax],
   );
+  const cloudTex = useMemo(
+    () => (preset.cityParallax ? makeCloudTexture(size) : null),
+    [size, preset.cityParallax],
+  );
 
   const nearRef = useRef<THREE.MeshBasicMaterial>(null);
 
-  // Subtle twinkle: gently shimmer the nearest layer (high tier only)
+  // Subtle twinkle on the nearest layer + slow cloud drift (high tier only)
   useFrame((state) => {
     if (nearRef.current) {
       nearRef.current.opacity = 0.9 + Math.sin(state.clock.elapsedTime * 1.5) * 0.06;
+    }
+    if (cloudTex) {
+      cloudTex.offset.x = state.clock.elapsedTime * 0.004;
     }
   });
 
@@ -150,6 +186,21 @@ export default function CityscapeBackdrop() {
         <planeGeometry args={[90, 45]} />
         <meshBasicMaterial map={skyTex} fog={false} toneMapped={false} />
       </mesh>
+
+      {/* Drifting clouds between the sky and the mid skyline (high tier) */}
+      {cloudTex && (
+        <mesh position={[0, 10, -26]}>
+          <planeGeometry args={[90, 18]} />
+          <meshBasicMaterial
+            map={cloudTex}
+            transparent
+            opacity={0.5}
+            fog={false}
+            toneMapped={false}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
 
       {/* Parallax silhouette layers (high tier) */}
       {midTex && (
