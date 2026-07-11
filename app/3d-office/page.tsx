@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronUp, HelpCircle, RotateCcw, SkipForward, Volume2, VolumeX, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle, Play, RotateCcw, SkipForward, Volume2, VolumeX, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import ProjectPanel from '@/components/ui/ProjectPanel';
@@ -17,6 +17,7 @@ import AllProjectsModal from '@/components/ui/AllProjectsModal';
 import ContactModal from '@/components/ui/ContactModal';
 import AvatarModal from '@/components/ui/AvatarModal';
 import RobotModal from '@/components/ui/RobotModal';
+import TourOverlay from '@/components/ui/TourOverlay';
 import SceneLoader from '@/components/ui/SceneLoader';
 import { useStore, isAnyOverlayOpen } from '@/store/useStore';
 
@@ -95,6 +96,9 @@ export default function ThreeDOfficePage() {
   const requestCameraReset = useStore((state) => state.requestCameraReset);
   const clearCameraFocus = useStore((state) => state.clearCameraFocus);
   const anyOverlayOpen = useStore(isAnyOverlayOpen);
+  const tourActive = useStore((state) => state.tourActive);
+  const startTour = useStore((state) => state.startTour);
+  const stopTour = useStore((state) => state.stopTour);
 
   const [legendOpen, setLegendOpen] = useState(true);
   const [mobileGuideOpen, setMobileGuideOpen] = useState(false);
@@ -111,14 +115,30 @@ export default function ThreeDOfficePage() {
     wasOverlayOpen.current = anyOverlayOpen;
   }, [anyOverlayOpen, clearCameraFocus]);
 
-  // Escape also cancels a focus flight before its modal has opened.
+  // Escape ends the tour (which owns the camera) or, otherwise, cancels a
+  // focus flight before its modal has opened.
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') clearCameraFocus();
+      if (e.key !== 'Escape') return;
+      if (useStore.getState().tourActive) {
+        stopTour();
+      } else {
+        clearCameraFocus();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [clearCameraFocus]);
+  }, [clearCameraFocus, stopTour]);
+
+  // Grabbing the scene (canvas) during the tour hands control back.
+  useEffect(() => {
+    if (!tourActive) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.target instanceof HTMLCanvasElement) stopTour();
+    };
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => window.removeEventListener('pointerdown', onPointerDown);
+  }, [tourActive, stopTour]);
 
   return (
     <main className="relative bg-black dark:bg-black transition-colors">
@@ -236,6 +256,16 @@ export default function ThreeDOfficePage() {
           >
             <HelpCircle className="w-5 h-5" />
           </button>
+          {!introPlaying && !tourActive && (
+            <button
+              onClick={startTour}
+              aria-label="Take a guided tour"
+              title="Take a guided tour"
+              className="p-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-sm border border-gray-700/50 rounded-lg text-gray-300 hover:text-white transition-colors cursor-pointer"
+            >
+              <Play className="w-5 h-5" />
+            </button>
+          )}
           <button
             onClick={() => setSoundMuted(!soundMuted)}
             aria-label={soundMuted ? 'Unmute ambient sound' : 'Mute ambient sound'}
@@ -253,6 +283,9 @@ export default function ThreeDOfficePage() {
             <RotateCcw className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Guided tour caption card + step controls */}
+        <TourOverlay />
 
         {/* Mobile Bottom Instructions */}
         <div className="absolute bottom-6 left-4 right-4 z-30 pointer-events-none sm:hidden">
