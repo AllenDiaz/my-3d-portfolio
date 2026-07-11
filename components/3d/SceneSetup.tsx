@@ -1,13 +1,13 @@
 'use client';
 
 import { OrbitControls, Environment, SoftShadows } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import gsap from 'gsap';
-import { useStore, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
+import { useStore, isAnyOverlayOpen, REST_CAMERA_POSITION, REST_CAMERA_TARGET } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { CAMERA_POSES, TOUR_STOPS, type CameraPose } from './cameraPoses';
 import CinematicCamera from './CinematicCamera';
@@ -22,6 +22,9 @@ const REST_POSE: CameraPose = {
 const DEFAULT_MIN_DISTANCE = 2;
 const FOCUS_MIN_DISTANCE = 0.4;
 const DEFAULT_FOV = 50;
+
+// Idle attract mode: after this much input silence, slowly auto-orbit the desk.
+const ATTRACT_IDLE_MS = 45000;
 
 interface SceneSetupProps {
   enableCinematicIntro?: boolean;
@@ -84,6 +87,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       arriveCallRef.current?.kill();
       arriveCallRef.current = null;
 
+      controls.autoRotate = false; // a flight always cancels the attract orbit
       controls.enabled = false;
       if (relaxMinDistance) controls.minDistance = FOCUS_MIN_DISTANCE;
 
@@ -228,6 +232,42 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     controls.addEventListener('change', onChange);
     return () => controls.removeEventListener('change', onChange);
   }, [camera]);
+
+  // Idle attract mode: any input stamps the clock and kills the auto-orbit
+  // immediately; a throttled frame check re-arms it after 45s of silence
+  // (never during the intro, a focus, the tour, an open modal, a flight, or
+  // under reduced motion).
+  const lastInputRef = useRef(0);
+  const attractFrameCounter = useRef(0);
+  const reducedMotionRef = useRef(false);
+  useEffect(() => {
+    lastInputRef.current = performance.now();
+    reducedMotionRef.current =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    const onInput = () => {
+      lastInputRef.current = performance.now();
+      const controls = controlsRef.current;
+      if (controls) controls.autoRotate = false;
+    };
+    const events = ['pointerdown', 'wheel', 'keydown', 'touchstart'] as const;
+    events.forEach((name) => window.addEventListener(name, onInput, { passive: true }));
+    return () => events.forEach((name) => window.removeEventListener(name, onInput));
+  }, []);
+
+  useFrame(() => {
+    attractFrameCounter.current += 1;
+    if (attractFrameCounter.current % 30 !== 0) return;
+    const controls = controlsRef.current;
+    if (!controls || controls.autoRotate || !controls.enabled) return;
+    if (reducedMotionRef.current) return;
+    if (performance.now() - lastInputRef.current < ATTRACT_IDLE_MS) return;
+    const state = useStore.getState();
+    if (state.introPlaying || state.focusActive || state.tourActive || isAnyOverlayOpen(state)) return;
+    if (gsap.isTweening(camera.position)) return;
+    controls.autoRotateSpeed = 0.4;
+    controls.autoRotate = true;
+  });
 
   // Guided tour: fly between stops while active (controls stay parked for the
   // whole ride); on exit, glide back to the resting framing.
