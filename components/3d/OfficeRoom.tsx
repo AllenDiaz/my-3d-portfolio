@@ -6,7 +6,7 @@ import { MeshReflectorMaterial, ContactShadows, RoundedBox } from '@react-three/
 import { useStore } from '@/store/useStore';
 import { ThreeEvent } from '@react-three/fiber';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
-import { MATERIALS } from '@/lib/materials';
+import { MATERIALS, floorDistortionMap } from '@/lib/materials';
 
 // Desk-top material picked once per tier: lacquered (clearcoat) on tiers with
 // physical materials, plain standard otherwise.
@@ -46,12 +46,14 @@ export default function OfficeRoom() {
             mixBlur={1}
             mixStrength={0.35}
             mixContrast={1.2}
-            roughness={0.6}
+            roughness={0.65}
             depthScale={1.0}
             minDepthThreshold={0.4}
             maxDepthThreshold={1.4}
             color="#1a1a1a"
             metalness={0.6}
+            distortion={0.12}
+            distortionMap={floorDistortionMap ?? undefined}
           />
         ) : (
           <meshStandardMaterial color="#161616" roughness={0.6} metalness={0.4} />
