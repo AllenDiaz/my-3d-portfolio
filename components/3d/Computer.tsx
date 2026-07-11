@@ -8,6 +8,7 @@ import { Mesh, CanvasTexture, Group } from 'three';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { useHoverFeedback } from './useHoverFeedback';
+import { createTerminalPainter } from './LiveCodeScreen';
 import type { FocusId } from './cameraPoses';
 
 interface ComputerProps {
@@ -16,6 +17,8 @@ interface ComputerProps {
   rotation?: [number, number, number];
   /** When set, clicking flies the camera to this pose before the panel opens. */
   focusId?: FocusId;
+  /** Hero monitor: screen runs a live typing terminal (tier-gated by screenAnimationHz). */
+  live?: boolean;
 }
 
 /**
@@ -40,17 +43,37 @@ function ChromeMaterial({ physical, color }: { physical: boolean; color: string 
   );
 }
 
-export default function Computer({ position, projectId, rotation = [0, 0, 0], focusId }: ComputerProps) {
+export default function Computer({ position, projectId, rotation = [0, 0, 0], focusId, live = false }: ComputerProps) {
   const groupRef = useRef<Group>(null);
   const screenRef = useRef<Mesh>(null);
   const { hovered, hoverProps } = useHoverFeedback();
   const { setActiveProject, setShowProjectPanel, getProjectById, qualityTier, requestCameraFocus } = useStore();
   const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
-  
+  const liveHz = QUALITY_PRESETS[qualityTier].screenAnimationHz;
+
   // Get the actual project data
   const project = useMemo(() => getProjectById(projectId), [projectId, getProjectById]);
 
-  // Create dynamic screen texture with project info
+  const isLive = live && liveHz > 0 && !!project;
+
+  // Live terminal screen: a redrawable canvas texture repainted at liveHz in
+  // useFrame below (texture *upload* happens only on repaint frames)
+  const liveScreen = useMemo(() => {
+    if (!isLive || !project) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 320;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    const paint = createTerminalPainter(project);
+    paint(ctx, 0);
+    const texture = new CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    return { texture, ctx, paint };
+  }, [isLive, project]);
+  const repaintAccum = useRef(0);
+
+  // Create dynamic screen texture with project info (static monitors)
   const screenTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 512;
@@ -137,17 +160,28 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
 
   // Subtle floating animation - move the whole monitor together so its parts
   // stay aligned (previously only the frame mesh moved, detaching it on hover)
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (groupRef.current) {
       groupRef.current.position.y =
         position[1] + (hovered ? Math.sin(state.clock.elapsedTime * 2) * 0.02 : 0);
     }
-    
+
     // Animate screen texture
-    if (screenRef.current && screenTexture) {
+    if (screenRef.current) {
       const material = screenRef.current.material as any;
       if (material.emissiveIntensity !== undefined) {
         material.emissiveIntensity = hovered ? 0.6 + Math.sin(state.clock.elapsedTime * 3) * 0.1 : 0.3;
+      }
+    }
+
+    // Repaint the live terminal at the tier's Hz (not every frame)
+    if (liveScreen) {
+      repaintAccum.current += delta;
+      const interval = 1 / liveHz;
+      if (repaintAccum.current >= interval) {
+        repaintAccum.current %= interval;
+        liveScreen.paint(liveScreen.ctx, state.clock.elapsedTime);
+        liveScreen.texture.needsUpdate = true;
       }
     }
   });
@@ -217,10 +251,10 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
         {...hoverProps}
       >
         <planeGeometry args={[0.62, 0.37]} />
-        <meshStandardMaterial 
-          map={screenTexture}
-          emissive="#4a90e2"
-          emissiveMap={screenTexture}
+        <meshStandardMaterial
+          map={liveScreen?.texture ?? screenTexture}
+          emissive={isLive ? '#22d3a0' : '#4a90e2'}
+          emissiveMap={liveScreen?.texture ?? screenTexture}
           emissiveIntensity={hovered ? 0.6 : 0.3}
           roughness={0.1}
           metalness={0.1}

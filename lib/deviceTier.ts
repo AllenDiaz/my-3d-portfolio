@@ -44,6 +44,8 @@ export interface QualityPreset {
   sceneryTextureSize: number;
   /** Animated procedural rain-streak plane on the window glass. */
   windowRain: boolean;
+  /** Redraw rate (Hz) for the hero monitor's live terminal texture (0 = static). */
+  screenAnimationHz: number;
 }
 
 export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
@@ -64,6 +66,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     cityParallax: true,
     sceneryTextureSize: 2048,
     windowRain: true,
+    screenAnimationHz: 10,
   },
   medium: {
     particleCount: 90,
@@ -82,6 +85,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     cityParallax: false,
     sceneryTextureSize: 2048,
     windowRain: false,
+    screenAnimationHz: 6,
   },
   low: {
     particleCount: 60,
@@ -100,6 +104,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     cityParallax: false,
     sceneryTextureSize: 1024,
     windowRain: false,
+    screenAnimationHz: 0,
   },
 };
 

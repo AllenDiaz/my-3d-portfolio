@@ -81,7 +81,7 @@ export default function MainScene() {
       {/* Interactive Computers/Monitors - unified triple array on the desk plane,
           hero project centred, flanking monitors angled inward toward the viewer */}
       {monitorProjects.length >= 1 && (
-        <Computer position={[0, 0.8, -2.0]} projectId={monitorProjects[0].id} focusId="monitor-center" />
+        <Computer position={[0, 0.8, -2.0]} projectId={monitorProjects[0].id} focusId="monitor-center" live />
       )}
       {monitorProjects.length >= 2 && (
         <Computer position={[-0.8, 0.8, -1.92]} rotation={[0, 0.18, 0]} projectId={monitorProjects[1].id} focusId="monitor-left" />
