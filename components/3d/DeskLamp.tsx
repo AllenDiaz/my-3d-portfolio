@@ -5,6 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Select } from '@react-three/postprocessing';
 import * as THREE from 'three';
+import gsap from 'gsap';
 import { useStore } from '@/store/useStore';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { useHoverFeedback } from './useHoverFeedback';
@@ -34,6 +35,24 @@ export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampPro
       spotRef.current.target = targetRef.current;
       spotRef.current.target.updateMatrixWorld();
     }
+  }, [lightsOn]);
+
+  // Fluorescent strike: when the lamp turns on, the bulb stutters twice
+  // before holding steady (bulb mesh mounts with lightsOn, so this runs on
+  // each turn-on).
+  const bulbMatRef = useRef<THREE.MeshStandardMaterial>(null);
+  useEffect(() => {
+    if (!lightsOn || !bulbMatRef.current) return;
+    const timeline = gsap.timeline();
+    timeline
+      .fromTo(bulbMatRef.current, { emissiveIntensity: 0 }, { emissiveIntensity: 2, duration: 0.08 })
+      .to(bulbMatRef.current, { emissiveIntensity: 0.3, duration: 0.05 })
+      .to(bulbMatRef.current, { emissiveIntensity: 2, duration: 0.06 })
+      .to(bulbMatRef.current, { emissiveIntensity: 0.6, duration: 0.05 })
+      .to(bulbMatRef.current, { emissiveIntensity: 2, duration: 0.11 });
+    return () => {
+      timeline.kill();
+    };
   }, [lightsOn]);
 
   // Subtle wobble when hovered
@@ -99,6 +118,7 @@ export default function DeskLamp({ position = [-1.35, 0.8, -2.15] }: DeskLampPro
           <mesh position={[0.15, 0.34, 0]}>
             <sphereGeometry args={[0.015]} />
             <meshStandardMaterial
+              ref={bulbMatRef}
               color="#ffffff"
               emissive="#ffdd88"
               emissiveIntensity={2}

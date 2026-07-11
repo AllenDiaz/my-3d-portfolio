@@ -68,7 +68,18 @@ export default function FloatingParticles({ count = 200 }: FloatingParticlesProp
       // Add subtle sinusoidal movement
       positions[i3] += Math.sin(time * 0.5 + i) * 0.001;
       positions[i3 + 2] += Math.cos(time * 0.5 + i) * 0.001;
-      
+
+      // Weak attractor toward the desk-lamp pool so motes gather in the warm
+      // light (only within ~2 units; same loop, no extra cost)
+      const dx = -positions[i3];
+      const dy = 1.2 - positions[i3 + 1];
+      const dz = -2 - positions[i3 + 2];
+      if (dx * dx + dy * dy + dz * dz < 4) {
+        positions[i3] += dx * 0.0008;
+        positions[i3 + 1] += dy * 0.0008;
+        positions[i3 + 2] += dz * 0.0008;
+      }
+
       // Recycle particles that leave the confined desk volume
       if (positions[i3 + 1] > 5) {
         positions[i3 + 1] = 0;
