@@ -7,6 +7,7 @@ import { useStore } from '@/store/useStore';
 import { ThreeEvent } from '@react-three/fiber';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { MATERIALS, floorDistortionMap } from '@/lib/materials';
+import WindowRain from './WindowRain';
 
 // Desk-top material picked once per tier: lacquered (clearcoat) on tiers with
 // physical materials, plain standard otherwise.
@@ -110,6 +111,9 @@ export default function OfficeRoom() {
             <meshStandardMaterial color="#bfe9e0" transparent opacity={0.06} roughness={0.1} />
           )}
         </mesh>
+
+        {/* Rain streaks running down the glass (high tier only) */}
+        {preset.windowRain && <WindowRain />}
 
         {/* Outer frame bars (dark metal) */}
         <mesh position={[0, 1.49, 0]} material={MATERIALS.darkMetal}>

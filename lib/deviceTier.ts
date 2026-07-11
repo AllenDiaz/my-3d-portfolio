@@ -42,6 +42,8 @@ export interface QualityPreset {
   cityParallax: boolean;
   /** Resolution of the procedural cityscape backdrop texture. */
   sceneryTextureSize: number;
+  /** Animated procedural rain-streak plane on the window glass. */
+  windowRain: boolean;
 }
 
 export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
@@ -61,6 +63,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     lampShadow: true,
     cityParallax: true,
     sceneryTextureSize: 2048,
+    windowRain: true,
   },
   medium: {
     particleCount: 90,
@@ -78,6 +81,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     lampShadow: false,
     cityParallax: false,
     sceneryTextureSize: 2048,
+    windowRain: false,
   },
   low: {
     particleCount: 60,
@@ -95,6 +99,7 @@ export const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
     lampShadow: false,
     cityParallax: false,
     sceneryTextureSize: 1024,
+    windowRain: false,
   },
 };
 
