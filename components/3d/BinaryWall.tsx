@@ -3,6 +3,7 @@
 import { useEffect, useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { useStore } from '@/store/useStore';
 
 interface BinaryWallProps {
   position?: [number, number, number];
@@ -47,9 +48,10 @@ export default function BinaryWall({
       ctx.fillStyle = '#0a0a0a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Binary text
+      // Binary text — drawn near-white so the shader's color uniforms own the
+      // palette (near/far teal-green mix) instead of the canvas
       ctx.font = '16px monospace';
-      ctx.fillStyle = '#00ff00';
+      ctx.fillStyle = '#e9fff6';
       
       const lines = binaryText.split('\n');
       lines.forEach((line, i) => {
@@ -68,8 +70,13 @@ export default function BinaryWall({
       uniforms: {
         time: { value: 0 },
         map: { value: texture },
-        glowColor: { value: new THREE.Color(0x00ff00) },
-        intensity: { value: 2.0 }
+        // On-palette teal up close, cooler green in the distance (mixed by
+        // camera distance in the fragment shader)
+        nearColor: { value: new THREE.Color('#35e0c0') },
+        farColor: { value: new THREE.Color('#17c17a') },
+        intensity: { value: 2.0 },
+        // Night boost: >1 when the room lights are off so the walls take over
+        boost: { value: 1.0 }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -83,8 +90,10 @@ export default function BinaryWall({
       fragmentShader: `
         uniform float time;
         uniform sampler2D map;
-        uniform vec3 glowColor;
+        uniform vec3 nearColor;
+        uniform vec3 farColor;
         uniform float intensity;
+        uniform float boost;
         varying vec2 vUv;
         varying vec3 vWorldPosition;
 
@@ -136,15 +145,19 @@ export default function BinaryWall({
           // Ethereal glow effect when visible (increased brightness)
           float glow = sin(time * 1.2 + vUv.y * 4.0) * 0.3 + 1.0;
           
+          // Proximity color-temperature shift: warm teal up close, cooler
+          // green as the wall recedes from the camera
+          float camDist = distance(cameraPosition, vWorldPosition);
+          vec3 glowColor = mix(nearColor, farColor, smoothstep(4.0, 12.0, camDist));
+
           // Final color with enhanced brightness and glow
-          vec3 finalColor = texColor.rgb * glowColor * intensity * glow * pulse * 1.5;
+          vec3 finalColor = texColor.rgb * glowColor * intensity * glow * pulse * 1.5 * boost;
 
           // CRT scanline overlay
           float scan = sin(vUv.y * 700.0 - time * 4.0) * 0.06;
           finalColor += scan * glowColor;
 
           // Depth-based fade so the wall dissolves into the fog/void with distance
-          float camDist = distance(cameraPosition, vWorldPosition);
           float depthFade = 1.0 - smoothstep(9.0, 24.0, camDist);
 
           // Critical: Alpha becomes 0 when disappeared - LEAVES NO TRACE
@@ -159,10 +172,19 @@ export default function BinaryWall({
     });
   }, [texture]);
 
-  // Animate shader
+  const lightsOn = useStore((state) => state.lightsOn);
+
+  // Animate shader; ease the night boost so the lamp toggle reads as the
+  // walls "waking up" rather than snapping
   useFrame((state) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime;
+    const material = materialRef.current;
+    if (material) {
+      material.uniforms.time.value = state.clock.elapsedTime;
+      material.uniforms.boost.value = THREE.MathUtils.lerp(
+        material.uniforms.boost.value,
+        lightsOn ? 1.0 : 1.4,
+        0.05
+      );
     }
   });
 
