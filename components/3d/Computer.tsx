@@ -233,12 +233,12 @@ export default function Computer({ position, projectId, rotation = [0, 0, 0], fo
           <planeGeometry args={[0.62, 0.37]} />
           <meshPhysicalMaterial
             transparent
-            opacity={0.12}
+            opacity={0.1}
             roughness={0.06}
             metalness={0}
             clearcoat={1}
             clearcoatRoughness={0.08}
-            envMapIntensity={1.5}
+            envMapIntensity={1.8}
           />
         </mesh>
       )}

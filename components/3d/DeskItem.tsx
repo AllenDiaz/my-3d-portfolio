@@ -7,6 +7,8 @@ import { Select } from '@react-three/postprocessing';
 import { Mesh } from 'three';
 import * as THREE from 'three';
 import { useHoverFeedback } from './useHoverFeedback';
+import { useStore } from '@/store/useStore';
+import { QUALITY_PRESETS } from '@/lib/deviceTier';
 
 /** Keyboard key caps rendered as a single InstancedMesh (one draw call). */
 function KeyboardKeys() {
@@ -51,6 +53,8 @@ interface DeskItemProps {
 export default function DeskItem({ position, itemType, onClick, label }: DeskItemProps) {
   const itemRef = useRef<Mesh>(null);
   const { hovered, hoverProps } = useHoverFeedback();
+  const qualityTier = useStore((state) => state.qualityTier);
+  const physical = QUALITY_PRESETS[qualityTier].physicalMaterials;
 
   useFrame((state) => {
     if (itemRef.current && hovered) {
@@ -119,13 +123,24 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
       case 'coffee':
         return (
           <group>
-            {/* Cup */}
+            {/* Cup — ceramic sheen on tiers with physical materials */}
             <mesh castShadow>
               <cylinderGeometry args={[0.04, 0.035, 0.08]} />
-              <meshStandardMaterial 
-                color={hovered ? "#ffffff" : "#e0e0e0"}
-                roughness={0.3}
-              />
+              {physical ? (
+                <meshPhysicalMaterial
+                  color={hovered ? "#ffffff" : "#e0e0e0"}
+                  roughness={0.4}
+                  sheen={0.5}
+                  sheenColor="#fff4e0"
+                  clearcoat={0.3}
+                  clearcoatRoughness={0.25}
+                />
+              ) : (
+                <meshStandardMaterial
+                  color={hovered ? "#ffffff" : "#e0e0e0"}
+                  roughness={0.3}
+                />
+              )}
             </mesh>
             {/* Coffee */}
             <mesh position={[0, 0.03, 0]}>
@@ -138,10 +153,21 @@ export default function DeskItem({ position, itemType, onClick, label }: DeskIte
             {/* Handle */}
             <mesh position={[0.05, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
               <torusGeometry args={[0.025, 0.005, 8, 16]} />
-              <meshStandardMaterial 
-                color={hovered ? "#ffffff" : "#e0e0e0"}
-                roughness={0.3}
-              />
+              {physical ? (
+                <meshPhysicalMaterial
+                  color={hovered ? "#ffffff" : "#e0e0e0"}
+                  roughness={0.4}
+                  sheen={0.5}
+                  sheenColor="#fff4e0"
+                  clearcoat={0.3}
+                  clearcoatRoughness={0.25}
+                />
+              ) : (
+                <meshStandardMaterial
+                  color={hovered ? "#ffffff" : "#e0e0e0"}
+                  roughness={0.3}
+                />
+              )}
             </mesh>
             {/* Steam effect */}
             {hovered && (

@@ -8,6 +8,12 @@ import { ThreeEvent } from '@react-three/fiber';
 import { QUALITY_PRESETS } from '@/lib/deviceTier';
 import { MATERIALS } from '@/lib/materials';
 
+// Desk-top material picked once per tier: lacquered (clearcoat) on tiers with
+// physical materials, plain standard otherwise.
+function deskTopMaterial(physical: boolean) {
+  return physical ? MATERIALS.deskLacquer : MATERIALS.deskPlain;
+}
+
 export default function OfficeRoom() {
   const floorRef = useRef<Mesh>(null);
   const chairRef = useRef<Mesh>(null);
@@ -152,10 +158,16 @@ export default function OfficeRoom() {
 
       {/* Desk Base */}
       <group position={[0, 0, -2]}>
-        {/* Desktop — rounded edges for a less blocky look */}
-        <RoundedBox args={[3, 0.1, 1.5]} radius={0.02} smoothness={4} position={[0, 0.75, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.6} />
-        </RoundedBox>
+        {/* Desktop — rounded edges, lacquered finish on capable tiers */}
+        <RoundedBox
+          args={[3, 0.1, 1.5]}
+          radius={0.02}
+          smoothness={4}
+          position={[0, 0.75, 0]}
+          castShadow
+          receiveShadow
+          material={deskTopMaterial(preset.physicalMaterials)}
+        />
 
         {/* Legs (shared dark-metal material) */}
         <mesh position={[-1.3, 0.375, -0.6]} castShadow material={MATERIALS.darkMetal}>
@@ -172,9 +184,15 @@ export default function OfficeRoom() {
         </mesh>
 
         {/* L-return — perpendicular desk section extending toward the viewer */}
-        <RoundedBox args={[0.8, 0.1, 1.5]} radius={0.02} smoothness={4} position={[1.4, 0.75, 1.05]} castShadow receiveShadow>
-          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.6} />
-        </RoundedBox>
+        <RoundedBox
+          args={[0.8, 0.1, 1.5]}
+          radius={0.02}
+          smoothness={4}
+          position={[1.4, 0.75, 1.05]}
+          castShadow
+          receiveShadow
+          material={deskTopMaterial(preset.physicalMaterials)}
+        />
         <mesh position={[1.1, 0.375, 1.7]} castShadow material={MATERIALS.darkMetal}>
           <boxGeometry args={[0.1, 0.75, 0.1]} />
         </mesh>
