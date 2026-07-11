@@ -182,9 +182,11 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
     }
   }, []);
 
-  // Mood: dim the overall exposure when the lights are toggled off
+  // Mood: redistribute rather than just dim when the lights go off — night
+  // mode keeps a slightly higher exposure because the remaining light sources
+  // (lamp ember, neon, city spill) are meant to read as the hero look.
   useEffect(() => {
-    gl.toneMappingExposure = lightsOn ? 1.35 : 0.8;
+    gl.toneMappingExposure = lightsOn ? 1.35 : 0.9;
   }, [gl, lightsOn]);
 
   useEffect(() => {
@@ -267,12 +269,12 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       {/* Lighting - "late-night dev studio": cool indigo base, warm amber key,
           teal neon spill from the binary walls */}
       {/* Ambient base (cool, but bright enough to read the room) */}
-      <ambientLight color="#2c3a5c" intensity={lightsOn ? 0.5 : 0.1} />
+      <ambientLight color="#2c3a5c" intensity={lightsOn ? 0.5 : 0.12} />
 
-      {/* Main Directional Light */}
+      {/* Main Directional Light — effectively off at night (no "sun" indoors) */}
       <directionalLight
         position={[5, 8, 5]}
-        intensity={lightsOn ? 1.2 : 0.15}
+        intensity={lightsOn ? 1.2 : 0.05}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -285,13 +287,14 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         shadow-camera-bottom={-10}
       />
 
-      {/* Window key - cool city light spilling in from the back-wall window */}
+      {/* Window key - cool city light spilling in from the back-wall window;
+          at night the city becomes the key light */}
       <rectAreaLight
         ref={windowLightRef}
         position={[0, 3, -4.8]}
         width={6}
         height={2.8}
-        intensity={lightsOn ? 3.2 : 0.5}
+        intensity={lightsOn ? 3.2 : 1.1}
         color="#9db8ff"
       />
 
@@ -305,7 +308,7 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
       {/* Desk lamp - warm amber practical, the emotional key light */}
       <pointLight
         position={[0, 2, -2]}
-        intensity={lightsOn ? 0.9 : 0.1}
+        intensity={lightsOn ? 0.9 : 0.35}
         distance={4}
         color="#ffb066"
         castShadow
@@ -318,23 +321,24 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         position={[0.6, 3.2, -0.6]}
         angle={0.5}
         penumbra={0.9}
-        intensity={lightsOn ? 1.6 : 0.12}
+        intensity={lightsOn ? 1.6 : 0.5}
         distance={7}
         decay={1.5}
         color="#ffb066"
       />
 
-      {/* Neon spill from the binary walls (teal/green, on-palette) */}
+      {/* Neon spill from the binary walls (teal/green, on-palette) — the neon
+          takes over the room at night */}
       <pointLight
         position={[-4, 2, -4]}
-        intensity={lightsOn ? 0.3 : 0.06}
+        intensity={lightsOn ? 0.3 : 0.45}
         distance={5}
         color="#22d3a0"
       />
 
       <pointLight
         position={[4, 2, -3]}
-        intensity={lightsOn ? 0.3 : 0.06}
+        intensity={lightsOn ? 0.3 : 0.45}
         distance={5}
         color="#22d3a0"
       />
@@ -344,13 +348,14 @@ export default function SceneSetup({ enableCinematicIntro = true }: SceneSetupPr
         position={[0, 5.5, 0]}
         angle={Math.PI / 3}
         penumbra={0.5}
-        intensity={lightsOn ? 0.7 : 0.08}
+        intensity={lightsOn ? 0.7 : 0}
         castShadow
         color="#ffffff"
       />
 
-      {/* Environment Map for Reflections - interior IBL, bright enough to lift the room */}
-      <Environment preset="apartment" environmentIntensity={0.85} />
+      {/* Environment Map for Reflections - interior IBL; pulled way down at
+          night so the practicals (lamp/neon/city) own the frame */}
+      <Environment preset="apartment" environmentIntensity={lightsOn ? 0.85 : 0.2} />
     </>
   );
 }

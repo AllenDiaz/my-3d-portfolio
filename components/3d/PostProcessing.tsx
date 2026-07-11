@@ -37,7 +37,7 @@ export default function PostProcessing() {
     return (
       <EffectComposer multisampling={preset.multisampling}>
         <Bloom
-          intensity={lightsOn ? 0.5 : 0.3}
+          intensity={0.5}
           luminanceThreshold={0.25}
           luminanceSmoothing={0.9}
           mipmapBlur
@@ -60,9 +60,10 @@ export default function PostProcessing() {
   // Full tier: all effects.
   return (
     <EffectComposer multisampling={preset.multisampling}>
-      {/* Bloom for glowing monitors and neon - deliberate emissive glow */}
+      {/* Bloom for glowing monitors and neon - deliberate emissive glow,
+          stronger at night so the boosted neon/binary emissives actually halo */}
       <Bloom
-        intensity={lightsOn ? 0.6 : 0.35}
+        intensity={lightsOn ? 0.6 : 0.7}
         luminanceThreshold={0.22}
         luminanceSmoothing={0.9}
         mipmapBlur
