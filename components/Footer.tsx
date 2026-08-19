@@ -44,7 +44,7 @@ export default function Footer() {
               <span className="text-white font-bold text-lg">Allen Diaz</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Senior Full-Stack Engineer building AI-powered products and
+              Full-Stack &amp; AI Engineer building agentic AI systems and
               immersive web experiences with React, Next.js, and Three.js.
             </p>
           </div>

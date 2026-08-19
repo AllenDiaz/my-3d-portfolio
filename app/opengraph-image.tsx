@@ -5,7 +5,7 @@ import { ImageResponse } from 'next/og';
  * Design echoes the site's "late-night dev studio" art direction:
  * deep indigo base, teal code accents, warm amber lamp glow.
  */
-export const alt = 'Allen Diaz — Senior Full-Stack Engineer & AI Engineer';
+export const alt = 'Allen Diaz — Full-Stack & AI Engineer who builds with agentic AI';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -96,10 +96,10 @@ export default function OpenGraphImage() {
               fontWeight: 400,
             }}
           >
-            Senior Full-Stack Engineer · AI Engineer
+            Full-Stack &amp; AI Engineer · builds with agentic AI
           </div>
           <div style={{ display: 'flex', gap: 14, marginTop: 14 }}>
-            {['React', 'Next.js', 'TypeScript', 'Three.js', 'Python', 'GCP'].map(
+            {['Claude Code', 'LLM Agents', 'RAG', 'MCP', 'Next.js', 'Python'].map(
               (tech) => (
                 <div
                   key={tech}

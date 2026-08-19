@@ -12,15 +12,21 @@ export const SITE_URL = (
 export const SITE = {
   name: 'Allen Diaz — Portfolio',
   shortName: 'Allen Diaz',
-  title: 'Allen Diaz — Full-Stack Developer & 3D Portfolio',
+  title: 'Allen Diaz — Full-Stack & AI Engineer',
   description:
-    'Interactive 3D portfolio of Allen Diaz, a full-stack developer specializing in web, AI, and cloud applications. Explore projects, skills, and experience.',
+    'Interactive 3D portfolio of Allen Diaz, a full-stack & AI engineer who builds with agentic AI — LLM tool-calling, RAG, MCP, and eval loops — on top of production web apps. Explore projects, skills, and experience.',
   /** Default social share image (must exist under /public). */
   ogImage: '/images/profile-picture.jpg',
   author: 'Allen Diaz',
   keywords: [
     'Allen Diaz',
     'full-stack developer',
+    'AI engineer',
+    'agentic AI',
+    'LLM',
+    'RAG',
+    'MCP',
+    'agent orchestration',
     'software engineer',
     'web developer',
     '3D portfolio',

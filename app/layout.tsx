@@ -61,7 +61,7 @@ const jsonLd = {
       "@type": "Person",
       name: SITE.author,
       url: SITE_URL,
-      jobTitle: "Senior Full-Stack Engineer",
+      jobTitle: "Full-Stack & AI Engineer",
       image: `${SITE_URL}${SITE.ogImage}`,
       email: "mailto:allendiaz.developer@gmail.com",
       sameAs: [
@@ -81,6 +81,11 @@ const jsonLd = {
         "FastAPI",
         "Google Cloud Platform",
         "Artificial Intelligence",
+        "Agentic AI",
+        "Large Language Models",
+        "Retrieval-Augmented Generation",
+        "Model Context Protocol",
+        "Agent Orchestration",
       ],
     },
     {
