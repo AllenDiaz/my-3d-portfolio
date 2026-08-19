@@ -29,18 +29,19 @@ export function createTerminalPainter(project: Project): (ctx: CanvasRenderingCo
   const slug = project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const techs = project.technologies.slice(0, 4);
   const lines = [
-    `$ npm run dev`,
-    `▸ compiling ${slug} ...`,
+    `$ claude "ship ${slug}"`,
+    `▸ planning ${slug} ...`,
     ``,
     `const stack = [${techs.map((t) => `'${t}'`).join(', ')}];`,
     ``,
-    `export async function ship(idea: Idea) {`,
-    `  const feature = await build(idea, { stack });`,
-    `  await test(feature);      // ✓ 42 passing`,
-    `  return deploy(feature, { target: 'prod' });`,
+    `const agent = new Agent({ stack, tools, memory });`,
+    `for await (const step of agent.run(idea)) {`,
+    `  await step.tool.call();   // tool-calling`,
+    `  await step.eval();        // ✓ 42 passing`,
     `}`,
+    `return deploy(agent.result, { target: 'prod' });`,
     ``,
-    `▸ ready in 312ms — watching for changes`,
+    `▸ shipped in 312ms — agent watching for changes`,
   ];
 
   const totalChars = lines.reduce((sum, l) => sum + Math.max(l.length, 1), 0);

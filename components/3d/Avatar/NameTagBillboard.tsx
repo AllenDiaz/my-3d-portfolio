@@ -83,7 +83,7 @@ function buildBadge(primary: string, secondary: string): THREE.CanvasTexture | n
 export default function NameTagBillboard({
   position = [0, 2.2, -2.4],
   primary = 'Allen Diaz',
-  secondary = 'AI Engineer',
+  secondary = 'Full-Stack & AI Engineer',
   bobAmplitude = 0.04,
 }: NameTagBillboardProps) {
   const groupRef = useRef<Group>(null);

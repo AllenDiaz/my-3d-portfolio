@@ -32,10 +32,10 @@ const LINES: Line[] = [
   { text: 'Next agent →', color: '#22d3ee', font: `700 30px ${FAMILY}`, align: 'left', gap: 44 },
   { text: 'a self-improving', color: '#e6fbff', font: `500 28px ${FAMILY}`, align: 'left', gap: 38 },
   { text: 'code-review agent', color: '#e6fbff', font: `500 28px ${FAMILY}`, align: 'left', gap: 52 },
-  { text: 'Level it up:', color: '#22d3ee', font: `700 28px ${FAMILY}`, align: 'left', gap: 42 },
-  { text: '• persistent memory', color: '#cfe8ff', font: `500 26px ${FAMILY}`, align: 'left', gap: 36 },
+  { text: "Today's stack:", color: '#22d3ee', font: `700 28px ${FAMILY}`, align: 'left', gap: 42 },
+  { text: '• Claude Code + subagents', color: '#cfe8ff', font: `500 26px ${FAMILY}`, align: 'left', gap: 36 },
+  { text: '• MCP tools + RAG memory', color: '#cfe8ff', font: `500 26px ${FAMILY}`, align: 'left', gap: 36 },
   { text: '• eval + self-critique loop', color: '#cfe8ff', font: `500 26px ${FAMILY}`, align: 'left', gap: 36 },
-  { text: '• multi-step tool planning', color: '#cfe8ff', font: `500 26px ${FAMILY}`, align: 'left', gap: 36 },
 ];
 
 function roundRect(
