@@ -7,8 +7,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const ROLES = [
-  'Senior Full-Stack Engineer',
-  'AI Engineer',
+  'Full-Stack & AI Engineer',
+  'I build with Agentic AI',
   'IEEE-Published Researcher',
   '3D Web Developer',
 ];
@@ -95,15 +95,16 @@ const Hero = () => {
             variants={itemVariants}
             className="text-lg text-gray-400 max-w-2xl leading-relaxed backdrop-blur-sm"
           >
-            Senior Full-Stack Engineer specializing in React, Next.js, FastAPI, and Express. 
-            Currently leading AI solutions at Albertsons Companies as a Senior Full-Stack Engineer / AI Engineer, 
-            designing scalable system architectures, mentoring developers, and delivering enterprise-grade applications. 
-            Certified by IBM, Meta, and Microsoft with published research in IEEE.
+            Full-Stack &amp; AI Engineer building production apps with React, Next.js, and FastAPI —
+            and agentic AI systems on top of them: LLM tool-calling, RAG, and eval loops.
+            I build <span className="text-gray-200">with</span> agents too, using Claude Code as my
+            daily driver to ship faster. Currently leading AI solutions at Albertsons Companies,
+            certified by IBM, Meta, and Microsoft, with published research in IEEE.
           </motion.p>
 
           {/* Tech Stack Pills */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-            {['React', 'Next.js', 'FastAPI', 'Express', 'Docker', 'Kubernetes', 'GCP', 'Azure', 'AWS', 'Python', 'Node.js', 'TypeScript', 'MongoDB', 'PostgreSQL', 'Linux', 'More...'].map((tech) => (
+            {['Claude Code', 'Anthropic/OpenAI SDK', 'Vertex AI', 'RAG', 'MCP', 'Evals', 'React', 'Next.js', 'FastAPI', 'Python', 'TypeScript', 'PostgreSQL', 'GCP', 'Docker', 'Kubernetes', 'More...'].map((tech) => (
               <span
                 key={tech}
                 className="px-4 py-2 bg-white/5 dark:bg-white/10 backdrop-blur-md border border-white/10 dark:border-white/20 rounded-lg text-gray-300 dark:text-gray-200 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors"

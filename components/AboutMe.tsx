@@ -4,15 +4,15 @@ import { motion } from 'framer-motion';
 import { 
   Code2, 
   Database, 
-  Layout, 
-  Server, 
-  Smartphone, 
+  Layout,
+  Server,
   GitBranch,
   Download,
   GraduationCap,
   Briefcase,
   Award,
-  CheckCircle2
+  CheckCircle2,
+  Bot
 } from 'lucide-react';
 import SkillsSection from '@/components/about/SkillsSection';
 import ExperienceTimeline from '@/components/about/ExperienceTimeline';
@@ -90,17 +90,18 @@ const AboutMe = () => {
               <h3 className="text-3xl font-bold text-white mb-4">My Story</h3>
               <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p>
-                  I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a Senior Full-Stack Engineer 
-                  with 3+ years of experience turning ideas into powerful, scalable web applications. My journey 
-                  began in high school with a simple curiosity about how the web works—and evolved into a passion 
-                  for building efficient, user-friendly digital solutions.
+                  I'm <span className="text-blue-400 font-semibold">Allen Diaz</span>, a Full-Stack &amp; AI Engineer
+                  with 3+ years of experience turning ideas into powerful, scalable web applications. My journey
+                  began in high school with a simple curiosity about how the web works—and evolved into building
+                  production full-stack systems and the agentic AI that runs on top of them.
                 </p>
                 <p>
-                  I thrive on solving complex problems, exploring new technologies, and contributing to open-source 
-                  projects. Currently contributing to AI-powered systems at Albertsons Companies, blending full-stack 
-                  development with machine learning to optimize business processes. When I'm not coding, you'll find me 
-                  running, shooting hoops on the basketball court, or sharing knowledge with the developer community. 
-                  For me, continuous learning isn't just a habit—it's a mindset.
+                  These days I work on both sides of agentic AI: I <span className="text-blue-400 font-semibold">build with agents</span>—Claude
+                  Code and subagents are my daily driver for shipping faster—and I <span className="text-blue-400 font-semibold">build agentic
+                  products</span>: LLM tool-calling, RAG pipelines, MCP integrations, and eval loops. Currently leading
+                  AI solutions at Albertsons Companies, blending full-stack development with model-native architectures.
+                  When I'm not coding, you'll find me running, shooting hoops, or sharing knowledge with the developer
+                  community. For me, continuous learning isn't just a habit—it's a mindset.
                 </p>
               </div>
 
@@ -109,9 +110,9 @@ const AboutMe = () => {
                 <h4 className="text-2xl font-bold text-white">What I Do</h4>
                 <div className="grid gap-4">
                   {[
+                    { icon: Bot, title: 'Agentic AI Engineering', desc: 'Building LLM apps and agents—tool-calling, RAG, MCP, and eval loops—and shipping with Claude Code' },
                     { icon: Layout, title: 'Frontend Development', desc: 'Creating responsive and interactive UIs with React, Next.js, and modern CSS' },
                     { icon: Server, title: 'Backend Development', desc: 'Building robust APIs and server-side logic with different backend frameworks and databases' },
-                    { icon: Smartphone, title: 'Responsive Design', desc: 'Ensuring seamless experiences across all devices and screen sizes' },
                     { icon: Code2, title: 'Cloud & DevOps', desc: 'Deploying and orchestrating applications using Docker, Kubernetes, and cloud platforms' },
                   ].map((service) => (
                     <div
