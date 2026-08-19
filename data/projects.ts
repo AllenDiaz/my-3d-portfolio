@@ -32,7 +32,7 @@ export const projectsData: Project[] = [
   {
     id: 'dora-invoice-processor',
     title: 'Document Recognition Assistant (DORA)',
-    description: 'Enterprise AI-powered invoice processing platform that automates document extraction, validation, and export workflows. Processes 10,000+ invoices monthly with 95%+ accuracy using Google Cloud AI (Gemini 2.0).',
+    description: 'Enterprise LLM document-extraction platform: a Gemini 2.0 (Vertex AI) pipeline that parses PDF/image invoices into 15+ structured fields with per-field confidence scoring and validation. Processes 10,000+ invoices monthly at 95%+ accuracy — my production AI-engineering work.',
     longDescription: `Enterprise AI-powered invoice processing platform that automates document extraction, validation, and export workflows. Successfully processes 10,000+ invoices monthly with 95%+ accuracy using Google Cloud AI (Gemini 2.0).
 
 **Key Achievements:**
@@ -91,6 +91,40 @@ Infrastructure: GCP, Docker, Cloud Run, Kubernetes (GKE), Helm, GitHub Actions`,
     completedDate: '2025-12',
     teamSize: 1,
     role: 'Full Stack Developer & AI Engineer',
+  },
+
+  // ==================================================================
+  // TODO(allen): AGENTIC PROJECT PLACEHOLDERS — fill with REAL shipped
+  // work, then set `featured: true` to surface on the office monitors.
+  // Nothing here is real yet; replace every field before publishing.
+  // Delete any placeholder you don't have a real project for.
+  // ==================================================================
+  {
+    id: 'agentic-placeholder-1',
+    title: 'TODO: Agentic AI Project #1',
+    description:
+      'TODO: describe a real agent you built — e.g. an LLM tool-calling agent with an eval loop. Cover what it does, the orchestration, and a concrete result.',
+    longDescription: `TODO: replace with the real story.
+
+**What it does:** ...
+**Agentic architecture:** tool-calling / planning / memory / orchestration (LangGraph or custom)
+**Evals:** how you measure and guard quality
+**Result:** a concrete, honest outcome (throughput, accuracy, time saved)`,
+    technologies: ['Anthropic SDK', 'MCP', 'RAG', 'pgvector', 'Python', 'TypeScript'],
+    categories: ['ai', 'fullstack'],
+    featured: false,
+    role: 'AI Engineer',
+  },
+  {
+    id: 'agentic-placeholder-2',
+    title: 'TODO: Agentic AI Project #2',
+    description:
+      'TODO: a second real agentic/LLM project — RAG assistant, multi-step agent, MCP integration, etc. Keep every claim truthful and specific.',
+    longDescription: `TODO: replace with the real story (or delete this entry).`,
+    technologies: ['OpenAI SDK', 'LangGraph', 'RAG', 'Vector DB', 'Next.js'],
+    categories: ['ai'],
+    featured: false,
+    role: 'AI Engineer',
   },
 
   // ===============================
