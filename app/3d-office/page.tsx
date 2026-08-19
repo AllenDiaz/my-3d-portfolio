@@ -16,6 +16,7 @@ import RestrictedLinkModal from '@/components/ui/RestrictedLinkModal';
 import AllProjectsModal from '@/components/ui/AllProjectsModal';
 import ContactModal from '@/components/ui/ContactModal';
 import AvatarModal from '@/components/ui/AvatarModal';
+import WorkflowModal from '@/components/ui/WorkflowModal';
 import RobotModal from '@/components/ui/RobotModal';
 import TourOverlay from '@/components/ui/TourOverlay';
 import SceneLoader from '@/components/ui/SceneLoader';
@@ -37,7 +38,7 @@ const GUIDE_ITEMS = [
   { icon: '💻', object: 'Monitors', action: 'Featured projects' },
   { icon: '📱', object: 'Tablet', action: 'Browse all projects' },
   { icon: '⌨️', object: 'Keyboard', action: 'Skills & technologies' },
-  { icon: '🖱️', object: 'Mouse', action: 'Reset the camera view' },
+  { icon: '🖱️', object: 'Mouse', action: 'How I build with agents' },
   { icon: '📓', object: 'Notebook', action: 'Resume & bio' },
   { icon: '🪪', object: 'ID card', action: 'Work experience' },
   { icon: '🏆', object: 'Certificate', action: 'Certifications' },
@@ -86,6 +87,8 @@ export default function ThreeDOfficePage() {
   const setShowContactModal = useStore((state) => state.setShowContactModal);
   const showAvatarModal = useStore((state) => state.showAvatarModal);
   const setShowAvatarModal = useStore((state) => state.setShowAvatarModal);
+  const showWorkflowModal = useStore((state) => state.showWorkflowModal);
+  const setShowWorkflowModal = useStore((state) => state.setShowWorkflowModal);
   const showRobotModal = useStore((state) => state.showRobotModal);
   const setShowRobotModal = useStore((state) => state.setShowRobotModal);
   const selectedRobot = useStore((state) => state.selectedRobot);
@@ -355,6 +358,12 @@ export default function ThreeDOfficePage() {
       <AvatarModal
         isOpen={showAvatarModal}
         onClose={() => setShowAvatarModal(false)}
+      />
+
+      {/* "How I build with agents" Workflow Modal */}
+      <WorkflowModal
+        isOpen={showWorkflowModal}
+        onClose={() => setShowWorkflowModal(false)}
       />
 
       {/* Service Robot flavor Modal */}

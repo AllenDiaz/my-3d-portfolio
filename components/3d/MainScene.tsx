@@ -36,7 +36,7 @@ export default function MainScene() {
   const setShowExperienceModal = useStore((state) => state.setShowExperienceModal);
   const setShowCertificateModal = useStore((state) => state.setShowCertificateModal);
   const setShowContactModal = useStore((state) => state.setShowContactModal);
-  const requestCameraReset = useStore((state) => state.requestCameraReset);
+  const setShowWorkflowModal = useStore((state) => state.setShowWorkflowModal);
   const requestCameraFocus = useStore((state) => state.requestCameraFocus);
   const featuredProjects = useStore((state) => state.featuredProjects);
   
@@ -101,8 +101,8 @@ export default function MainScene() {
       <DeskItem
         position={[-0.3, 0.82, -1.5]}
         itemType="mouse"
-        label="Reset camera view"
-        onClick={requestCameraReset}
+        label="How I build with agents"
+        onClick={() => requestCameraFocus('mouse', () => setShowWorkflowModal(true))}
       />
       
       {/* Interactive Desk Tablet - Navigate to Projects Page */}

@@ -8,6 +8,7 @@ export type FocusId =
   | 'monitor-right'
   | 'tablet'
   | 'keyboard'
+  | 'mouse'
   | 'notebook'
   | 'badge'
   | 'certificate'
@@ -35,6 +36,7 @@ export const CAMERA_POSES: Record<FocusId, CameraPose> = {
   'monitor-right': { position: [0.63, 1.18, -0.98], target: [0.8, 1.1, -1.9] },
   tablet: { position: [0.3, 1.55, -0.55], target: [0.3, 0.84, -1.25] },
   keyboard: { position: [-0.8, 1.5, -0.75], target: [-0.8, 0.84, -1.5] },
+  mouse: { position: [-0.3, 1.45, -0.78], target: [-0.3, 0.84, -1.5] },
   notebook: { position: [0.9, 1.45, -0.6], target: [0.9, 0.84, -1.3] },
   badge: { position: [1.3, 1.35, -1.05], target: [1.3, 0.84, -1.7] },
   certificate: { position: [-1.3, 1.35, -0.65], target: [-1.3, 0.84, -1.3] },

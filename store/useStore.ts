@@ -103,6 +103,10 @@ interface StoreState {
   showAvatarModal: boolean;
   setShowAvatarModal: (show: boolean) => void;
 
+  // "How I build with agents" Workflow Modal state
+  showWorkflowModal: boolean;
+  setShowWorkflowModal: (show: boolean) => void;
+
   // Which robot Allen is currently tuning up (one-at-a-time lock); drives both
   // the robot's "being serviced" phase and Allen's fixing animation.
   servicingRobotId: string | null;
@@ -219,6 +223,9 @@ export const useStore = create<StoreState>((set, get) => ({
   showAvatarModal: false,
   setShowAvatarModal: (show) => set({ showAvatarModal: show }),
 
+  showWorkflowModal: false,
+  setShowWorkflowModal: (show) => set({ showWorkflowModal: show }),
+
   servicingRobotId: null,
   setServicingRobotId: (id) => set({ servicingRobotId: id }),
 
@@ -295,6 +302,7 @@ export function isAnyOverlayOpen(state: StoreState): boolean {
     state.showCVModal ||
     state.showContactModal ||
     state.showAvatarModal ||
+    state.showWorkflowModal ||
     state.showRobotModal ||
     state.showAllProjectsModal ||
     state.showRestrictedLinkModal ||
