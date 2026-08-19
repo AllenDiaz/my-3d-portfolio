@@ -1,13 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { 
-  Code2, 
-  Database, 
-  Layout, 
-  Server, 
+import {
+  Code2,
+  Database,
+  Layout,
+  Server,
   Wrench,
-  Palette
+  Palette,
+  Bot
 } from 'lucide-react';
 
 const SkillsSection = () => {
@@ -38,6 +39,20 @@ const SkillsSection = () => {
         { name: 'REST API', level: 90 },
         { name: 'GraphQL', level: 80 },
         { name: 'Microservices', level: 75 },
+      ],
+    },
+    {
+      category: 'AI & Agentic',
+      icon: Bot,
+      color: 'from-teal-500 to-indigo-500',
+      skills: [
+        { name: 'Claude Code / Agents', level: 90 },
+        { name: 'LLM SDKs (Anthropic/OpenAI)', level: 88 },
+        { name: 'Google Vertex AI / Gemini', level: 85 },
+        { name: 'RAG & Vector DBs (pgvector)', level: 82 },
+        { name: 'MCP & Tool-Calling', level: 80 },
+        { name: 'Agent Orchestration & Evals', level: 80 },
+        { name: 'Prompt Engineering', level: 88 },
       ],
     },
     {
@@ -165,8 +180,10 @@ const SkillsSection = () => {
         <h4 className="text-2xl font-bold text-white mb-6 text-center">Tech Stack</h4>
         <div className="flex flex-wrap justify-center gap-3">
           {[
-            'React', 'Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL','Node.js', 'MongoDB', 
-           'Tailwind CSS', 'Three.js', 'GraphQL', 
+            'Claude Code', 'Anthropic SDK', 'OpenAI SDK', 'Vertex AI', 'Gemini', 'RAG',
+            'pgvector', 'MCP', 'LangGraph', 'Evals',
+            'React', 'Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL','Node.js', 'MongoDB',
+           'Tailwind CSS', 'Three.js', 'GraphQL',
             'Docker', 'GCP', 'AWS', 'Azure', 'Git', 'Linux', 'Figma', 'Redux', 'Express.js',
             'Python', 'Javascript', 'Laravel', 'Firebase', 'Vercel', 'REST API', 'Webpack'
           ].map((tech) => (
