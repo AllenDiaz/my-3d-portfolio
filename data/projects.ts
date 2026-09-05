@@ -93,38 +93,135 @@ Infrastructure: GCP, Docker, Cloud Run, Kubernetes (GKE), Helm, GitHub Actions`,
     role: 'Full Stack Developer & AI Engineer',
   },
 
-  // ==================================================================
-  // TODO(allen): AGENTIC PROJECT PLACEHOLDERS — fill with REAL shipped
-  // work, then set `featured: true` to surface on the office monitors.
-  // Nothing here is real yet; replace every field before publishing.
-  // Delete any placeholder you don't have a real project for.
-  // ==================================================================
+  // ===============================
+  // PROFESSIONALLY YOU - AI DIGITAL TWIN CHATBOT - FEATURED
+  // ===============================
   {
-    id: 'agentic-placeholder-1',
-    title: 'TODO: Agentic AI Project #1',
-    description:
-      'TODO: describe a real agent you built — e.g. an LLM tool-calling agent with an eval loop. Cover what it does, the orchestration, and a concrete result.',
-    longDescription: `TODO: replace with the real story.
+    id: 'professionally-you-digital-twin',
+    title: 'Professionally You - AI Career Digital Twin',
+    description: 'An AI-powered career chatbot that acts as your professional digital twin, answering questions about your background as *you*. Built on Google Gemini (Vertex AI) with RAG grounding over your LinkedIn profile, an LLM-as-judge guardrail + evaluator loop, tool-based lead capture, and a token-gated admin dashboard.',
+    longDescription: `An AI-powered career chatbot that acts as your professional digital twin. It answers questions about your background, skills, and experience as *you*, backed by Google Gemini (Vertex AI) and grounded in your LinkedIn profile and career summary via retrieval.
 
-**What it does:** ...
-**Agentic architecture:** tool-calling / planning / memory / orchestration (LangGraph or custom)
-**Evals:** how you measure and guard quality
-**Result:** a concrete, honest outcome (throughput, accuracy, time saved)`,
-    technologies: ['Anthropic SDK', 'MCP', 'RAG', 'pgvector', 'Python', 'TypeScript'],
+**What it does:**
+Visitors chat with a persona that represents you professionally to potential employers or clients. Replies stream token-by-token in a distinctive terminal-style "session log" UI (\`you ›\` / \`allen ›\` labels, hairline dividers, a mono receipt line like \`[ok · 1.2s · gemini-2.5-pro]\`) — no generic chat bubbles.
+
+**Agentic architecture:**
+• RAG Retrieval — the LinkedIn PDF is chunked, embedded, and only query-relevant snippets are pulled into each prompt instead of dumping the whole document every turn. The index builds automatically on first startup.
+• Bounded tool-calling loop — the backend runs a tool-calling loop against Gemini, retrieving relevant profile context per question and persisting each conversation.
+• Tool-based lead & question capture — tool calls record interested visitors' contact details and questions the twin can't answer, persisted to the database and pushed to your phone.
+
+**Guardrail + Evaluator (LLM-as-judge):**
+• An input guardrail blocks off-topic or abusive messages with a redirect.
+• An output evaluator checks each reply for on-persona accuracy and retries once with feedback if it fails.
+• Both fail open if the judge call errors, so the chat never hard-breaks.
+
+**Admin & Operations:**
+• Token-gated admin dashboard to review captured leads, unanswered questions, and full conversation transcripts, edit your profile, and rebuild the RAG index from the browser.
+• Push notifications via Pushover for real-time lead alerts (optional).
+• Per-IP rate limiting on the chat endpoints.
+
+**Architecture:**
+Next.js frontend (chat UI + admin dashboard) streams \`POST /api/chat/stream\` (Server-Sent Events) directly from a FastAPI backend. The backend talks to Vertex AI via its OpenAI-compatible endpoint for chat and its native embeddings API, with credentials from Application Default Credentials (cached, refreshed only on expiry). The RAG index is a plain JSON file — no vector DB.
+
+**Tech Highlights:**
+• Frontend: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
+• Backend: FastAPI, Python 3.12, SQLAlchemy 2.0, Pydantic v2
+• AI/ML: Google Vertex AI (Gemini 2.5), native embeddings, RAG over LinkedIn
+• Storage: Postgres in the container stack; SQLite by default when running locally
+• Runtime: Containerized with Podman/Docker via \`podman-compose.yml\` (web + api + Postgres) for one-command self-hosted deployment
+• Testing: Fully offline backend test suite (Vertex AI and Pushover mocked)`,
+    technologies: [
+      'Next.js 16',
+      'React 19',
+      'TypeScript',
+      'Tailwind CSS v4',
+      'FastAPI',
+      'Python 3.12',
+      'SQLAlchemy 2.0',
+      'Pydantic v2',
+      'Google Vertex AI',
+      'Gemini 2.5',
+      'RAG',
+      'Embeddings',
+      'LLM-as-Judge',
+      'Server-Sent Events',
+      'PostgreSQL',
+      'SQLite',
+      'Pushover',
+      'Podman',
+      'Docker',
+    ],
     categories: ['ai', 'fullstack'],
-    featured: false,
-    role: 'AI Engineer',
+    featured: true,
+    thumbnailUrl: '/images/projects/ai-me/me0.jpeg',
+    imageUrl: '/images/projects/ai-me/me0.jpeg',
+    images: [
+      '/images/projects/ai-me/me0.jpeg',
+      '/images/projects/ai-me/me1.jpeg',
+      '/images/projects/ai-me/me2.jpeg',
+      '/images/projects/ai-me/me3.jpeg',
+      '/images/projects/ai-me/me4.jpeg',
+      '/images/projects/ai-me/me5.jpeg',
+      '/images/projects/ai-me/me6.jpeg',
+      '/images/projects/ai-me/me7.jpeg',
+    ],
+    githubUrl: 'https://github.com/AllenDiaz/Professionally-You',
+    liveUrl: 'RESTRICTED',
+    completedDate: '2025-09',
+    teamSize: 1,
+    role: 'Full Stack Developer & AI Engineer',
   },
+
+  // ===============================
+  // ALBERTSONS CCAI VOICEBOT - ENTERPRISE CONVERSATIONAL AI - FEATURED
+  // ===============================
   {
-    id: 'agentic-placeholder-2',
-    title: 'TODO: Agentic AI Project #2',
-    description:
-      'TODO: a second real agentic/LLM project — RAG assistant, multi-step agent, MCP integration, etc. Keep every claim truthful and specific.',
-    longDescription: `TODO: replace with the real story (or delete this entry).`,
-    technologies: ['OpenAI SDK', 'LangGraph', 'RAG', 'Vector DB', 'Next.js'],
+    id: 'albertsons-ccai-voicebot',
+    title: 'Contact Center AI Voicebot (Albertsons)',
+    description: "Enterprise conversational AI voice bots for Albertsons' Contact Center, built with Google Cloud CCAI and serving 2,200+ stores. Turned rigid rule-based IVR workflows into natural, conversational AI, backed by APIs and backend services that power the voice automation platform. Production work with the AI Team (INCITE).",
+    longDescription: `Production conversational-AI voice bots built for Albertsons' Contact Center on Google Cloud's Contact Center AI (CCAI) platform, serving 2,200+ retail stores. This is enterprise work delivered with the AI Team (INCITE — Innovation & Continuous Improvement Team), replacing brittle rule-based phone workflows with natural, intent-driven conversational experiences.
+
+**What it does:**
+• Handles inbound Contact Center calls with conversational AI instead of rigid, menu-driven IVR trees
+• Understands caller intent and routes, resolves, or escalates automatically across a 2,200+ store footprint
+• Backed by APIs and backend services that power the voice automation platform and integrate with enterprise systems
+
+**How it was built:**
+• Google Cloud CCAI (Dialogflow CX) for intent modeling, flows, and conversational state
+• Designed and developed the APIs and backend services that drive the voice automation systems
+• Leveraged Claude and other LLMs across the delivery lifecycle — prompt engineering, solution design, code generation, debugging, and documentation — to accelerate delivery
+• Migrated rule-based call workflows into maintainable conversational AI experiences
+
+**Impact:**
+• Serves 2,200+ Albertsons Companies stores in production
+• Converts rule-based Contact Center workflows into conversational AI, improving caller experience and deflecting routine calls from human agents
+• Part of a broader enterprise modernization effort by the AI Team (INCITE)
+
+*Enterprise/proprietary project — source code and live system are internal to Albertsons and cannot be shared publicly.*`,
+    technologies: [
+      'Google Cloud CCAI',
+      'Dialogflow CX',
+      'Conversational AI',
+      'Claude',
+      'LLMs',
+      'Prompt Engineering',
+      'Node.js',
+      'REST APIs',
+      'Backend Services',
+      'Google Cloud Platform',
+    ],
     categories: ['ai'],
-    featured: false,
-    role: 'AI Engineer',
+    featured: true,
+    thumbnailUrl: '/images/projects/ccai/voice.jpeg',
+    imageUrl: '/images/projects/ccai/voice.jpeg',
+    images: [
+      '/images/projects/ccai/voice.jpeg',
+    ],
+    githubUrl: 'RESTRICTED',
+    liveUrl: 'RESTRICTED',
+    completedDate: '2026-04',
+    teamSize: 1,
+    role: 'AI Engineer / Full Stack Developer',
   },
 
   // ===============================
